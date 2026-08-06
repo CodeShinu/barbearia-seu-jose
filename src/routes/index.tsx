@@ -46,6 +46,7 @@ import barbeariaInterna2 from "@/assets/barbearia_interna_2.jpg.asset.json";
 import barbeariaInterna3 from "@/assets/barbearia_interna_3.jpg.asset.json";
 import videoCombo1 from "@/assets/video_combo_premium.mp4.asset.json";
 import videoKids1 from "@/assets/video_kids_premium.mp4.asset.json";
+import videoToalhaQuente from "@/assets/video_toalha_quente.mp4.asset.json";
 
 
 
@@ -273,7 +274,7 @@ function Index() {
               { name: "O Combo", time: "1h 15min", video: videoCombo1.url },
               { name: "Pigmentação", time: "40 min", img: "https://images.unsplash.com/photo-1593702295094-ada74bc4a19c?q=80&w=600" },
               { name: "Kids", time: "30 min", video: videoKids1.url },
-              { name: "Toalha Quente", time: "20 min", img: "https://images.unsplash.com/photo-1622286330961-a30b42f61e73?q=80&w=600" },
+              { name: "Toalha Quente", time: "20 min", video: videoToalhaQuente.url },
             ].map((service, i) => (
               <motion.div 
                 key={i} 
