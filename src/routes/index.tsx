@@ -66,7 +66,7 @@ function Index() {
         <div className="text-center text-sm">
           <p>© 2026 Seu José Barbershop. Rua Piratininga, 487 – São Caetano do Sul</p>
           <div className="flex justify-center gap-6 mt-4">
-            <a href="#" className="flex items-center gap-2 hover:text-gold"><Instagram size={18}/> @seujosebarbershop</a>
+            <a href="#" className="flex items-center gap-2 hover:text-gold">@seujosebarbershop</a>
             <a href="#" className="flex items-center gap-2 hover:text-gold"><Phone size={18}/> (11) 99999-9999</a>
           </div>
         </div>
