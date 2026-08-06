@@ -8,17 +8,19 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-gold text-primary hover:bg-white",
+        default: "bg-gold text-forest-deep hover:bg-cream hover:text-forest-deep shadow-lg shadow-gold/20",
         destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline: "border border-white/20 bg-transparent text-white hover:bg-white hover:text-primary",
-        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
+        outline: "border-2 border-gold text-gold hover:bg-gold hover:text-forest-deep",
+        secondary: "bg-brick text-cream hover:bg-brick/80",
+        ghost: "hover:bg-gold/10 hover:text-gold",
+        link: "text-gold underline-offset-4 hover:underline",
+        premium: "bg-gold-gradient text-forest-deep shadow-xl shadow-gold/30 hover:scale-105 active:scale-95 transition-transform",
       },
       size: {
         default: "h-12 px-8 py-2",
-        sm: "h-9 px-3",
+        sm: "h-9 px-4",
         lg: "h-14 px-10 text-base",
+        xl: "h-16 px-12 text-lg",
         icon: "h-10 w-10",
       },
     },

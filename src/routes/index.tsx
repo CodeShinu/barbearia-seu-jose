@@ -1,82 +1,330 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { motion } from "framer-motion";
-import { Scissors, Star, Calendar, Phone } from "lucide-react";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { 
+  Scissors, 
+  Star, 
+  Calendar, 
+  Phone, 
+  Check, 
+  Clock, 
+  MapPin, 
+  ChevronDown, 
+  Coffee, 
+  Users, 
+  ShoppingBag,
+  Award,
+  Menu,
+  X,
+  ArrowUp
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { useState, useEffect } from "react";
 import logoAsset from "@/assets/logo.png.asset.json";
 
 export const Route = createFileRoute("/")({
   component: Index,
 });
 
+const fadeInUp = {
+  initial: { opacity: 0, y: 30 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true },
+  transition: { duration: 0.6 }
+};
+
+const stagger = {
+  initial: {},
+  whileInView: { transition: { staggerChildren: 0.1 } },
+  viewport: { once: true }
+};
+
 function Index() {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { scrollYProgress } = useScroll();
+  const opacity = useTransform(scrollYProgress, [0, 0.05], [1, 0]);
+
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <div className="min-h-screen bg-background text-foreground selection:bg-gold selection:text-white">
-      {/* Navbar Placeholder */}
-      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between p-6 px-12 transition-all duration-300">
-        <div className="flex items-center">
-          <img src={logoAsset.url} alt="Seu José Logo" className="w-16 h-16 rounded-full border border-gold/30 shadow-lg hover:scale-105 transition-transform cursor-pointer" />
-        </div>
-        <div className="flex gap-8 items-center text-sm font-medium tracking-wide">
-          {["Home", "Serviços", "Assinatura", "Contato"].map((item) => (
-            <a key={item} href={`#${item.toLowerCase()}`} className="hover:text-gold transition-colors">{item}</a>
+    <div className="min-h-screen bg-forest-deep text-cream overflow-x-hidden selection:bg-gold selection:text-forest-deep">
+      {/* Navbar */}
+      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 py-4 px-6 md:px-12 flex items-center justify-between ${isScrolled ? "bg-forest-deep/90 backdrop-blur-md shadow-2xl py-3 border-b border-gold/10" : "bg-transparent"}`}>
+        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-4">
+          <img src={logoAsset.url} alt="Seu José Logo" className="w-12 h-12 md:w-16 md:h-16 rounded-full border border-gold/30 shadow-gold/20 shadow-lg" />
+        </motion.div>
+
+        <div className="hidden lg:flex gap-8 items-center text-sm font-bold uppercase tracking-widest">
+          {["Home", "Sobre", "Serviços", "Assinatura", "Equipe", "Contato"].map((item) => (
+            <a key={item} href={`#${item.toLowerCase()}`} className="hover:text-gold transition-colors duration-300">{item}</a>
           ))}
-          <Button>Agendar</Button>
+          <Button size="sm" variant="premium">Agendar</Button>
         </div>
+
+        <button className="lg:hidden text-gold" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+          {isMenuOpen ? <X size={32} /> : <Menu size={32} />}
+        </button>
       </nav>
 
-      {/* Hero */}
-      <section className="relative h-screen flex flex-col justify-center items-center text-center p-6 bg-dark">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1599351431202-1e0f0137899a?q=80&w=2000')] bg-cover bg-center opacity-40" />
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed inset-0 z-40 bg-forest-deep flex flex-col items-center justify-center gap-8 pt-20"
+          >
+            {["Home", "Sobre", "Serviços", "Assinatura", "Equipe", "Contato"].map((item) => (
+              <a key={item} href={`#${item.toLowerCase()}`} onClick={() => setIsMenuOpen(false)} className="text-2xl font-serif font-bold text-cream hover:text-gold">{item}</a>
+            ))}
+            <Button size="lg" variant="premium" className="mt-4" onClick={() => setIsMenuOpen(false)}>Agendar Agora</Button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* 1. Hero */}
+      <section id="home" className="relative h-screen flex flex-col justify-center items-center text-center px-6 overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-dark-gradient z-10" />
+          <motion.div 
+            animate={{ scale: [1, 1.1, 1] }} 
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+            className="w-full h-full bg-[url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=2000')] bg-cover bg-center"
+          />
+        </div>
+
         <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="relative z-10 space-y-6"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
+          className="relative z-20 max-w-5xl space-y-8"
         >
-          <h1 className="text-6xl md:text-8xl font-serif text-white tracking-tight">Corte, Barba e <br />Experiência Premium.</h1>
-          <p className="text-lg md:text-xl text-stone-300 max-w-2xl mx-auto">Mais do que um corte. Um atendimento pensado para quem valoriza estilo, conforto e qualidade.</p>
-          <div className="flex gap-4 justify-center">
-            <Button>Agendar Agora</Button>
-            <Button variant="outline">Conhecer Serviços</Button>
+          <div className="flex flex-wrap justify-center gap-4 mb-4">
+            <span className="bg-gold/10 border border-gold/30 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest text-gold flex items-center gap-2">⭐ 1.600+ SEGUIDORES</span>
+            <span className="bg-gold/10 border border-gold/30 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest text-gold flex items-center gap-2">🏆 DESDE 2019</span>
+            <span className="bg-gold/10 border border-gold/30 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest text-gold flex items-center gap-2">💈 ASSINATURA</span>
           </div>
+          
+          <h1 className="text-5xl md:text-8xl font-serif leading-tight tracking-tight text-cream">
+            Muito mais que um corte. <br />
+            <span className="text-gold italic">Uma experiência completa.</span>
+          </h1>
+          
+          <p className="text-lg md:text-2xl text-cream/80 max-w-3xl mx-auto leading-relaxed">
+            Cortes modernos, barba impecável, ambiente confortável e atendimento que faz você querer voltar em São Caetano do Sul.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-6 justify-center pt-4">
+            <Button size="xl" variant="premium">Agendar Agora</Button>
+            <Button size="xl" variant="outline">Conhecer a Barbearia</Button>
+          </div>
+        </motion.div>
+
+        <motion.div style={{ opacity }} className="absolute bottom-10 left-1/2 -translate-x-1/2 text-gold animate-bounce">
+          <ChevronDown size={40} />
         </motion.div>
       </section>
 
-      {/* Diferenciais */}
-      <section className="py-24 px-12 bg-stone-50">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-6xl mx-auto">
+      {/* 2. Faixa de Confiança */}
+      <section className="py-12 bg-forest border-y border-gold/10">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8">
           {[
-            { icon: Scissors, title: "Atendimento", desc: "Profissionais experientes." },
-            { icon: Star, title: "Qualidade", desc: "Ambiente climatizado e premium." },
-            { icon: Calendar, title: "Agendamento", desc: "Rápido pelo nosso app." },
+            { label: "Cortes Realizados", value: "+10.000" },
+            { label: "Clientes Satisfeitos", value: "★★★★★" },
+            { label: "Anos de História", value: "Desde 2019" },
+            { label: "Em São Caetano", value: "R. Piratininga" },
           ].map((item, i) => (
-            <motion.div 
-              key={i}
-              whileHover={{ y: -10 }}
-            >
-              <Card className="p-8 hover:border-gold transition-all shadow-sm">
-                <CardHeader className="p-0">
-                  <item.icon className="w-10 h-10 text-gold mb-6" />
-                  <CardTitle>{item.title}</CardTitle>
-                  <CardDescription className="text-base">{item.desc}</CardDescription>
-                </CardHeader>
-              </Card>
+            <motion.div key={i} {...fadeInUp} className="text-center">
+              <div className="text-3xl md:text-4xl font-serif font-bold text-gold mb-1">{item.value}</div>
+              <div className="text-xs md:text-sm uppercase tracking-widest text-cream/60">{item.label}</div>
             </motion.div>
           ))}
         </div>
       </section>
 
-      {/* Footer Placeholder */}
-      <footer className="py-12 px-12 bg-dark text-stone-400">
-        <div className="text-center text-sm">
-          <p>© 2026 Seu José Barbershop. Rua Piratininga, 487 – São Caetano do Sul</p>
-          <div className="flex justify-center gap-6 mt-4">
-            <a href="#" className="flex items-center gap-2 hover:text-gold">@seujosebarbershop</a>
-            <a href="#" className="flex items-center gap-2 hover:text-gold"><Phone size={18}/> (11) 99999-9999</a>
+      {/* 3. Sobre & 4. Diferenciais */}
+      <section id="sobre" className="py-24 px-6 md:px-12 bg-forest-deep relative">
+        {/* Background Texture Placeholder */}
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/brick-wall.png')]" />
+        
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+          <motion.div {...fadeInUp} className="relative group">
+            <div className="absolute -inset-4 border-2 border-gold/20 rounded-3xl translate-x-4 translate-y-4 -z-10 group-hover:translate-x-6 group-hover:translate-y-6 transition-transform duration-500" />
+            <img 
+              src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?q=80&w=1200" 
+              alt="Ambiente Seu José" 
+              className="rounded-3xl shadow-2xl w-full h-[600px] object-cover border border-gold/10"
+            />
+          </motion.div>
+
+          <div className="space-y-12">
+            <motion.div {...fadeInUp} className="space-y-6">
+              <h2 className="text-4xl md:text-6xl font-serif">Mais do que uma <span className="text-gold">barbearia.</span></h2>
+              <p className="text-lg text-cream/70 leading-relaxed">
+                Aqui cada cliente é tratado como parte da casa. Nossa missão é oferecer muito mais do que um corte de cabelo: entregamos uma experiência completa, com conforto, atendimento personalizado e profissionais apaixonados pelo que fazem.
+              </p>
+              <Button variant="link" className="p-0 text-lg">Conheça nossa história →</Button>
+            </motion.div>
+
+            <motion.div variants={stagger} initial="initial" whileInView="whileInView" className="grid grid-cols-2 gap-6">
+              {[
+                { icon: Scissors, title: "Especialistas" },
+                { icon: ShoppingBag, title: "Produtos Premium" },
+                { icon: Award, title: "Personalizado" },
+                { icon: Coffee, title: "Café e Conforto" },
+                { icon: Clock, title: "Ambiente Climatizado" },
+                { icon: Phone, title: "App Exclusivo" },
+              ].map((item, i) => (
+                <motion.div key={i} variants={fadeInUp} className="flex items-center gap-4 group">
+                  <div className="w-12 h-12 rounded-xl bg-forest flex items-center justify-center border border-gold/20 group-hover:bg-gold group-hover:text-forest-deep transition-all duration-300">
+                    <item.icon size={24} />
+                  </div>
+                  <span className="font-bold text-sm uppercase tracking-wide text-cream/80 group-hover:text-gold transition-colors">{item.title}</span>
+                </motion.div>
+              ))}
+            </motion.div>
           </div>
         </div>
+      </section>
+
+      {/* 5. Serviços */}
+      <section id="serviços" className="py-24 bg-forest px-6 md:px-12">
+        <div className="max-w-7xl mx-auto space-y-16">
+          <motion.div {...fadeInUp} className="text-center space-y-4">
+            <h2 className="text-4xl md:text-6xl font-serif">Serviços <span className="text-gold">Impecáveis</span></h2>
+            <p className="text-cream/60 max-w-2xl mx-auto">Dos clássicos aos modernos, cuidamos do seu estilo com maestria.</p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+              { name: "Corte Masculino", time: "45 min", img: "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?q=80&w=600" },
+              { name: "Barba", time: "30 min", img: "https://images.unsplash.com/photo-1621605815841-aa897af68032?q=80&w=600" },
+              { name: "Corte + Barba", time: "1h 15min", img: "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=600" },
+              { name: "Pigmentação", time: "40 min", img: "https://images.unsplash.com/photo-1593702295094-ada74bc4a19c?q=80&w=600" },
+              { name: "Corte Infantil", time: "30 min", img: "https://images.unsplash.com/photo-1512690196162-7c972627ad0a?q=80&w=600" },
+              { name: "Acabamento", time: "15 min", img: "https://images.unsplash.com/photo-1622286330961-a30b42f61e73?q=80&w=600" },
+            ].map((service, i) => (
+              <motion.div key={i} {...fadeInUp} whileHover={{ y: -10 }} className="group">
+                <Card className="bg-forest-deep border-gold/10 overflow-hidden hover:border-gold/30 transition-all">
+                  <div className="relative h-64 overflow-hidden">
+                    <img src={service.img} alt={service.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                    <div className="absolute top-4 right-4 bg-gold/90 text-forest-deep px-3 py-1 rounded-full text-xs font-bold">{service.time}</div>
+                  </div>
+                  <CardHeader>
+                    <CardTitle className="text-2xl">{service.name}</CardTitle>
+                    <CardDescription className="text-cream/50">Corte com finalização premium e produtos de alta linha.</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Button variant="outline" className="w-full">Agendar este serviço</Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 6. Barbearia por Assinatura */}
+      <section id="assinatura" className="relative py-32 px-6 overflow-hidden">
+        <div className="absolute inset-0 bg-gold-gradient opacity-10 z-0" />
+        <div className="absolute top-0 left-0 w-full h-1 bg-gold-gradient" />
+        
+        <div className="max-w-5xl mx-auto relative z-10 text-center space-y-12">
+          <motion.div {...fadeInUp} className="space-y-6">
+            <span className="text-gold font-bold uppercase tracking-widest text-sm">Vantagem Exclusiva</span>
+            <h2 className="text-5xl md:text-7xl font-serif">Barbearia por <span className="text-gold">Assinatura</span></h2>
+            <p className="text-xl text-cream/70 max-w-2xl mx-auto">Economize e tenha prioridade. Se você corta o cabelo frequentemente, nosso plano foi feito para você.</p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              "Economia todos os meses",
+              "Atendimento prioritário",
+              "Mais praticidade",
+              "Cortes ilimitados"
+            ].map((benefit, i) => (
+              <motion.div key={i} {...fadeInUp} className="bg-forest border border-gold/20 p-6 rounded-2xl flex flex-col items-center gap-4">
+                <div className="bg-gold/10 p-3 rounded-full text-gold">
+                  <Check size={28} />
+                </div>
+                <span className="font-bold uppercase text-xs tracking-widest">{benefit}</span>
+              </motion.div>
+            ))}
+          </div>
+
+          <motion.div {...fadeInUp} className="pt-8">
+            <Button size="xl" variant="premium" className="px-16 shadow-gold/50">Quero fazer parte do clube</Button>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* 15. CTA Final & 16. Footer */}
+      <section className="py-24 bg-forest-deep px-6 border-t border-gold/10">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20">
+          <div className="space-y-8">
+            <h2 className="text-5xl font-serif">Seu próximo corte <span className="text-gold">começa aqui.</span></h2>
+            <p className="text-cream/60 text-lg">Agende em menos de um minuto pelo nosso aplicativo ou WhatsApp. Estamos prontos para te atender.</p>
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-forest rounded-full flex items-center justify-center text-gold"><MapPin /></div>
+                <span>Rua Piratininga, 487 – São Caetano do Sul</span>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-forest rounded-full flex items-center justify-center text-gold"><Clock /></div>
+                <span>Seg-Sex 10h-20h | Sáb 09h-17h</span>
+              </div>
+            </div>
+            <Button size="xl" variant="premium" className="w-full md:w-auto">💈 Agendar Agora</Button>
+          </div>
+          
+          <div className="rounded-3xl overflow-hidden grayscale contrast-125 border border-gold/20 h-[400px]">
+            {/* Google Maps Placeholder */}
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3655.441403215939!2d-46.562164!3d-23.624107!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce42d9b6a1250b%3A0x6a0c0e0e0e0e0e0e!2sRua%20Piratininga%2C%20487%20-%20Santa%20Maria%2C%20S%C3%A3o%20Caetano%20do%20Sul%20-%20SP%2C%2009550-160!5e0!3m2!1spt-BR!2sbr!4v1700000000000!5m2!1spt-BR!2sbr" 
+              className="w-full h-full border-0" 
+              allowFullScreen 
+              loading="lazy" 
+            />
+          </div>
+        </div>
+      </section>
+
+      <footer className="py-12 px-6 border-t border-gold/5 bg-forest-deep/50 text-cream/40">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+          <div className="flex items-center gap-4">
+            <img src={logoAsset.url} alt="Logo" className="w-12 h-12 opacity-50 grayscale" />
+            <span className="font-serif text-xl tracking-tighter uppercase">Seu José</span>
+          </div>
+          <div className="flex gap-8 text-xs font-bold uppercase tracking-widest">
+            <a href="#" className="hover:text-gold transition-colors flex items-center gap-2">Instagram</a>
+            <a href="#" className="hover:text-gold transition-colors flex items-center gap-2"><Phone size={16}/> WhatsApp</a>
+          </div>
+          <p className="text-xs">© 2026 Seu José Barbershop. Todos os direitos reservados.</p>
+        </div>
       </footer>
+
+      {/* Floating CTA (Mobile) */}
+      <div className="fixed bottom-6 right-6 lg:hidden z-50">
+        <Button variant="premium" size="icon" className="w-16 h-16 rounded-full shadow-2xl">
+          <Calendar size={28} />
+        </Button>
+      </div>
+
+      {/* Back to top */}
+      <motion.button 
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        className="fixed bottom-6 right-6 hidden lg:flex w-12 h-12 bg-forest border border-gold/20 rounded-full items-center justify-center text-gold hover:bg-gold hover:text-forest-deep transition-all z-50"
+      >
+        <ArrowUp size={24} />
+      </motion.button>
     </div>
   );
 }
