@@ -281,7 +281,7 @@ function Index() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className={`relative group w-full md:w-[calc(50%-24px)] lg:w-[calc(33.333%-32px)] ${i % 2 !== 0 ? "md:translate-y-12" : ""}`}
+                className={`relative group w-full md:w-[calc(50%-24px)] lg:w-[calc(33.333%-32px)] ${i < 3 && i % 2 !== 0 ? "md:translate-y-12" : ""}`}
               >
                 <div className="overflow-hidden aspect-[3/4] rounded-none mb-6 relative">
                   {service.video && (
