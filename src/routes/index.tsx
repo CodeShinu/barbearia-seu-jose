@@ -375,8 +375,8 @@ function Index() {
                 transition={{ delay: i * 0.1 }}
                 className="group relative"
               >
-                <div className="aspect-[4/5] overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-700">
-                  <img src={barber.img} alt={barber.name} className="w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-1000" />
+                <div className="aspect-[3/4] overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-700">
+                  <img src={barber.img} alt={barber.name} className="w-full h-full object-contain bg-forest-deep/20 group-hover:scale-105 transition-transform duration-1000" />
                 </div>
                 <div className="mt-6 space-y-1">
                   <h3 className="text-2xl font-serif uppercase tracking-tighter text-cream">{barber.name}</h3>
@@ -546,7 +546,7 @@ function Index() {
               whileInView={{ opacity: 1, scale: 1 }}
               className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10 md:row-span-2"
             >
-              <img src={corteMullet1.url} alt="Corte Mullet Detalhe" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
+              <img src={corteMullet1.url} alt="Corte Mullet Detalhe" className="w-full h-full object-contain bg-forest/20 hover:scale-105 transition-transform duration-1000" />
             </motion.div>
 
             {/* 3. Corte Mullet 2 */}
@@ -555,7 +555,7 @@ function Index() {
               whileInView={{ opacity: 1, scale: 1 }}
               className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10"
             >
-              <img src={corteMullet2.url} alt="Corte Mullet Perfil" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
+              <img src={corteMullet2.url} alt="Corte Mullet Perfil" className="w-full h-full object-contain bg-forest/20 hover:scale-105 transition-transform duration-1000" />
             </motion.div>
 
             {/* 4. Corte Mullet 3 */}
@@ -564,7 +564,7 @@ function Index() {
               whileInView={{ opacity: 1, scale: 1 }}
               className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10"
             >
-              <img src={corteMullet3.url} alt="Corte Mullet Estilo" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
+              <img src={corteMullet3.url} alt="Corte Mullet Estilo" className="w-full h-full object-contain bg-forest/20 hover:scale-105 transition-transform duration-1000" />
             </motion.div>
 
             {/* 5. Vídeo Institucional 3 (Largo) */}
