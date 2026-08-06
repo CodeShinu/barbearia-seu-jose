@@ -607,11 +607,9 @@ function Index() {
               <img src={barbeariaInterna2.url} alt="Cuidado Premium" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
             </motion.div>
           </div>
-
-
-          </div>
         </div>
       </section>
+
 
       {/* Back to top */}
       <motion.button 
