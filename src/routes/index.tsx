@@ -123,8 +123,8 @@ function Index() {
           </div>
           
           <h1 className="headline-huge font-serif text-cream uppercase">
-            O Estilo que <br />
-            <span className="text-gold italic">define você.</span>
+            Barbearia <br />
+            <span className="text-gold italic">Seu José.</span>
           </h1>
           
           <p className="text-xl md:text-3xl text-cream/70 max-w-2xl mx-auto leading-tight text-balance">
