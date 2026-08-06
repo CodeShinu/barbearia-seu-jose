@@ -272,7 +272,6 @@ function Index() {
               { name: "Corte Masculino", time: "45 min", video: videoCorte1.url, large: true },
               { name: "A Barba", time: "30 min", video: videoBarba1.url },
               { name: "O Combo", time: "1h 15min", video: videoCombo1.url },
-              { name: "Pigmentação", time: "40 min", img: "https://images.unsplash.com/photo-1593702295094-ada74bc4a19c?q=80&w=600" },
               { name: "Kids", time: "30 min", video: videoKids1.url },
               { name: "Toalha Quente", time: "20 min", video: videoToalhaQuente.url },
             ].map((service, i) => (
