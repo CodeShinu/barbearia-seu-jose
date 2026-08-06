@@ -44,6 +44,8 @@ import corteMullet3 from "@/assets/corte_mullet_3.jpg.asset.json";
 import barbeariaInterna1 from "@/assets/barbearia_interna_1.jpg.asset.json";
 import barbeariaInterna2 from "@/assets/barbearia_interna_2.jpg.asset.json";
 import barbeariaInterna3 from "@/assets/barbearia_interna_3.jpg.asset.json";
+import videoCombo1 from "@/assets/video_combo_premium.mp4.asset.json";
+
 
 
 export const Route = createFileRoute("/")({
@@ -267,7 +269,7 @@ function Index() {
             {[
               { name: "Corte Masculino", time: "45 min", video: videoCorte1.url, large: true },
               { name: "A Barba", time: "30 min", video: videoBarba1.url },
-              { name: "O Combo", time: "1h 15min", img: "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=600" },
+              { name: "O Combo", time: "1h 15min", video: videoCombo1.url },
               { name: "Pigmentação", time: "40 min", img: "https://images.unsplash.com/photo-1593702295094-ada74bc4a19c?q=80&w=600" },
               { name: "Kids", time: "30 min", img: "https://images.unsplash.com/photo-1512690196162-7c972627ad0a?q=80&w=600" },
               { name: "Toalha Quente", time: "20 min", img: "https://images.unsplash.com/photo-1622286330961-a30b42f61e73?q=80&w=600" },
