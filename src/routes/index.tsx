@@ -31,6 +31,14 @@ import { useState, useEffect } from "react";
 import logoAsset from "@/assets/logo.png.asset.json";
 
 export const Route = createFileRoute("/")({
+  head: () => ({
+    title: "Seu José Barbershop | Barbearia Premium em São Caetano do Sul",
+    meta: [
+      { name: "description", content: "Barbearia premium em São Caetano do Sul (SP). Cortes de elite, ambiente exclusivo e tradição desde 2019. Agende seu horário no Seu José." },
+      { property: "og:title", content: "Seu José Barbershop | Estilo e Tradição em São Caetano" },
+      { property: "og:description", content: "Experiência premium de barbearia com mestres barbeiros, lounge VIP e o melhor atendimento da região." },
+    ],
+  }),
   component: Index,
 });
 
