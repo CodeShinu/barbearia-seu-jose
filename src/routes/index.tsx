@@ -331,7 +331,20 @@ function Index() {
         </div>
       </footer>
 
-      {/* Floating CTA (Mobile) */}
+      {/* Floating CTA (WhatsApp Pulse) */}
+      <div className="fixed bottom-6 left-6 z-50">
+        <motion.a 
+          href="https://wa.me/5511999999999"
+          target="_blank"
+          animate={{ scale: [1, 1.05, 1] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          className="flex items-center gap-3 bg-[#25D366] text-white px-4 py-3 rounded-full shadow-2xl hover:scale-105 transition-transform"
+        >
+          <Phone size={20} />
+          <span className="font-bold text-sm hidden md:block uppercase tracking-widest">Atendimento</span>
+        </motion.a>
+      </div>
+
       <div className="fixed bottom-6 right-6 lg:hidden z-50">
         <Button variant="premium" size="icon" className="w-16 h-16 rounded-full shadow-2xl">
           <Calendar size={28} />
