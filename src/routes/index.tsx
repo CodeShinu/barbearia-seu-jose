@@ -427,66 +427,8 @@ function Index() {
         </div>
       </section>
 
-      {/* 15. CTA Final & 16. Footer */}
-      <section id="contato" className="py-32 bg-forest-deep px-6 border-t border-gold/10 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-[0.03] brick-texture pointer-events-none" />
-        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-20 items-center">
-          <div className="lg:w-1/2 space-y-12">
-            <h2 className="text-6xl md:text-8xl font-serif leading-none tracking-tighter">
-              Seu estilo <br />
-              <span className="text-gold italic">começa agora.</span>
-            </h2>
-            <div className="space-y-6">
-              <div className="flex items-center gap-6 group">
-                <div className="w-16 h-16 bg-forest rounded-none flex items-center justify-center text-gold border border-gold/20 group-hover:bg-gold group-hover:text-forest-deep transition-all duration-500"><MapPin size={32} /></div>
-                <div>
-                  <p className="text-xs uppercase tracking-widest text-gold font-bold">Localização</p>
-                  <p className="text-lg">Rua Piratininga, 487 – São Caetano do Sul</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-6 group">
-                <div className="w-16 h-16 bg-forest rounded-none flex items-center justify-center text-gold border border-gold/20 group-hover:bg-gold group-hover:text-forest-deep transition-all duration-500"><Clock size={32} /></div>
-                <div>
-                  <p className="text-xs uppercase tracking-widest text-gold font-bold">Horário</p>
-                  <p className="text-lg">Seg-Sex 10h-20h | Sáb 09h-17h</p>
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-6 pt-4">
-              <Button size="xl" variant="premium" className="rounded-none px-12" asChild>
-                <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer">Agendar via WhatsApp</a>
-              </Button>
-              <Button size="xl" variant="outline" className="rounded-none px-12 border-cream/20 text-cream" asChild>
-                <a href="https://maps.app.goo.gl/rDbtF4nJ8pW2mK4Z9" target="_blank" rel="noopener noreferrer">Ver no Mapa</a>
-              </Button>
-            </div>
-          </div>
-          
-          <div className="lg:w-1/2 w-full aspect-square md:aspect-video lg:aspect-square relative border border-gold/20">
-            <iframe 
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3655.441403215939!2d-46.562164!3d-23.624107!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce42d9b6a1250b%3A0x6a0c0e0e0e0e0e0e!2sRua%20Piratininga%2C%20487%20-%20Santa%20Maria%2C%20S%C3%A3o%20Caetano%20do%20Sul%20-%20SP%2C%2009550-160!5e0!3m2!1spt-BR!2sbr!4v1700000000000!5m2!1spt-BR!2sbr" 
-              className="w-full h-full border-0" 
-              allowFullScreen 
-              loading="lazy" 
-            />
-          </div>
-        </div>
-      </section>
+      {/* O rodapé foi movido para depois da galeria para seguir o fluxo visual solicitado */}
 
-      <footer className="py-12 px-6 border-t border-gold/5 bg-forest-deep/50 text-cream/40">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="flex items-center gap-4">
-            <img src={logoAsset.url} alt="Logo" className="w-12 h-12 opacity-50 grayscale" />
-            <span className="font-serif text-xl tracking-tighter uppercase">Seu José</span>
-          </div>
-          <div className="flex gap-8 text-xs font-bold uppercase tracking-widest">
-            <a href="https://www.instagram.com/barbeariaseujose/" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-colors flex items-center gap-2">Instagram</a>
-            <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-colors flex items-center gap-2"><Phone size={16}/> WhatsApp</a>
-            <a href="https://play.google.com/store/apps/details?id=br.com.starapp.barbeariaseujose" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-colors flex items-center gap-2">Google Play</a>
-          </div>
-          <p className="text-xs">© 2026 Seu José Barbershop. Todos os direitos reservados.</p>
-        </div>
-      </footer>
 
       {/* Floating Badge Aberto/Fechado */}
       <div className="fixed top-24 right-6 z-50 pointer-events-none">
@@ -624,7 +566,107 @@ function Index() {
             </motion.div>
           </div>
         </div>
+      {/* 15. Contato & Footer Premium - Movido para depois da Galeria */}
+      <section id="contato" className="relative py-40 bg-forest-deep overflow-hidden border-t border-gold/10">
+        <div className="absolute inset-0 opacity-[0.05] brick-texture pointer-events-none" />
+        
+        {/* Elemento Decorativo Gigante no Background */}
+        <div className="absolute -bottom-20 -right-20 text-[20vw] font-serif font-black text-gold/5 pointer-events-none uppercase tracking-tighter select-none">
+          Estilo
+        </div>
+
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-start">
+            
+            {/* Coluna de Informações e CTA */}
+            <motion.div {...fadeInUp} className="space-y-16">
+              <div className="space-y-6">
+                <span className="text-gold font-bold uppercase tracking-[0.3em] text-xs inline-block border-b border-gold/30 pb-2">Agendamento & Localização</span>
+                <h2 className="text-6xl md:text-9xl font-serif leading-none tracking-tighter text-cream uppercase">
+                  Onde a <br />
+                  <span className="text-gold italic">Magia</span> <br />
+                  Acontece.
+                </h2>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-12">
+                <div className="space-y-4 group">
+                  <div className="w-12 h-12 flex items-center justify-center text-gold border border-gold/20 group-hover:bg-gold group-hover:text-forest-deep transition-all duration-500">
+                    <MapPin size={24} />
+                  </div>
+                  <div>
+                    <h4 className="text-gold font-bold uppercase text-[10px] tracking-widest mb-1">Endereço</h4>
+                    <p className="text-lg text-cream/80 font-serif leading-tight">Rua Piratininga, 487 <br />São Caetano do Sul</p>
+                  </div>
+                </div>
+
+                <div className="space-y-4 group">
+                  <div className="w-12 h-12 flex items-center justify-center text-gold border border-gold/20 group-hover:bg-gold group-hover:text-forest-deep transition-all duration-500">
+                    <Clock size={24} />
+                  </div>
+                  <div>
+                    <h4 className="text-gold font-bold uppercase text-[10px] tracking-widest mb-1">Horário de Luxo</h4>
+                    <p className="text-lg text-cream/80 font-serif leading-tight">Seg-Sex: 10h às 20h <br />Sáb: 09h às 17h</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-6 pt-4">
+                <Button size="xl" variant="premium" className="rounded-none px-12 h-16 text-lg uppercase tracking-widest shadow-2xl shadow-gold/10" asChild>
+                  <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer">
+                    Agendar Horário <Scissors className="ml-2 w-5 h-5" />
+                  </a>
+                </Button>
+                <Button size="xl" variant="outline" className="rounded-none px-12 h-16 border-cream/20 text-cream uppercase tracking-widest hover:bg-cream hover:text-forest-deep transition-all" asChild>
+                  <a href="https://maps.app.goo.gl/rDbtF4nJ8pW2mK4Z9" target="_blank" rel="noopener noreferrer">Ver no Mapa</a>
+                </Button>
+              </div>
+            </motion.div>
+
+            {/* Coluna do Mapa Brutalista */}
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="relative aspect-square md:aspect-video lg:aspect-square"
+            >
+              <div className="absolute -top-4 -left-4 w-full h-full border border-gold/20 z-0" />
+              <div className="relative z-10 w-full h-full border-2 border-gold/40 shadow-2xl overflow-hidden group">
+                <iframe 
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3655.441403215939!2d-46.562164!3d-23.624107!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce42d9b6a1250b%3A0x6a0c0e0e0e0e0e0e!2sRua%20Piratininga%2C%20487%20-%20Santa%20Maria%2C%20S%C3%A3o%20Caetano%20do%20Sul%20-%20SP%2C%2009550-160!5e0!3m2!1spt-BR!2sbr!4v1700000000000!5m2!1spt-BR!2sbr" 
+                  className="w-full h-full border-0 grayscale hover:grayscale-0 transition-all duration-1000" 
+                  allowFullScreen 
+                  loading="lazy" 
+                />
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Rodapé Final Minimalista */}
+          <div className="mt-40 pt-12 border-t border-gold/10 flex flex-col md:flex-row justify-between items-center gap-12">
+            <div className="flex flex-col items-center md:items-start gap-4">
+              <div className="flex items-center gap-4">
+                <img src={logoAsset.url} alt="Logo Seu José" className="w-16 h-16 rounded-full border border-gold/20" />
+                <div className="flex flex-col">
+                  <span className="font-serif text-2xl tracking-tighter uppercase text-cream">Seu José</span>
+                  <span className="text-[10px] uppercase tracking-[0.5em] text-gold font-bold">Barbershop</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap justify-center gap-12 text-[10px] font-bold uppercase tracking-[0.3em] text-cream/40">
+              <a href="https://www.instagram.com/barbeariaseujose/" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-all duration-300">Instagram</a>
+              <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-all duration-300">WhatsApp</a>
+              <a href="https://play.google.com/store/apps/details?id=br.com.starapp.barbeariaseujose" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-all duration-300">App Store</a>
+            </div>
+
+            <div className="text-[10px] uppercase tracking-widest text-cream/20">
+              © 2026 — SCS / SP
+            </div>
+          </div>
+        </div>
       </section>
+
 
 
       {/* Back to top */}
