@@ -518,7 +518,7 @@ function Index() {
           </div>
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 auto-rows-[200px] md:auto-rows-[300px]">
-            {/* Main Video Square */}
+            {/* 1. Vídeo Principal (Grande) */}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -534,12 +534,9 @@ function Index() {
                 <source src={videoInstitucional2.url} type="video/mp4" />
               </video>
               <div className="absolute inset-0 bg-forest-deep/20 group-hover:bg-transparent transition-colors" />
-              <div className="absolute bottom-6 left-6 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-                <span className="text-gold font-bold text-xs uppercase tracking-widest">Processo Criativo</span>
-              </div>
             </motion.div>
 
-            {/* Uploaded Photos */}
+            {/* 2. Corte Mullet 1 */}
             <motion.div 
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -548,6 +545,7 @@ function Index() {
               <img src={corteMullet1.url} alt="Corte Mullet Detalhe" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
             </motion.div>
 
+            {/* 3. Corte Mullet 2 */}
             <motion.div 
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -556,15 +554,7 @@ function Index() {
               <img src={corteMullet2.url} alt="Corte Mullet Perfil" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
             </motion.div>
 
-            {/* Extra Branded Content */}
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              className="relative overflow-hidden bg-forest flex items-center justify-center p-8 border border-gold/10 group"
-            >
-              <Scissors className="text-gold/20 w-16 h-16 group-hover:rotate-45 transition-transform duration-500" />
-            </motion.div>
-
+            {/* 4. Corte Mullet 3 */}
             <motion.div 
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -573,6 +563,7 @@ function Index() {
               <img src={corteMullet3.url} alt="Corte Mullet Estilo" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
             </motion.div>
 
+            {/* 5. Vídeo Institucional 3 (Largo) */}
             <motion.div 
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -589,6 +580,7 @@ function Index() {
               </video>
             </motion.div>
 
+            {/* 6. Barbearia Interna 3 */}
             <motion.div 
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -597,6 +589,7 @@ function Index() {
               <img src={barbeariaInterna3.url} alt="Ambiente VIP Seu José" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 hover:scale-105 transition-transform duration-1000" />
             </motion.div>
 
+            {/* 7. Barbearia Interna 1 (Vertical) */}
             <motion.div 
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -605,17 +598,18 @@ function Index() {
               <img src={barbeariaInterna1.url} alt="Barbeiros em Ação" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
             </motion.div>
 
+            {/* 8. Barbearia Interna 2 (Largo) */}
             <motion.div 
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
-              className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10 md:col-span-2"
+              className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10 md:col-span-3"
             >
               <img src={barbeariaInterna2.url} alt="Cuidado Premium" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
             </motion.div>
-
           </div>
         </div>
       </section>
+
 
       {/* Back to top */}
       <motion.button 
