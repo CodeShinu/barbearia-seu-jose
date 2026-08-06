@@ -219,7 +219,7 @@ function Index() {
             <img 
               src={posterTradicao.url} 
               alt="Ambiente Seu José" 
-              className="rounded-none shadow-2xl w-full h-[600px] object-cover relative z-10 grayscale hover:grayscale-0 transition-all duration-700 border-2 border-gold/10"
+              className="rounded-none shadow-2xl w-full h-[600px] object-contain bg-forest/20 relative z-10 grayscale hover:grayscale-0 transition-all duration-700 border-2 border-gold/10"
             />
             <div className="absolute -bottom-6 -right-6 bg-gold p-8 rounded-none z-20 hidden md:block">
               <p className="text-forest-deep font-bold uppercase tracking-tighter text-xl leading-none">
@@ -375,8 +375,8 @@ function Index() {
                 transition={{ delay: i * 0.1 }}
                 className="group relative"
               >
-                <div className="aspect-[4/5] overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-700">
-                  <img src={barber.img} alt={barber.name} className="w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-1000" />
+                <div className="aspect-[3/4] overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-700">
+                  <img src={barber.img} alt={barber.name} className="w-full h-full object-contain bg-forest-deep/20 group-hover:scale-105 transition-transform duration-1000" />
                 </div>
                 <div className="mt-6 space-y-1">
                   <h3 className="text-2xl font-serif uppercase tracking-tighter text-cream">{barber.name}</h3>
@@ -546,7 +546,7 @@ function Index() {
               whileInView={{ opacity: 1, scale: 1 }}
               className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10 md:row-span-2"
             >
-              <img src={corteMullet1.url} alt="Corte Mullet Detalhe" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
+              <img src={corteMullet1.url} alt="Corte Mullet Detalhe" className="w-full h-full object-contain bg-forest/20 hover:scale-105 transition-transform duration-1000" />
             </motion.div>
 
             {/* 3. Corte Mullet 2 */}
@@ -555,7 +555,7 @@ function Index() {
               whileInView={{ opacity: 1, scale: 1 }}
               className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10"
             >
-              <img src={corteMullet2.url} alt="Corte Mullet Perfil" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
+              <img src={corteMullet2.url} alt="Corte Mullet Perfil" className="w-full h-full object-contain bg-forest/20 hover:scale-105 transition-transform duration-1000" />
             </motion.div>
 
             {/* 4. Corte Mullet 3 */}
@@ -564,7 +564,7 @@ function Index() {
               whileInView={{ opacity: 1, scale: 1 }}
               className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10"
             >
-              <img src={corteMullet3.url} alt="Corte Mullet Estilo" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
+              <img src={corteMullet3.url} alt="Corte Mullet Estilo" className="w-full h-full object-contain bg-forest/20 hover:scale-105 transition-transform duration-1000" />
             </motion.div>
 
             {/* 5. Vídeo Institucional 3 (Largo) */}
@@ -590,7 +590,7 @@ function Index() {
               whileInView={{ opacity: 1, scale: 1 }}
               className="relative overflow-hidden md:col-span-2 border border-gold/10 group"
             >
-              <img src={barbeariaInterna3.url} alt="Ambiente VIP Seu José" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 hover:scale-105 transition-transform duration-1000" />
+              <img src={barbeariaInterna3.url} alt="Ambiente VIP Seu José" className="w-full h-full object-contain bg-forest/20 grayscale group-hover:grayscale-0 transition-all duration-700 hover:scale-105 transition-transform duration-1000" />
             </motion.div>
 
             {/* 7. Barbearia Interna 1 (Vertical) */}
@@ -599,7 +599,7 @@ function Index() {
               whileInView={{ opacity: 1, scale: 1 }}
               className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10 md:row-span-2"
             >
-              <img src={barbeariaInterna1.url} alt="Barbeiros em Ação" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
+              <img src={barbeariaInterna1.url} alt="Barbeiros em Ação" className="w-full h-full object-contain bg-forest/20 hover:scale-105 transition-transform duration-1000" />
             </motion.div>
 
             {/* 8. Barbearia Interna 2 (Largo) */}
@@ -608,7 +608,7 @@ function Index() {
               whileInView={{ opacity: 1, scale: 1 }}
               className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10 md:col-span-3"
             >
-              <img src={barbeariaInterna2.url} alt="Cuidado Premium" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
+              <img src={barbeariaInterna2.url} alt="Cuidado Premium" className="w-full h-full object-contain bg-forest/20 hover:scale-105 transition-transform duration-1000" />
             </motion.div>
           </div>
         </div>
