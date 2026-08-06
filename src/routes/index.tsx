@@ -566,6 +566,7 @@ function Index() {
             </motion.div>
           </div>
         </div>
+      </section>
       {/* 15. Contato & Footer Premium - Movido para depois da Galeria */}
       <section id="contato" className="relative py-40 bg-forest-deep overflow-hidden border-t border-gold/10">
         <div className="absolute inset-0 opacity-[0.05] brick-texture pointer-events-none" />
