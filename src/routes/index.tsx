@@ -31,6 +31,14 @@ import { useState, useEffect } from "react";
 import logoAsset from "@/assets/logo.png.asset.json";
 
 export const Route = createFileRoute("/")({
+  head: () => ({
+    title: "Seu José Barbershop | Barbearia Premium em São Caetano do Sul",
+    meta: [
+      { name: "description", content: "Barbearia premium em São Caetano do Sul (SP). Cortes de elite, ambiente exclusivo e tradição desde 2019. Agende seu horário no Seu José." },
+      { property: "og:title", content: "Seu José Barbershop | Estilo e Tradição em São Caetano" },
+      { property: "og:description", content: "Experiência premium de barbearia com mestres barbeiros, lounge VIP e o melhor atendimento da região." },
+    ],
+  }),
   component: Index,
 });
 
@@ -123,8 +131,8 @@ function Index() {
           </div>
           
           <h1 className="headline-huge font-serif text-cream uppercase">
-            O Estilo que <br />
-            <span className="text-gold italic">define você.</span>
+            Barbearia <br />
+            <span className="text-gold italic">Seu José.</span>
           </h1>
           
           <p className="text-xl md:text-3xl text-cream/70 max-w-2xl mx-auto leading-tight text-balance">
@@ -412,8 +420,9 @@ function Index() {
             <span className="font-serif text-xl tracking-tighter uppercase">Seu José</span>
           </div>
           <div className="flex gap-8 text-xs font-bold uppercase tracking-widest">
-            <a href="#" className="hover:text-gold transition-colors flex items-center gap-2">Instagram</a>
-            <a href="#" className="hover:text-gold transition-colors flex items-center gap-2"><Phone size={16}/> WhatsApp</a>
+            <a href="https://www.instagram.com/barbeariaseujose/" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-colors flex items-center gap-2">Instagram</a>
+            <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-colors flex items-center gap-2"><Phone size={16}/> WhatsApp</a>
+            <a href="https://play.google.com/store/apps/details?id=br.com.starapp.barbeariaseujose" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-colors flex items-center gap-2">Google Play</a>
           </div>
           <p className="text-xs">© 2026 Seu José Barbershop. Todos os direitos reservados.</p>
         </div>
