@@ -131,4 +131,14 @@
     font-size: clamp(3rem, 8vw + 1rem, 10rem);
     line-height: 0.9;
   }
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .animate-marquee {
+    animation: marquee 30s linear infinite;
+    display: flex;
+    width: max-content;
+  }
 }
