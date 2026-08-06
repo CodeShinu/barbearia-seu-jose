@@ -31,25 +31,6 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import logoAsset from "@/assets/logo.png.asset.json";
-import posterTradicao from "@/assets/poster_tradicao.jpg.asset.json";
-import corteMullet1 from "@/assets/corte_mullet_1.jpg.asset.json";
-import corteMullet2 from "@/assets/corte_mullet_2.jpg.asset.json";
-import videoInstitucional1 from "@/assets/video_institucional_1.mp4.asset.json";
-import videoInstitucional2 from "@/assets/video_institucional_2.mp4.asset.json";
-import videoInstitucional3 from "@/assets/video_institucional_3.mp4.asset.json";
-import videoBarba1 from "@/assets/video_barba_premium.mp4.asset.json";
-import videoCorte1 from "@/assets/video_corte_1.mp4.asset.json";
-import corteMullet3 from "@/assets/corte_mullet_3.jpg.asset.json";
-import barbeariaInterna1 from "@/assets/barbearia_interna_1.jpg.asset.json";
-import barbeariaInterna2 from "@/assets/barbearia_interna_2.jpg.asset.json";
-import barbeariaInterna3 from "@/assets/barbearia_interna_3.jpg.asset.json";
-import videoCombo1 from "@/assets/video_combo_premium.mp4.asset.json";
-import videoKids1 from "@/assets/video_kids_premium.mp4.asset.json";
-import videoToalhaQuente from "@/assets/video_toalha_quente.mp4.asset.json";
-import joeberSaccomani from "@/assets/joeber_saccomani.jpg.asset.json";
-import wesleySilva from "@/assets/wesley_silva.jpg.asset.json";
-import adrielBarao from "@/assets/adriel_barao.jpg.asset.json";
 
 
 
@@ -58,7 +39,7 @@ export const Route = createFileRoute("/")({
     title: "Seu José Barbershop | Barbearia Premium em São Caetano do Sul",
     meta: [
       { name: "description", content: "Barbearia premium em São Caetano do Sul (SP). Cortes de elite, ambiente exclusivo e tradição desde 2019. Agende seu horário no Seu José." },
-      { property: "og:title", content: "Lovable App" },
+      { property: "og:title", content: "Seu José Barbershop" },
       { property: "og:description", content: "Barbearia premium em São Caetano do Sul (SP). Cortes de elite, ambiente exclusivo e tradição desde 2019. Agende seu horário no Seu José." },
     ],
   }),
@@ -103,7 +84,7 @@ function Index() {
       {/* Navbar */}
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 py-4 px-6 md:px-12 flex items-center justify-between ${isScrolled ? "bg-forest-deep/95 backdrop-blur-md shadow-2xl py-3 border-b border-gold/10" : "bg-transparent"}`}>
         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-4">
-          <img src={logoAsset.url} alt="Seu José Logo" className="w-12 h-12 md:w-16 md:h-16 rounded-full border border-gold/30 shadow-gold/20 shadow-lg" />
+          <img src={"/assets/logo.png"} alt="Seu José Logo" className="w-12 h-12 md:w-16 md:h-16 rounded-full border border-gold/30 shadow-gold/20 shadow-lg" />
         </motion.div>
 
         <div className="hidden lg:flex gap-8 items-center text-sm font-bold uppercase tracking-widest">
@@ -154,7 +135,7 @@ function Index() {
             transition={{ duration: 20, repeat: Infinity, repeatType: "reverse" }}
             className="w-full h-full object-cover grayscale opacity-40 md:opacity-60"
           >
-            <source src={videoInstitucional1.url} type="video/mp4" />
+            <source src={"/assets/video_institucional_1.mp4"} type="video/mp4" />
           </motion.video>
           
           <button 
@@ -225,7 +206,7 @@ function Index() {
           >
             <div className="absolute -top-10 -left-10 w-32 h-32 border-l-2 border-t-2 border-gold/40 z-0" />
             <img 
-              src={posterTradicao.url} 
+              src={"/assets/poster_tradicao.jpg"} 
               alt="Ambiente Seu José" 
               className="rounded-none shadow-2xl w-full h-[600px] object-contain bg-forest/20 relative z-10 grayscale hover:grayscale-0 transition-all duration-700 border-2 border-gold/10"
             />
@@ -280,11 +261,11 @@ function Index() {
 
           <div className="flex flex-wrap justify-center gap-x-12 gap-y-24">
             {[
-              { name: "Corte Masculino", time: "45 min", video: videoCorte1.url },
-              { name: "A Barba", time: "30 min", video: videoBarba1.url },
-              { name: "O Combo", time: "1h 15min", video: videoCombo1.url },
-              { name: "Kids", time: "30 min", video: videoKids1.url },
-              { name: "Toalha Quente", time: "20 min", video: videoToalhaQuente.url },
+              { name: "Corte Masculino", time: "45 min", video: "/assets/video_corte_1.mp4" },
+              { name: "A Barba", time: "30 min", video: "/assets/video_barba_premium.mp4" },
+              { name: "O Combo", time: "1h 15min", video: "/assets/video_combo_premium.mp4" },
+              { name: "Kids", time: "30 min", video: "/assets/video_kids_premium.mp4" },
+              { name: "Toalha Quente", time: "20 min", video: "/assets/video_toalha_quente.mp4" },
             ].map((service, i) => (
               <motion.div 
                 key={i} 
@@ -375,9 +356,9 @@ function Index() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
             {[
-              { name: "Joeber Saccomani", role: "Barber", img: (joeberSaccomani as any).url },
-              { name: "Wesley Silva", role: "Barber", img: (wesleySilva as any).url },
-              { name: "Adriel Barão", role: "Barber", img: (adrielBarao as any).url },
+              { name: "Joeber Saccomani", role: "Barber", img: "/assets/joeber_saccomani.jpg" },
+              { name: "Wesley Silva", role: "Barber", img: "/assets/wesley_silva.jpg" },
+              { name: "Adriel Barão", role: "Barber", img: "/assets/adriel_barao.jpg" },
             ].map((barber, i) => (
               <motion.div 
                 key={i} 
@@ -493,7 +474,7 @@ function Index() {
                 playsInline 
                 className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
               >
-                <source src={videoInstitucional2.url} type="video/mp4" />
+                <source src={"/assets/video_institucional_2.mp4"} type="video/mp4" />
               </video>
               <div className="absolute inset-0 bg-forest-deep/20 group-hover:bg-transparent transition-colors" />
             </motion.div>
@@ -504,7 +485,7 @@ function Index() {
               whileInView={{ opacity: 1, scale: 1 }}
               className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10 md:row-span-2"
             >
-              <img src={corteMullet1.url} alt="Corte Mullet Detalhe" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
+              <img src={"/assets/corte_mullet_1.jpg"} alt="Corte Mullet Detalhe" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
             </motion.div>
 
             {/* 3. Corte Mullet 2 */}
@@ -513,7 +494,7 @@ function Index() {
               whileInView={{ opacity: 1, scale: 1 }}
               className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10"
             >
-              <img src={corteMullet2.url} alt="Corte Mullet Perfil" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
+              <img src={"/assets/corte_mullet_2.jpg"} alt="Corte Mullet Perfil" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
             </motion.div>
 
             {/* 4. Corte Mullet 3 */}
@@ -522,7 +503,7 @@ function Index() {
               whileInView={{ opacity: 1, scale: 1 }}
               className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10"
             >
-              <img src={corteMullet3.url} alt="Corte Mullet Estilo" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
+              <img src={"/assets/corte_mullet_3.jpg"} alt="Corte Mullet Estilo" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
             </motion.div>
 
             {/* 5. Vídeo Institucional 3 (Largo) */}
@@ -538,7 +519,7 @@ function Index() {
                 playsInline 
                 className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
               >
-                <source src={videoInstitucional3.url} type="video/mp4" />
+                <source src={"/assets/video_institucional_3.mp4"} type="video/mp4" />
               </video>
             </motion.div>
 
@@ -548,7 +529,7 @@ function Index() {
               whileInView={{ opacity: 1, scale: 1 }}
               className="relative overflow-hidden md:col-span-2 border border-gold/10 group"
             >
-              <img src={barbeariaInterna3.url} alt="Ambiente VIP Seu José" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 hover:scale-105 transition-transform duration-1000" />
+              <img src={"/assets/barbearia_interna_3.jpg"} alt="Ambiente VIP Seu José" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 hover:scale-105 transition-transform duration-1000" />
             </motion.div>
 
             {/* 7. Barbearia Interna 1 (Vertical) */}
@@ -557,7 +538,7 @@ function Index() {
               whileInView={{ opacity: 1, scale: 1 }}
               className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10 md:row-span-2"
             >
-              <img src={barbeariaInterna1.url} alt="Barbeiros em Ação" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
+              <img src={"/assets/barbearia_interna_1.jpg"} alt="Barbeiros em Ação" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
             </motion.div>
 
             {/* 8. Barbearia Interna 2 (Largo) */}
@@ -566,7 +547,7 @@ function Index() {
               whileInView={{ opacity: 1, scale: 1 }}
               className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10 md:col-span-3"
             >
-              <img src={barbeariaInterna2.url} alt="Cuidado Premium" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
+              <img src={"/assets/barbearia_interna_2.jpg"} alt="Cuidado Premium" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
             </motion.div>
           </div>
         </div>
@@ -651,7 +632,7 @@ function Index() {
           <div className="mt-40 pt-12 border-t border-gold/10 flex flex-col md:flex-row justify-between items-center gap-12">
             <div className="flex flex-col items-center md:items-start gap-4">
               <div className="flex items-center gap-4">
-                <img src={logoAsset.url} alt="Logo Seu José" className="w-16 h-16 rounded-full border border-gold/20" />
+                <img src={"/assets/logo.png"} alt="Logo Seu José" className="w-16 h-16 rounded-full border border-gold/20" />
                 <div className="flex flex-col">
                   <span className="font-serif text-2xl tracking-tighter uppercase text-cream">Seu José</span>
                   <span className="text-[10px] uppercase tracking-[0.5em] text-gold font-bold">Barbershop</span>
