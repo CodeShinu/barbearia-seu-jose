@@ -276,29 +276,40 @@ function Index() {
       </section>
 
       {/* 15. CTA Final & 16. Footer */}
-      <section className="py-24 bg-forest-deep px-6 border-t border-gold/10">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20">
-          <div className="space-y-8">
-            <h2 className="text-5xl font-serif">Seu próximo corte <span className="text-gold">começa aqui.</span></h2>
-            <p className="text-cream/60 text-lg">Agende em menos de um minuto pelo nosso aplicativo ou WhatsApp. Estamos prontos para te atender.</p>
-            <div className="flex flex-col gap-4">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-forest rounded-full flex items-center justify-center text-gold"><MapPin /></div>
-                <span>Rua Piratininga, 487 – São Caetano do Sul</span>
+      <section className="py-32 bg-forest-deep px-6 border-t border-gold/10 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.03] brick-texture pointer-events-none" />
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-20 items-center">
+          <div className="lg:w-1/2 space-y-12">
+            <h2 className="text-6xl md:text-8xl font-serif leading-none tracking-tighter">
+              Seu estilo <br />
+              <span className="text-gold italic">começa agora.</span>
+            </h2>
+            <div className="space-y-6">
+              <div className="flex items-center gap-6 group">
+                <div className="w-16 h-16 bg-forest rounded-none flex items-center justify-center text-gold border border-gold/20 group-hover:bg-gold group-hover:text-forest-deep transition-all duration-500"><MapPin size={32} /></div>
+                <div>
+                  <p className="text-xs uppercase tracking-widest text-gold font-bold">Localização</p>
+                  <p className="text-lg">Rua Piratininga, 487 – São Caetano do Sul</p>
+                </div>
               </div>
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-forest rounded-full flex items-center justify-center text-gold"><Clock /></div>
-                <span>Seg-Sex 10h-20h | Sáb 09h-17h</span>
+              <div className="flex items-center gap-6 group">
+                <div className="w-16 h-16 bg-forest rounded-none flex items-center justify-center text-gold border border-gold/20 group-hover:bg-gold group-hover:text-forest-deep transition-all duration-500"><Clock size={32} /></div>
+                <div>
+                  <p className="text-xs uppercase tracking-widest text-gold font-bold">Horário</p>
+                  <p className="text-lg">Seg-Sex 10h-20h | Sáb 09h-17h</p>
+                </div>
               </div>
             </div>
-            <Button size="xl" variant="premium" className="w-full md:w-auto">💈 Agendar Agora</Button>
+            <div className="flex flex-col sm:flex-row gap-6 pt-4">
+              <Button size="xl" variant="premium" className="rounded-none px-12">Agendar via WhatsApp</Button>
+              <Button size="xl" variant="outline" className="rounded-none px-12 border-cream/20 text-cream">Ver no Mapa</Button>
+            </div>
           </div>
           
-          <div className="rounded-3xl overflow-hidden grayscale contrast-125 border border-gold/20 h-[400px]">
-            {/* Google Maps Placeholder */}
+          <div className="lg:w-1/2 w-full aspect-square md:aspect-video lg:aspect-square relative grayscale contrast-125 border border-gold/20">
             <iframe 
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3655.441403215939!2d-46.562164!3d-23.624107!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce42d9b6a1250b%3A0x6a0c0e0e0e0e0e0e!2sRua%20Piratininga%2C%20487%20-%20Santa%20Maria%2C%20S%C3%A3o%20Caetano%20do%20Sul%20-%20SP%2C%2009550-160!5e0!3m2!1spt-BR!2sbr!4v1700000000000!5m2!1spt-BR!2sbr" 
-              className="w-full h-full border-0" 
+              className="w-full h-full border-0 grayscale invert contrast-150 opacity-70" 
               allowFullScreen 
               loading="lazy" 
             />
