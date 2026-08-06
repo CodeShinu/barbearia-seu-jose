@@ -1,4 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { 
+  motion, 
+  useScroll, 
+  useTransform, 
+  AnimatePresence, 
+  useSpring,
+  useInView
+} from "framer-motion";
+import { useRef } from "react";
 import { motion, useScroll, useTransform, AnimatePresence, useSpring } from "framer-motion";
 import { 
   Scissors, 
