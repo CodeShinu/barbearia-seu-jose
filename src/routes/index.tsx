@@ -111,7 +111,7 @@ function Index() {
             <a key={item} href={item === "Contato" ? "#contato" : `#${item.toLowerCase()}`} className="hover:text-gold transition-colors duration-300">{item}</a>
           ))}
           <Button size="sm" variant="premium" asChild>
-            <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer">Agendar</a>
+            <a href="https://wa.me/5511931458599?text=Olá,%20gostaria%20de%20agendar%20um%20horário" target="_blank" rel="noopener noreferrer">Agendar</a>
           </Button>
         </div>
 
@@ -133,7 +133,7 @@ function Index() {
               <a key={item} href={item === "Contato" ? "#contato" : `#${item.toLowerCase()}`} onClick={() => setIsMenuOpen(false)} className="text-2xl font-serif font-bold text-cream hover:text-gold">{item}</a>
             ))}
             <Button size="lg" variant="premium" className="mt-4" asChild onClick={() => setIsMenuOpen(false)}>
-              <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer">Agendar Agora</a>
+              <a href="https://wa.me/5511931458599?text=Olá,%20gostaria%20de%20agendar%20um%20horário" target="_blank" rel="noopener noreferrer">Agendar Agora</a>
             </Button>
           </motion.div>
         )}
@@ -186,7 +186,7 @@ function Index() {
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center pt-8">
             <Button size="xl" variant="premium" className="rounded-none px-12" asChild>
-              <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer">Agendar Agora</a>
+              <a href="https://wa.me/5511931458599?text=Olá,%20gostaria%20de%20agendar%20um%20horário" target="_blank" rel="noopener noreferrer">Agendar Agora</a>
             </Button>
             <Button size="xl" variant="outline" className="rounded-none px-12 border-cream/20 text-cream">Nossos Serviços</Button>
           </div>
@@ -445,7 +445,7 @@ function Index() {
       {/* Floating CTA (WhatsApp Pulse) */}
       <div className="fixed bottom-6 left-6 z-50">
         <motion.a 
-          href="https://wa.me/5511999999999"
+          href="https://wa.me/5511931458599?text=Olá,%20gostaria%20de%20agendar%20um%20horário"
           target="_blank"
           animate={{ scale: [1, 1.05, 1] }}
           transition={{ duration: 2, repeat: Infinity }}
@@ -458,7 +458,7 @@ function Index() {
 
       <div className="fixed bottom-6 right-6 lg:hidden z-50">
         <Button variant="premium" size="icon" className="w-16 h-16 rounded-full shadow-2xl" asChild>
-          <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer">
+          <a href="https://wa.me/5511931458599?text=Olá,%20gostaria%20de%20agendar%20um%20horário" target="_blank" rel="noopener noreferrer">
             <Calendar size={28} />
           </a>
         </Button>
@@ -614,7 +614,7 @@ function Index() {
 
               <div className="flex flex-col sm:flex-row gap-6 pt-4">
                 <Button size="xl" variant="premium" className="rounded-none px-12 h-16 text-lg uppercase tracking-widest shadow-2xl shadow-gold/10" asChild>
-                  <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer">
+                  <a href="https://wa.me/5511931458599?text=Olá,%20gostaria%20de%20agendar%20um%20horário" target="_blank" rel="noopener noreferrer">
                     Agendar Horário <Scissors className="ml-2 w-5 h-5" />
                   </a>
                 </Button>
@@ -656,9 +656,9 @@ function Index() {
             </div>
 
             <div className="flex flex-wrap justify-center gap-12 text-[10px] font-bold uppercase tracking-[0.3em] text-cream/40">
-              <a href="https://www.instagram.com/barbeariaseujose/" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-all duration-300">Instagram</a>
-              <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-all duration-300">WhatsApp</a>
-              <a href="https://play.google.com/store/apps/details?id=br.com.starapp.barbeariaseujose" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-all duration-300">App Store</a>
+              <a href="https://www.instagram.com/seujosebarbershop" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-all duration-300">Instagram</a>
+              <a href="https://wa.me/5511931458599?text=Olá,%20gostaria%20de%20agendar%20um%20horário" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-all duration-300">WhatsApp</a>
+              <a href="https://play.google.com/store/apps/details?id=br.com.starapp.barbeariaseujose" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-all duration-300">Play Store</a>
             </div>
 
             <div className="text-[10px] uppercase tracking-widest text-cream/20">
