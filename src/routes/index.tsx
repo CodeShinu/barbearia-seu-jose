@@ -7,7 +7,7 @@ import {
   useSpring,
   useInView
 } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { 
   Scissors, 
   Star, 
@@ -23,12 +23,20 @@ import {
   Award,
   Menu,
   X,
-  ArrowUp
+  ArrowUp,
+  Play,
+  Volume2,
+  VolumeX,
+  Maximize2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { useState, useEffect } from "react";
 import logoAsset from "@/assets/logo.png.asset.json";
+import posterTradicao from "@/assets/poster_tradicao.jpg.asset.json";
+import corteMullet1 from "@/assets/corte_mullet_1.jpg.asset.json";
+import corteMullet2 from "@/assets/corte_mullet_2.jpg.asset.json";
+import videoInstitucional1 from "@/assets/video_institucional_1.mp4.asset.json";
+import videoInstitucional2 from "@/assets/video_institucional_2.mp4.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -58,6 +66,8 @@ const stagger = {
 function Index() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const { scrollYProgress } = useScroll();
   const opacity = useTransform(scrollYProgress, [0, 0.05], [1, 0]);
 
@@ -110,14 +120,30 @@ function Index() {
         )}
       </AnimatePresence>
 
-      {/* 1. Hero with Parallax & Texture */}
+      {/* 1. Hero with Video & Texture */}
       <section id="home" className="relative h-screen flex flex-col justify-center items-center text-center px-6 overflow-hidden grainy-overlay">
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-dark-gradient z-10" />
-          <motion.div 
-            animate={{ scale: 1.05 }} 
-            className="w-full h-full bg-[url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=2000')] bg-cover bg-center"
-          />
+          <motion.video 
+            ref={videoRef}
+            autoPlay 
+            muted={isMuted} 
+            loop 
+            playsInline
+            initial={{ scale: 1.1 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 20, repeat: Infinity, repeatType: "reverse" }}
+            className="w-full h-full object-cover grayscale opacity-40 md:opacity-60"
+          >
+            <source src={videoInstitucional1.url} type="video/mp4" />
+          </motion.video>
+          
+          <button 
+            onClick={() => setIsMuted(!isMuted)}
+            className="absolute bottom-32 right-12 z-20 w-12 h-12 rounded-full border border-gold/30 bg-forest-deep/50 backdrop-blur-md flex items-center justify-center text-gold hover:bg-gold hover:text-forest-deep transition-all"
+          >
+            {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+          </button>
         </div>
 
         <motion.div 
@@ -176,9 +202,9 @@ function Index() {
           >
             <div className="absolute -top-10 -left-10 w-32 h-32 border-l-2 border-t-2 border-gold/40 z-0" />
             <img 
-              src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?q=80&w=1200" 
+              src={posterTradicao.url} 
               alt="Ambiente Seu José" 
-              className="rounded-none shadow-2xl w-full h-[500px] object-cover relative z-10 grayscale hover:grayscale-0 transition-all duration-700"
+              className="rounded-none shadow-2xl w-full h-[600px] object-cover relative z-10 grayscale hover:grayscale-0 transition-all duration-700 border-2 border-gold/10"
             />
             <div className="absolute -bottom-6 -right-6 bg-gold p-8 rounded-none z-20 hidden md:block">
               <p className="text-forest-deep font-bold uppercase tracking-tighter text-xl leading-none">
@@ -460,9 +486,9 @@ function Index() {
         </Button>
       </div>
 
-      {/* Galeria / Instagram Brutalista */}
+      {/* Galeria / Instagram Brutalista - Optimized with Uploads */}
       <section className="py-32 bg-forest-deep px-6 overflow-hidden">
-        <div className="max-w-7xl mx-auto flex flex-col gap-12">
+        <div className="max-w-7xl mx-auto flex flex-col gap-16">
           <div className="flex flex-col md:flex-row justify-between items-baseline gap-4">
             <h2 className="text-4xl md:text-7xl font-serif uppercase tracking-tighter text-cream">
               Galeria <br />
@@ -471,27 +497,61 @@ function Index() {
             <p className="text-cream/40 uppercase tracking-widest text-xs font-bold">@seujosebarbershop</p>
           </div>
           
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=600",
-              "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?q=80&w=600",
-              "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?q=80&w=600",
-              "https://images.unsplash.com/photo-1621605815841-aa897af68032?q=80&w=600",
-              "https://images.unsplash.com/photo-1593702295094-ada74bc4a19c?q=80&w=600",
-              "https://images.unsplash.com/photo-1512690196162-7c972627ad0a?q=80&w=600",
-              "https://images.unsplash.com/photo-1622286330961-a30b42f61e73?q=80&w=600",
-              "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=600"
-            ].map((url, i) => (
-              <motion.div 
-                key={i} 
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ delay: i * 0.05 }}
-                className={`relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 aspect-square ${i === 1 || i === 4 ? "md:row-span-2 md:aspect-auto" : ""}`}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 auto-rows-[200px] md:auto-rows-[300px]">
+            {/* Main Video Square */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              className="relative overflow-hidden md:col-span-2 md:row-span-2 border border-gold/10 group"
+            >
+              <video 
+                autoPlay 
+                muted 
+                loop 
+                playsInline 
+                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
               >
-                <img src={url} alt={`Galeria ${i}`} className="w-full h-full object-cover hover:scale-110 transition-transform duration-1000" />
-              </motion.div>
-            ))}
+                <source src={videoInstitucional2.url} type="video/mp4" />
+              </video>
+              <div className="absolute inset-0 bg-forest-deep/20 group-hover:bg-transparent transition-colors" />
+              <div className="absolute bottom-6 left-6 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+                <span className="text-gold font-bold text-xs uppercase tracking-widest">Processo Criativo</span>
+              </div>
+            </motion.div>
+
+            {/* Uploaded Photos */}
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10 md:row-span-2"
+            >
+              <img src={corteMullet1.url} alt="Corte Mullet Detalhe" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10"
+            >
+              <img src={corteMullet2.url} alt="Corte Mullet Perfil" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
+            </motion.div>
+
+            {/* Extra Branded Content */}
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              className="relative overflow-hidden bg-forest flex items-center justify-center p-8 border border-gold/10 group"
+            >
+              <Scissors className="text-gold/20 w-16 h-16 group-hover:rotate-45 transition-transform duration-500" />
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10 md:col-span-2"
+            >
+              <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=1200" alt="Ambiente" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
+            </motion.div>
           </div>
         </div>
       </section>
