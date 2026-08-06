@@ -255,37 +255,41 @@ function Index() {
         </div>
       </section>
 
-      {/* 6. Barbearia por Assinatura */}
-      <section id="assinatura" className="relative py-32 px-6 overflow-hidden">
-        <div className="absolute inset-0 bg-gold-gradient opacity-10 z-0" />
-        <div className="absolute top-0 left-0 w-full h-1 bg-gold-gradient" />
+      {/* 6. Assinatura - Estilo Brutalista/Premium */}
+      <section id="assinatura" className="relative py-32 px-6 overflow-hidden bg-forest-deep border-y border-gold/10">
+        <div className="absolute inset-0 opacity-[0.05] brick-texture pointer-events-none" />
         
-        <div className="max-w-5xl mx-auto relative z-10 text-center space-y-12">
-          <motion.div {...fadeInUp} className="space-y-6">
-            <span className="text-gold font-bold uppercase tracking-widest text-sm">Vantagem Exclusiva</span>
-            <h2 className="text-5xl md:text-7xl font-serif">Barbearia por <span className="text-gold">Assinatura</span></h2>
-            <p className="text-xl text-cream/70 max-w-2xl mx-auto">Economize e tenha prioridade. Se você corta o cabelo frequentemente, nosso plano foi feito para você.</p>
-          </motion.div>
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <motion.div {...fadeInUp} className="space-y-8">
+              <span className="text-gold font-bold uppercase tracking-widest text-sm inline-block border-b-2 border-gold pb-1">Club Seu José</span>
+              <h2 className="text-6xl md:text-8xl font-serif uppercase leading-none tracking-tighter">
+                Sempre <br />
+                <span className="text-gold italic">Impecável.</span>
+              </h2>
+              <p className="text-xl text-cream/70 max-w-xl font-light">Para o homem que entende que imagem é investimento. Cortes ilimitados e benefícios exclusivos em São Caetano.</p>
+              <Button size="xl" variant="premium" className="rounded-none px-12 uppercase">Faça parte do clube</Button>
+            </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              "Economia todos os meses",
-              "Atendimento prioritário",
-              "Mais praticidade",
-              "Cortes ilimitados"
-            ].map((benefit, i) => (
-              <motion.div key={i} {...fadeInUp} className="bg-forest border border-gold/20 p-6 rounded-2xl flex flex-col items-center gap-4">
-                <div className="bg-gold/10 p-3 rounded-full text-gold">
-                  <Check size={28} />
-                </div>
-                <span className="font-bold uppercase text-xs tracking-widest">{benefit}</span>
-              </motion.div>
-            ))}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {[
+                { title: "ILIMITADO", desc: "Corte quantas vezes quiser." },
+                { title: "PRIORIDADE", desc: "Agendamento VIP sem filas." },
+                { title: "ECONOMIA", desc: "Mais de 40% de redução de custo." },
+                { title: "EVENTOS", desc: "Acesso a workshops e degustações." }
+              ].map((item, i) => (
+                <motion.div 
+                  key={i} 
+                  {...fadeInUp}
+                  transition={{ delay: i * 0.1 }}
+                  className="bg-forest/30 border border-gold/10 p-8 hover:border-gold/40 transition-colors"
+                >
+                  <h3 className="text-gold font-bold text-2xl font-serif mb-2 tracking-tighter">{item.title}</h3>
+                  <p className="text-cream/50 text-sm leading-tight">{item.desc}</p>
+                </motion.div>
+              ))}
+            </div>
           </div>
-
-          <motion.div {...fadeInUp} className="pt-8">
-            <Button size="xl" variant="premium" className="px-16 shadow-gold/50">Quero fazer parte do clube</Button>
-          </motion.div>
         </div>
       </section>
 
