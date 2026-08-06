@@ -108,9 +108,11 @@ function Index() {
 
         <div className="hidden lg:flex gap-8 items-center text-sm font-bold uppercase tracking-widest">
           {["Home", "Sobre", "Serviços", "Assinatura", "Equipe", "Contato"].map((item) => (
-            <a key={item} href={`#${item.toLowerCase()}`} className="hover:text-gold transition-colors duration-300">{item}</a>
+            <a key={item} href={item === "Contato" ? "#contato" : `#${item.toLowerCase()}`} className="hover:text-gold transition-colors duration-300">{item}</a>
           ))}
-          <Button size="sm" variant="premium">Agendar</Button>
+          <Button size="sm" variant="premium" asChild>
+            <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer">Agendar</a>
+          </Button>
         </div>
 
         <button className="lg:hidden text-gold" onClick={() => setIsMenuOpen(!isMenuOpen)}>
@@ -128,9 +130,11 @@ function Index() {
             className="fixed inset-0 z-40 bg-forest-deep flex flex-col items-center justify-center gap-8 pt-20"
           >
             {["Home", "Sobre", "Serviços", "Assinatura", "Equipe", "Contato"].map((item) => (
-              <a key={item} href={`#${item.toLowerCase()}`} onClick={() => setIsMenuOpen(false)} className="text-2xl font-serif font-bold text-cream hover:text-gold">{item}</a>
+              <a key={item} href={item === "Contato" ? "#contato" : `#${item.toLowerCase()}`} onClick={() => setIsMenuOpen(false)} className="text-2xl font-serif font-bold text-cream hover:text-gold">{item}</a>
             ))}
-            <Button size="lg" variant="premium" className="mt-4" onClick={() => setIsMenuOpen(false)}>Agendar Agora</Button>
+            <Button size="lg" variant="premium" className="mt-4" asChild onClick={() => setIsMenuOpen(false)}>
+              <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer">Agendar Agora</a>
+            </Button>
           </motion.div>
         )}
       </AnimatePresence>
@@ -181,7 +185,9 @@ function Index() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center pt-8">
-            <Button size="xl" variant="premium" className="rounded-none px-12">Agendar Agora</Button>
+            <Button size="xl" variant="premium" className="rounded-none px-12" asChild>
+              <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer">Agendar Agora</a>
+            </Button>
             <Button size="xl" variant="outline" className="rounded-none px-12 border-cream/20 text-cream">Nossos Serviços</Button>
           </div>
         </motion.div>
@@ -422,7 +428,7 @@ function Index() {
       </section>
 
       {/* 15. CTA Final & 16. Footer */}
-      <section className="py-32 bg-forest-deep px-6 border-t border-gold/10 relative overflow-hidden">
+      <section id="contato" className="py-32 bg-forest-deep px-6 border-t border-gold/10 relative overflow-hidden">
         <div className="absolute inset-0 opacity-[0.03] brick-texture pointer-events-none" />
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-20 items-center">
           <div className="lg:w-1/2 space-y-12">
@@ -447,8 +453,12 @@ function Index() {
               </div>
             </div>
             <div className="flex flex-col sm:flex-row gap-6 pt-4">
-              <Button size="xl" variant="premium" className="rounded-none px-12">Agendar via WhatsApp</Button>
-              <Button size="xl" variant="outline" className="rounded-none px-12 border-cream/20 text-cream">Ver no Mapa</Button>
+              <Button size="xl" variant="premium" className="rounded-none px-12" asChild>
+                <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer">Agendar via WhatsApp</a>
+              </Button>
+              <Button size="xl" variant="outline" className="rounded-none px-12 border-cream/20 text-cream" asChild>
+                <a href="https://maps.app.goo.gl/rDbtF4nJ8pW2mK4Z9" target="_blank" rel="noopener noreferrer">Ver no Mapa</a>
+              </Button>
             </div>
           </div>
           
@@ -505,8 +515,10 @@ function Index() {
       </div>
 
       <div className="fixed bottom-6 right-6 lg:hidden z-50">
-        <Button variant="premium" size="icon" className="w-16 h-16 rounded-full shadow-2xl">
-          <Calendar size={28} />
+        <Button variant="premium" size="icon" className="w-16 h-16 rounded-full shadow-2xl" asChild>
+          <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer">
+            <Calendar size={28} />
+          </a>
         </Button>
       </div>
 
