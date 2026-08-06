@@ -419,6 +419,18 @@ function Index() {
         </div>
       </footer>
 
+      {/* Floating Badge Aberto/Fechado */}
+      <div className="fixed top-24 right-6 z-50 pointer-events-none">
+        <motion.div 
+          initial={{ x: 100 }}
+          animate={{ x: 0 }}
+          className="bg-forest-deep/80 backdrop-blur-md border border-gold/30 px-4 py-2 flex items-center gap-3"
+        >
+          <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+          <span className="text-[10px] font-bold uppercase tracking-widest text-gold">Aberto agora</span>
+        </motion.div>
+      </div>
+
       {/* Floating CTA (WhatsApp Pulse) */}
       <div className="fixed bottom-6 left-6 z-50">
         <motion.a 
@@ -438,6 +450,42 @@ function Index() {
           <Calendar size={28} />
         </Button>
       </div>
+
+      {/* Galeria / Instagram Brutalista */}
+      <section className="py-32 bg-forest-deep px-6 overflow-hidden">
+        <div className="max-w-7xl mx-auto flex flex-col gap-12">
+          <div className="flex flex-col md:flex-row justify-between items-baseline gap-4">
+            <h2 className="text-4xl md:text-7xl font-serif uppercase tracking-tighter text-cream">
+              Galeria <br />
+              <span className="text-gold italic">No Detalhe.</span>
+            </h2>
+            <p className="text-cream/40 uppercase tracking-widest text-xs font-bold">@seujosebarbershop</p>
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=600",
+              "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?q=80&w=600",
+              "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?q=80&w=600",
+              "https://images.unsplash.com/photo-1621605815841-aa897af68032?q=80&w=600",
+              "https://images.unsplash.com/photo-1593702295094-ada74bc4a19c?q=80&w=600",
+              "https://images.unsplash.com/photo-1512690196162-7c972627ad0a?q=80&w=600",
+              "https://images.unsplash.com/photo-1622286330961-a30b42f61e73?q=80&w=600",
+              "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=600"
+            ].map((url, i) => (
+              <motion.div 
+                key={i} 
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ delay: i * 0.05 }}
+                className={`relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 aspect-square ${i === 1 || i === 4 ? "md:row-span-2 md:aspect-auto" : ""}`}
+              >
+                <img src={url} alt={`Galeria ${i}`} className="w-full h-full object-cover hover:scale-110 transition-transform duration-1000" />
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* Back to top */}
       <motion.button 
