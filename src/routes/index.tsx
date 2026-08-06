@@ -88,46 +88,39 @@ function Index() {
         )}
       </AnimatePresence>
 
-      {/* 1. Hero */}
-      <section id="home" className="relative h-screen flex flex-col justify-center items-center text-center px-6 overflow-hidden">
+      {/* 1. Hero with Parallax & Texture */}
+      <section id="home" className="relative h-screen flex flex-col justify-center items-center text-center px-6 overflow-hidden grainy-overlay">
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-dark-gradient z-10" />
           <motion.div 
-            animate={{ scale: [1, 1.1, 1] }} 
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+            animate={{ scale: 1.05 }} 
             className="w-full h-full bg-[url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=2000')] bg-cover bg-center"
           />
         </div>
 
         <motion.div 
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
-          className="relative z-20 max-w-5xl space-y-8"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+          className="relative z-20 max-w-6xl space-y-8"
         >
           <div className="flex flex-wrap justify-center gap-4 mb-4">
-            <span className="bg-gold/10 border border-gold/30 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest text-gold flex items-center gap-2">⭐ 1.600+ SEGUIDORES</span>
-            <span className="bg-gold/10 border border-gold/30 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest text-gold flex items-center gap-2">🏆 DESDE 2019</span>
-            <span className="bg-gold/10 border border-gold/30 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest text-gold flex items-center gap-2">💈 ASSINATURA</span>
+            <span className="bg-gold/10 border border-gold/30 px-6 py-2 rounded-none text-xs font-bold uppercase tracking-widest text-gold">🏆 DESDE 2019</span>
           </div>
           
-          <h1 className="text-5xl md:text-8xl font-serif leading-tight tracking-tight text-cream">
-            Muito mais que um corte. <br />
-            <span className="text-gold italic">Uma experiência completa.</span>
+          <h1 className="headline-huge font-serif text-cream uppercase">
+            O Estilo que <br />
+            <span className="text-gold italic">define você.</span>
           </h1>
           
-          <p className="text-lg md:text-2xl text-cream/80 max-w-3xl mx-auto leading-relaxed">
-            Cortes modernos, barba impecável, ambiente confortável e atendimento que faz você querer voltar em São Caetano do Sul.
+          <p className="text-xl md:text-3xl text-cream/70 max-w-2xl mx-auto leading-tight text-balance">
+            Barbearia premium em São Caetano do Sul. Onde a tradição encontra a modernidade.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-6 justify-center pt-4">
-            <Button size="xl" variant="premium">Agendar Agora</Button>
-            <Button size="xl" variant="outline">Conhecer a Barbearia</Button>
+          <div className="flex flex-col sm:flex-row gap-6 justify-center pt-8">
+            <Button size="xl" variant="premium" className="rounded-none px-12">Agendar Agora</Button>
+            <Button size="xl" variant="outline" className="rounded-none px-12 border-cream/20 text-cream">Nossos Serviços</Button>
           </div>
-        </motion.div>
-
-        <motion.div style={{ opacity }} className="absolute bottom-10 left-1/2 -translate-x-1/2 text-gold animate-bounce">
-          <ChevronDown size={40} />
         </motion.div>
       </section>
 
