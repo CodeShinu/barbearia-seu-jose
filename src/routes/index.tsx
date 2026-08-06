@@ -267,9 +267,9 @@ function Index() {
             <p className="text-cream/60 mt-6 text-xl">Artesanato em forma de estilo. Escolha o cuidado que sua imagem merece.</p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-24">
+          <div className="flex flex-wrap justify-center gap-x-12 gap-y-24">
             {[
-              { name: "Corte Masculino", time: "45 min", video: videoCorte1.url, large: true },
+              { name: "Corte Masculino", time: "45 min", video: videoCorte1.url },
               { name: "A Barba", time: "30 min", video: videoBarba1.url },
               { name: "O Combo", time: "1h 15min", video: videoCombo1.url },
               { name: "Kids", time: "30 min", video: videoKids1.url },
@@ -281,7 +281,7 @@ function Index() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className={`relative group ${i % 2 !== 0 ? "md:translate-y-12" : ""}`}
+                className={`relative group w-full md:w-[calc(50%-24px)] lg:w-[calc(33.333%-32px)] ${i % 2 !== 0 ? "md:translate-y-12" : ""}`}
               >
                 <div className="overflow-hidden aspect-[3/4] rounded-none mb-6 relative">
                   {service.video && (
