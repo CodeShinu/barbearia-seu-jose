@@ -41,6 +41,10 @@ import videoInstitucional3 from "@/assets/video_institucional_3.mp4.asset.json";
 import videoBarba1 from "@/assets/video_barba_premium.mp4.asset.json";
 import videoCorte1 from "@/assets/video_corte_1.mp4.asset.json";
 import corteMullet3 from "@/assets/corte_mullet_3.jpg.asset.json";
+import barbeariaInterna1 from "@/assets/barbearia_interna_1.jpg.asset.json";
+import barbeariaInterna2 from "@/assets/barbearia_interna_2.jpg.asset.json";
+import barbeariaInterna3 from "@/assets/barbearia_interna_3.jpg.asset.json";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -588,10 +592,27 @@ function Index() {
             <motion.div 
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
-              className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10"
+              className="relative overflow-hidden md:col-span-2 border border-gold/10 group"
             >
-              <img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?q=80&w=1200" alt="Ambiente VIP" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
+              <img src={barbeariaInterna3.url} alt="Ambiente VIP Seu José" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 hover:scale-105 transition-transform duration-1000" />
             </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10 md:row-span-2"
+            >
+              <img src={barbeariaInterna1.url} alt="Barbeiros em Ação" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10 md:col-span-2"
+            >
+              <img src={barbeariaInterna2.url} alt="Cuidado Premium" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
+            </motion.div>
+
           </div>
         </div>
       </section>
