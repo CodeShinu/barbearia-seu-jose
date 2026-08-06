@@ -41,6 +41,10 @@ import videoInstitucional3 from "@/assets/video_institucional_3.mp4.asset.json";
 import videoBarba1 from "@/assets/video_barba_premium.mp4.asset.json";
 import videoCorte1 from "@/assets/video_corte_1.mp4.asset.json";
 import corteMullet3 from "@/assets/corte_mullet_3.jpg.asset.json";
+import barbeariaInterna1 from "@/assets/barbearia_interna_1.jpg.asset.json";
+import barbeariaInterna2 from "@/assets/barbearia_interna_2.jpg.asset.json";
+import barbeariaInterna3 from "@/assets/barbearia_interna_3.jpg.asset.json";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
