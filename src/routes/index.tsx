@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Scissors, Star, Calendar, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import logoAsset from "@/assets/logo.png.asset.json";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -13,7 +14,10 @@ function Index() {
     <div className="min-h-screen bg-background text-foreground selection:bg-gold selection:text-white">
       {/* Navbar Placeholder */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between p-6 px-12 transition-all duration-300">
-        <div className="text-2xl font-serif font-bold tracking-tighter">SEU JOSÉ</div>
+        <div className="flex items-center gap-3">
+          <img src={logoAsset.url} alt="Seu José Logo" className="w-12 h-12 rounded-full border border-gold/30" />
+          <div className="text-2xl font-serif font-bold tracking-tighter">SEU JOSÉ</div>
+        </div>
         <div className="flex gap-8 items-center text-sm font-medium tracking-wide">
           {["Home", "Serviços", "Assinatura", "Contato"].map((item) => (
             <a key={item} href={`#${item.toLowerCase()}`} className="hover:text-gold transition-colors">{item}</a>
