@@ -18,9 +18,7 @@ function Index() {
           {["Home", "Serviços", "Assinatura", "Contato"].map((item) => (
             <a key={item} href={`#${item.toLowerCase()}`} className="hover:text-gold transition-colors">{item}</a>
           ))}
-          <button className="bg-gold text-primary font-bold px-6 py-2 rounded-full hover:bg-white transition-colors">
-            Agendar
-          </button>
+          <Button>Agendar</Button>
         </div>
       </nav>
 
@@ -36,8 +34,8 @@ function Index() {
           <h1 className="text-6xl md:text-8xl font-serif text-white tracking-tight">Corte, Barba e <br />Experiência Premium.</h1>
           <p className="text-lg md:text-xl text-stone-300 max-w-2xl mx-auto">Mais do que um corte. Um atendimento pensado para quem valoriza estilo, conforto e qualidade.</p>
           <div className="flex gap-4 justify-center">
-            <button className="bg-gold text-primary font-bold px-8 py-4 rounded-full text-lg hover:bg-white transition-colors">Agendar Agora</button>
-            <button className="border border-white/30 text-white font-bold px-8 py-4 rounded-full text-lg hover:bg-white/10 transition-colors">Conhecer Serviços</button>
+            <Button>Agendar Agora</Button>
+            <Button variant="outline">Conhecer Serviços</Button>
           </div>
         </motion.div>
       </section>
