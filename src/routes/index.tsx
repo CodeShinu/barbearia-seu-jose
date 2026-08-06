@@ -37,6 +37,10 @@ import corteMullet1 from "@/assets/corte_mullet_1.jpg.asset.json";
 import corteMullet2 from "@/assets/corte_mullet_2.jpg.asset.json";
 import videoInstitucional1 from "@/assets/video_institucional_1.mp4.asset.json";
 import videoInstitucional2 from "@/assets/video_institucional_2.mp4.asset.json";
+import videoInstitucional3 from "@/assets/video_institucional_3.mp4.asset.json";
+import videoBarba1 from "@/assets/video_barba_1.mp4.asset.json";
+import videoCorte1 from "@/assets/video_corte_1.mp4.asset.json";
+import corteMullet3 from "@/assets/corte_mullet_3.jpg.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -257,8 +261,8 @@ function Index() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-24">
             {[
-              { name: "Corte Masculino", time: "45 min", img: "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?q=80&w=600", large: true },
-              { name: "A Barba", time: "30 min", img: "https://images.unsplash.com/photo-1621605815841-aa897af68032?q=80&w=600" },
+              { name: "Corte Masculino", time: "45 min", video: videoCorte1.url, large: true },
+              { name: "A Barba", time: "30 min", video: videoBarba1.url },
               { name: "O Combo", time: "1h 15min", img: "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=600" },
               { name: "Pigmentação", time: "40 min", img: "https://images.unsplash.com/photo-1593702295094-ada74bc4a19c?q=80&w=600" },
               { name: "Kids", time: "30 min", img: "https://images.unsplash.com/photo-1512690196162-7c972627ad0a?q=80&w=600" },
@@ -272,8 +276,20 @@ function Index() {
                 transition={{ delay: i * 0.1 }}
                 className={`relative group ${i % 2 !== 0 ? "md:translate-y-12" : ""}`}
               >
-                <div className="overflow-hidden aspect-[3/4] rounded-none mb-6">
-                  <img src={service.img} alt={service.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 grayscale hover:grayscale-0" />
+                <div className="overflow-hidden aspect-[3/4] rounded-none mb-6 relative">
+                  {service.video ? (
+                    <video 
+                      autoPlay 
+                      muted 
+                      loop 
+                      playsInline 
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 grayscale group-hover:grayscale-0"
+                    >
+                      <source src={service.video} type="video/mp4" />
+                    </video>
+                  ) : (
+                    <img src={service.img} alt={service.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 grayscale hover:grayscale-0" />
+                  )}
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between items-baseline border-b border-gold/20 pb-2">
@@ -548,9 +564,33 @@ function Index() {
             <motion.div 
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
-              className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10 md:col-span-2"
+              className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10"
             >
-              <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=1200" alt="Ambiente" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
+              <img src={corteMullet3.url} alt="Corte Mullet Estilo" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              className="relative overflow-hidden md:col-span-2 border border-gold/10 group"
+            >
+              <video 
+                autoPlay 
+                muted 
+                loop 
+                playsInline 
+                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+              >
+                <source src={videoInstitucional3.url} type="video/mp4" />
+              </video>
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10"
+            >
+              <img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?q=80&w=1200" alt="Ambiente VIP" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
             </motion.div>
           </div>
         </div>
