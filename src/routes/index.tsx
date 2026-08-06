@@ -452,10 +452,10 @@ function Index() {
             </div>
           </div>
           
-          <div className="lg:w-1/2 w-full aspect-square md:aspect-video lg:aspect-square relative grayscale contrast-125 border border-gold/20">
+          <div className="lg:w-1/2 w-full aspect-square md:aspect-video lg:aspect-square relative border border-gold/20">
             <iframe 
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3655.441403215939!2d-46.562164!3d-23.624107!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce42d9b6a1250b%3A0x6a0c0e0e0e0e0e0e!2sRua%20Piratininga%2C%20487%20-%20Santa%20Maria%2C%20S%C3%A3o%20Caetano%20do%20Sul%20-%20SP%2C%2009550-160!5e0!3m2!1spt-BR!2sbr!4v1700000000000!5m2!1spt-BR!2sbr" 
-              className="w-full h-full border-0 grayscale invert contrast-150 opacity-70" 
+              className="w-full h-full border-0" 
               allowFullScreen 
               loading="lazy" 
             />
@@ -546,7 +546,7 @@ function Index() {
               whileInView={{ opacity: 1, scale: 1 }}
               className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10 md:row-span-2"
             >
-              <img src={corteMullet1.url} alt="Corte Mullet Detalhe" className="w-full h-full object-contain bg-forest/20 hover:scale-105 transition-transform duration-1000" />
+              <img src={corteMullet1.url} alt="Corte Mullet Detalhe" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
             </motion.div>
 
             {/* 3. Corte Mullet 2 */}
@@ -555,7 +555,7 @@ function Index() {
               whileInView={{ opacity: 1, scale: 1 }}
               className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10"
             >
-              <img src={corteMullet2.url} alt="Corte Mullet Perfil" className="w-full h-full object-contain bg-forest/20 hover:scale-105 transition-transform duration-1000" />
+              <img src={corteMullet2.url} alt="Corte Mullet Perfil" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
             </motion.div>
 
             {/* 4. Corte Mullet 3 */}
@@ -564,7 +564,7 @@ function Index() {
               whileInView={{ opacity: 1, scale: 1 }}
               className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10"
             >
-              <img src={corteMullet3.url} alt="Corte Mullet Estilo" className="w-full h-full object-contain bg-forest/20 hover:scale-105 transition-transform duration-1000" />
+              <img src={corteMullet3.url} alt="Corte Mullet Estilo" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
             </motion.div>
 
             {/* 5. Vídeo Institucional 3 (Largo) */}
@@ -590,7 +590,7 @@ function Index() {
               whileInView={{ opacity: 1, scale: 1 }}
               className="relative overflow-hidden md:col-span-2 border border-gold/10 group"
             >
-              <img src={barbeariaInterna3.url} alt="Ambiente VIP Seu José" className="w-full h-full object-contain bg-forest/20 grayscale group-hover:grayscale-0 transition-all duration-700 hover:scale-105 transition-transform duration-1000" />
+              <img src={barbeariaInterna3.url} alt="Ambiente VIP Seu José" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 hover:scale-105 transition-transform duration-1000" />
             </motion.div>
 
             {/* 7. Barbearia Interna 1 (Vertical) */}
@@ -599,7 +599,7 @@ function Index() {
               whileInView={{ opacity: 1, scale: 1 }}
               className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10 md:row-span-2"
             >
-              <img src={barbeariaInterna1.url} alt="Barbeiros em Ação" className="w-full h-full object-contain bg-forest/20 hover:scale-105 transition-transform duration-1000" />
+              <img src={barbeariaInterna1.url} alt="Barbeiros em Ação" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
             </motion.div>
 
             {/* 8. Barbearia Interna 2 (Largo) */}
@@ -608,7 +608,7 @@ function Index() {
               whileInView={{ opacity: 1, scale: 1 }}
               className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10 md:col-span-3"
             >
-              <img src={barbeariaInterna2.url} alt="Cuidado Premium" className="w-full h-full object-contain bg-forest/20 hover:scale-105 transition-transform duration-1000" />
+              <img src={barbeariaInterna2.url} alt="Cuidado Premium" className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000" />
             </motion.div>
           </div>
         </div>
