@@ -332,7 +332,9 @@ function Index() {
                 <span className="text-gold italic">Impecável.</span>
               </h2>
               <p className="text-xl text-cream/70 max-w-xl font-light">Para o homem que entende que imagem é investimento. Cortes ilimitados e benefícios exclusivos em São Caetano.</p>
-              <Button size="xl" variant="premium" className="rounded-none px-12 uppercase">Faça parte do clube</Button>
+              <Button size="xl" variant="premium" className="rounded-none px-12 uppercase" asChild>
+                <a href="https://wa.me/5511931458599?text=Olá,%20gostaria%20de%20saber%20mais%20sobre%20o%20Club%20Seu%20José" target="_blank" rel="noopener noreferrer">Faça parte do clube</a>
+              </Button>
             </motion.div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
