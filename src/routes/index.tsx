@@ -219,7 +219,7 @@ function Index() {
             <img 
               src={posterTradicao.url} 
               alt="Ambiente Seu José" 
-              className="rounded-none shadow-2xl w-full h-[600px] object-cover relative z-10 grayscale hover:grayscale-0 transition-all duration-700 border-2 border-gold/10"
+              className="rounded-none shadow-2xl w-full h-[600px] object-contain bg-forest/20 relative z-10 grayscale hover:grayscale-0 transition-all duration-700 border-2 border-gold/10"
             />
             <div className="absolute -bottom-6 -right-6 bg-gold p-8 rounded-none z-20 hidden md:block">
               <p className="text-forest-deep font-bold uppercase tracking-tighter text-xl leading-none">
