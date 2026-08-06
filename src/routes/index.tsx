@@ -365,9 +365,9 @@ function Index() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
             {[
-              { name: "Joeber Saccomani", role: "Barber", img: joeberSaccomani.url },
-              { name: "Wesley Silva", role: "Barber", img: wesleySilva.url },
-              { name: "Adriel Barão", role: "Barber", img: adrielBarao.url },
+              { name: "Joeber Saccomani", role: "Barber", img: (joeberSaccomani as any).url },
+              { name: "Wesley Silva", role: "Barber", img: (wesleySilva as any).url },
+              { name: "Adriel Barão", role: "Barber", img: (adrielBarao as any).url },
             ].map((barber, i) => (
               <motion.div 
                 key={i} 
