@@ -188,7 +188,9 @@ function Index() {
             <Button size="xl" variant="premium" className="rounded-none px-12" asChild>
               <a href="https://wa.me/5511931458599?text=Olá,%20gostaria%20de%20agendar%20um%20horário" target="_blank" rel="noopener noreferrer">Agendar Agora</a>
             </Button>
-            <Button size="xl" variant="outline" className="rounded-none px-12 border-cream/20 text-cream">Nossos Serviços</Button>
+            <Button size="xl" variant="outline" className="rounded-none px-12 border-cream/20 text-cream" asChild>
+              <a href="#serviços">Nossos Serviços</a>
+            </Button>
           </div>
         </motion.div>
       </section>
