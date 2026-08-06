@@ -60,9 +60,15 @@ function Index() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-forest-deep text-cream overflow-x-hidden selection:bg-gold selection:text-forest-deep">
+    <div className="min-h-screen bg-forest-deep text-cream overflow-x-hidden selection:bg-gold selection:text-forest-deep grainy-overlay">
+      {/* Scroll Progress Bar */}
+      <motion.div 
+        className="fixed top-0 left-0 right-0 h-1 bg-gold z-[100] origin-left"
+        style={{ scaleX: scrollYProgress }}
+      />
+
       {/* Navbar */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 py-4 px-6 md:px-12 flex items-center justify-between ${isScrolled ? "bg-forest-deep/90 backdrop-blur-md shadow-2xl py-3 border-b border-gold/10" : "bg-transparent"}`}>
+      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 py-4 px-6 md:px-12 flex items-center justify-between ${isScrolled ? "bg-forest-deep/95 backdrop-blur-md shadow-2xl py-3 border-b border-gold/10" : "bg-transparent"}`}>
         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-4">
           <img src={logoAsset.url} alt="Seu José Logo" className="w-12 h-12 md:w-16 md:h-16 rounded-full border border-gold/30 shadow-gold/20 shadow-lg" />
         </motion.div>
