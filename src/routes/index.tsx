@@ -53,11 +53,14 @@ function Index() {
             <motion.div 
               key={i}
               whileHover={{ y: -10 }}
-              className="p-8 bg-white border border-stone-200 rounded-3xl hover:border-gold transition-all shadow-sm"
             >
-              <item.icon className="w-10 h-10 text-gold mb-6" />
-              <h3 className="text-2xl font-serif mb-2">{item.title}</h3>
-              <p className="text-muted-foreground">{item.desc}</p>
+              <Card className="p-8 hover:border-gold transition-all shadow-sm">
+                <CardHeader className="p-0">
+                  <item.icon className="w-10 h-10 text-gold mb-6" />
+                  <CardTitle>{item.title}</CardTitle>
+                  <CardDescription className="text-base">{item.desc}</CardDescription>
+                </CardHeader>
+              </Card>
             </motion.div>
           ))}
         </div>
