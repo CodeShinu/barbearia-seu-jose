@@ -101,3 +101,44 @@
 @utility bg-dark-gradient {
   background: linear-gradient(180deg, rgba(20, 53, 42, 0.8) 0%, rgba(20, 24, 26, 0.95) 100%);
 }
+
+@utility text-balance {
+  text-wrap: balance;
+}
+
+@layer base {
+  .grainy-overlay {
+    position: relative;
+  }
+  .grainy-overlay::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.05;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  .brick-texture {
+    background-image: url("https://www.transparenttextures.com/patterns/brick-wall.png");
+  }
+
+  /* Custom clamp for headlines */
+  .headline-huge {
+    font-size: clamp(3rem, 8vw + 1rem, 10rem);
+    line-height: 0.9;
+  }
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .animate-marquee {
+    animation: marquee 30s linear infinite;
+    display: flex;
+    width: max-content;
+  }
+}
