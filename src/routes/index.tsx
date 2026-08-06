@@ -8,7 +8,6 @@ import {
   useInView
 } from "framer-motion";
 import { useRef } from "react";
-import { motion, useScroll, useTransform, AnimatePresence, useSpring } from "framer-motion";
 import { 
   Scissors, 
   Star, 
