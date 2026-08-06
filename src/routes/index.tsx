@@ -292,6 +292,76 @@ function Index() {
           </div>
         </div>
       </section>
+      {/* 7. Equipe / Barbeiros (Assimetria) */}
+      <section id="equipe" className="py-32 px-6 md:px-12 bg-forest relative overflow-hidden">
+        <div className="max-w-7xl mx-auto flex flex-col gap-20">
+          <div className="flex flex-col md:flex-row justify-between items-end gap-8">
+            <motion.div {...fadeInUp} className="max-w-2xl">
+              <h2 className="text-5xl md:text-8xl font-serif leading-none tracking-tighter uppercase text-cream">
+                O Time <br />
+                <span className="text-gold italic">de Elite.</span>
+              </h2>
+            </motion.div>
+            <Button variant="outline" className="rounded-none border-gold/30 text-gold uppercase tracking-widest text-xs h-12">Ver todos os barbeiros</Button>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
+            {[
+              { name: "Seu José", role: "Founder & Master", img: "https://images.unsplash.com/photo-1593702295094-ada74bc4a19c?q=80&w=800" },
+              { name: "Marcos", role: "Especialista em Barba", img: "https://images.unsplash.com/photo-1621605815841-aa897af68032?q=80&w=800" },
+              { name: "André", role: "Estilo Moderno", img: "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?q=80&w=800" },
+            ].map((barber, i) => (
+              <motion.div 
+                key={i} 
+                {...fadeInUp} 
+                transition={{ delay: i * 0.1 }}
+                className="group relative"
+              >
+                <div className="aspect-[4/5] overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-700">
+                  <img src={barber.img} alt={barber.name} className="w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-1000" />
+                </div>
+                <div className="mt-6 space-y-1">
+                  <h3 className="text-2xl font-serif uppercase tracking-tighter text-cream">{barber.name}</h3>
+                  <p className="text-gold font-bold text-xs uppercase tracking-widest">{barber.role}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 8. Depoimentos (Marquee Suave) */}
+      <section className="py-24 bg-forest-deep border-y border-gold/10 overflow-hidden relative">
+        <div className="flex whitespace-nowrap gap-12 animate-marquee py-10">
+          {[
+            "Excelente atendimento!",
+            "Melhor barbearia de SCS",
+            "Ambiente sensacional",
+            "Corte impecável sempre",
+            "Assinatura vale muito a pena",
+            "Profissionais de elite"
+          ].map((text, i) => (
+            <div key={i} className="flex items-center gap-6">
+              <span className="text-4xl md:text-6xl font-serif text-cream/20 uppercase tracking-tighter italic">{text}</span>
+              <Scissors className="text-gold/20 w-8 h-8" />
+            </div>
+          ))}
+          {/* Duplicate for seamless loop */}
+          {[
+            "Excelente atendimento!",
+            "Melhor barbearia de SCS",
+            "Ambiente sensacional",
+            "Corte impecável sempre",
+            "Assinatura vale muito a pena",
+            "Profissionais de elite"
+          ].map((text, i) => (
+            <div key={`dup-${i}`} className="flex items-center gap-6">
+              <span className="text-4xl md:text-6xl font-serif text-cream/20 uppercase tracking-tighter italic">{text}</span>
+              <Scissors className="text-gold/20 w-8 h-8" />
+            </div>
+          ))}
+        </div>
+      </section>
 
       {/* 15. CTA Final & 16. Footer */}
       <section className="py-32 bg-forest-deep px-6 border-t border-gold/10 relative overflow-hidden">
