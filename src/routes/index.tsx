@@ -39,7 +39,7 @@ export const Route = createFileRoute("/")({
     title: "Seu José Barbershop | Barbearia Premium em São Caetano do Sul",
     meta: [
       { name: "description", content: "Barbearia premium em São Caetano do Sul (SP). Cortes de elite, ambiente exclusivo e tradição desde 2019. Agende seu horário no Seu José." },
-      { property: "og:title", content: "Lovable App" },
+      { property: "og:title", content: "Seu José Barbershop" },
       { property: "og:description", content: "Barbearia premium em São Caetano do Sul (SP). Cortes de elite, ambiente exclusivo e tradição desde 2019. Agende seu horário no Seu José." },
     ],
   }),
