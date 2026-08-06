@@ -14,9 +14,8 @@ function Index() {
     <div className="min-h-screen bg-background text-foreground selection:bg-gold selection:text-white">
       {/* Navbar Placeholder */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between p-6 px-12 transition-all duration-300">
-        <div className="flex items-center gap-3">
-          <img src={logoAsset.url} alt="Seu José Logo" className="w-12 h-12 rounded-full border border-gold/30" />
-          <div className="text-2xl font-serif font-bold tracking-tighter">SEU JOSÉ</div>
+        <div className="flex items-center">
+          <img src={logoAsset.url} alt="Seu José Logo" className="w-16 h-16 rounded-full border border-gold/30 shadow-lg hover:scale-105 transition-transform cursor-pointer" />
         </div>
         <div className="flex gap-8 items-center text-sm font-medium tracking-wide">
           {["Home", "Serviços", "Assinatura", "Contato"].map((item) => (
