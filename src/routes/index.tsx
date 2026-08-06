@@ -284,7 +284,7 @@ function Index() {
                 className={`relative group ${i % 2 !== 0 ? "md:translate-y-12" : ""}`}
               >
                 <div className="overflow-hidden aspect-[3/4] rounded-none mb-6 relative">
-                  {service.video ? (
+                  {service.video && (
                     <video 
                       autoPlay 
                       muted 
@@ -294,8 +294,6 @@ function Index() {
                     >
                       <source src={service.video} type="video/mp4" />
                     </video>
-                  ) : (
-                    <img src={service.img} alt={service.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 grayscale hover:grayscale-0" />
                   )}
                 </div>
                 <div className="space-y-2">
