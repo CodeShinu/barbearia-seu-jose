@@ -47,6 +47,9 @@ import barbeariaInterna3 from "@/assets/barbearia_interna_3.jpg.asset.json";
 import videoCombo1 from "@/assets/video_combo_premium.mp4.asset.json";
 import videoKids1 from "@/assets/video_kids_premium.mp4.asset.json";
 import videoToalhaQuente from "@/assets/video_toalha_quente.mp4.asset.json";
+import joeberSaccomani from "@/assets/joeber_saccomani.jpg.asset.json";
+import wesleySilva from "@/assets/wesley_silva.jpg.asset.json";
+import adrielBarao from "@/assets/adriel_barao.jpg.asset.json";
 
 
 
@@ -362,9 +365,9 @@ function Index() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
             {[
-              { name: "Seu José", role: "Founder & Master", img: "https://images.unsplash.com/photo-1593702295094-ada74bc4a19c?q=80&w=800" },
-              { name: "Marcos", role: "Especialista em Barba", img: "https://images.unsplash.com/photo-1621605815841-aa897af68032?q=80&w=800" },
-              { name: "André", role: "Estilo Moderno", img: "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?q=80&w=800" },
+              { name: "Joeber Saccomani", role: "Barber", img: joeberSaccomani.url },
+              { name: "Wesley Silva", role: "Barber", img: wesleySilva.url },
+              { name: "Adriel Barão", role: "Barber", img: adrielBarao.url },
             ].map((barber, i) => (
               <motion.div 
                 key={i} 
