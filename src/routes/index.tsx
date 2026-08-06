@@ -412,8 +412,9 @@ function Index() {
             <span className="font-serif text-xl tracking-tighter uppercase">Seu José</span>
           </div>
           <div className="flex gap-8 text-xs font-bold uppercase tracking-widest">
-            <a href="#" className="hover:text-gold transition-colors flex items-center gap-2">Instagram</a>
-            <a href="#" className="hover:text-gold transition-colors flex items-center gap-2"><Phone size={16}/> WhatsApp</a>
+            <a href="https://www.instagram.com/barbeariaseujose/" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-colors flex items-center gap-2">Instagram</a>
+            <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-colors flex items-center gap-2"><Phone size={16}/> WhatsApp</a>
+            <a href="https://play.google.com/store/apps/details?id=br.com.starapp.barbeariaseujose" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-colors flex items-center gap-2">Google Play</a>
           </div>
           <p className="text-xs">© 2026 Seu José Barbershop. Todos os direitos reservados.</p>
         </div>
