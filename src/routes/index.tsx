@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { Scissors, Star, Clock, Calendar, MapPin, Phone } from "lucide-react";
+import { Scissors, Star, Calendar, Phone } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
 export const Route = createFileRoute("/")({
   component: Index,
