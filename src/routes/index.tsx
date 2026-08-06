@@ -5,7 +5,6 @@ import {
   Star, 
   Calendar, 
   Phone, 
-  Instagram, 
   Check, 
   Clock, 
   MapPin, 
@@ -31,7 +30,7 @@ const fadeInUp = {
   initial: { opacity: 0, y: 30 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true },
-  transition: { duration: 0.6, ease: "easeOut" }
+  transition: { duration: 0.6 }
 };
 
 const stagger = {
@@ -303,7 +302,7 @@ function Index() {
             <span className="font-serif text-xl tracking-tighter uppercase">Seu José</span>
           </div>
           <div className="flex gap-8 text-xs font-bold uppercase tracking-widest">
-            <a href="#" className="hover:text-gold transition-colors flex items-center gap-2"><Instagram size={16}/> Instagram</a>
+            <a href="#" className="hover:text-gold transition-colors flex items-center gap-2">Instagram</a>
             <a href="#" className="hover:text-gold transition-colors flex items-center gap-2"><Phone size={16}/> WhatsApp</a>
           </div>
           <p className="text-xs">© 2026 Seu José Barbershop. Todos os direitos reservados.</p>
