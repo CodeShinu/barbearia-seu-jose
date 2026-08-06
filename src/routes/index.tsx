@@ -38,7 +38,7 @@ import corteMullet2 from "@/assets/corte_mullet_2.jpg.asset.json";
 import videoInstitucional1 from "@/assets/video_institucional_1.mp4.asset.json";
 import videoInstitucional2 from "@/assets/video_institucional_2.mp4.asset.json";
 import videoInstitucional3 from "@/assets/video_institucional_3.mp4.asset.json";
-import videoBarba1 from "@/assets/video_barba_1.mp4.asset.json";
+import videoBarba1 from "@/assets/video_barba_premium.mp4.asset.json";
 import videoCorte1 from "@/assets/video_corte_1.mp4.asset.json";
 import corteMullet3 from "@/assets/corte_mullet_3.jpg.asset.json";
 
