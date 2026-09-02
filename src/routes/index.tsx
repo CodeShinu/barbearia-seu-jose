@@ -32,7 +32,21 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 
+const WHATSAPP_NUMBER = "5511931458599";
+const DEFAULT_WHATSAPP_MESSAGE = "Olá, gostaria de agendar um horário";
 
+const whatsappUrl = (message: string) => {
+  const messageWithExclamation = `${message.trim().replace(/!+$/, "")}!`;
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(messageWithExclamation)}`;
+};
+
+const services = [
+  { name: "Corte", time: "40 min", video: "/assets/video_corte_1.mp4" },
+  { name: "A Barba", time: "30 min", video: "/assets/video_barba_premium.mp4" },
+  { name: "Combo", time: "1h10min", video: "/assets/video_combo_premium.mp4" },
+  { name: "Kids", time: "40 min", video: "/assets/video_kids_premium.mp4" },
+  { name: "Toalha Quente", time: "30 min", video: "/assets/video_toalha_quente.mp4" },
+];
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -85,8 +99,12 @@ function Index() {
 
       {/* Navbar */}
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 py-4 px-6 md:px-12 flex items-center justify-between ${isScrolled ? "bg-forest-deep/95 backdrop-blur-md shadow-2xl py-3 border-b border-gold/10" : "bg-transparent"}`}>
-        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-4">
-          <img src={"/assets/logo.png"} alt="Seu José Logo" className="w-12 h-12 md:w-16 md:h-16 rounded-full border border-gold/30 shadow-gold/20 shadow-lg" />
+        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-3 md:gap-4">
+          <img src={"/assets/logo.png"} alt="Logo Barbearia Seu José" className="w-12 h-12 md:w-16 md:h-16 rounded-full border border-gold/30 shadow-gold/20 shadow-lg" />
+          <div className="flex flex-col leading-none">
+            <span className="font-serif text-lg md:text-2xl tracking-tighter uppercase text-cream">Seu José</span>
+            <span className="mt-1 text-[8px] md:text-[10px] uppercase tracking-[0.35em] md:tracking-[0.5em] text-gold font-bold">Barbearia</span>
+          </div>
         </motion.div>
 
         <div className="hidden lg:flex gap-8 items-center text-sm font-bold uppercase tracking-widest">
@@ -94,7 +112,7 @@ function Index() {
             <a key={item} href={item === "Contato" ? "#contato" : `#${item.toLowerCase()}`} className="hover:text-gold transition-colors duration-300">{item}</a>
           ))}
           <Button size="sm" variant="premium" asChild>
-            <a href="https://wa.me/5511931458599?text=Olá,%20gostaria%20de%20agendar%20um%20horário" target="_blank" rel="noopener noreferrer">Agendar</a>
+            <a href={whatsappUrl(DEFAULT_WHATSAPP_MESSAGE)} target="_blank" rel="noopener noreferrer">Agendar</a>
           </Button>
         </div>
 
@@ -116,7 +134,7 @@ function Index() {
               <a key={item} href={item === "Contato" ? "#contato" : `#${item.toLowerCase()}`} onClick={() => setIsMenuOpen(false)} className="text-2xl font-serif font-bold text-cream hover:text-gold">{item}</a>
             ))}
             <Button size="lg" variant="premium" className="mt-4" asChild onClick={() => setIsMenuOpen(false)}>
-              <a href="https://wa.me/5511931458599?text=Olá,%20gostaria%20de%20agendar%20um%20horário" target="_blank" rel="noopener noreferrer">Agendar Agora</a>
+              <a href={whatsappUrl(DEFAULT_WHATSAPP_MESSAGE)} target="_blank" rel="noopener noreferrer">Agendar Agora</a>
             </Button>
           </motion.div>
         )}
@@ -169,7 +187,7 @@ function Index() {
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center pt-8">
             <Button size="xl" variant="premium" className="rounded-none px-12" asChild>
-              <a href="https://wa.me/5511931458599?text=Olá,%20gostaria%20de%20agendar%20um%20horário" target="_blank" rel="noopener noreferrer">Agendar Agora</a>
+              <a href={whatsappUrl(DEFAULT_WHATSAPP_MESSAGE)} target="_blank" rel="noopener noreferrer">Agendar Agora</a>
             </Button>
             <Button size="xl" variant="outline" className="rounded-none px-12 border-cream/20 text-cream" asChild>
               <a href="#serviços">Nossos Serviços</a>
@@ -233,7 +251,7 @@ function Index() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-8 gap-x-12">
               {[
                 { icon: Scissors, title: "Mestres Barbeiros", desc: "Técnicas clássicas com visão moderna." },
-                { icon: Coffee, title: "Lounge VIP", desc: "Cerveja gelada e café de cortesia." },
+                { icon: Coffee, title: "Lounge VIP", desc: "Cerveja gelada, café cortesia." },
                 { icon: Award, title: "Premium Care", desc: "Produtos importados de alta linha." },
                 { icon: Clock, title: "Seu Tempo", desc: "Pontualidade e agendamento fácil." },
               ].map((item, i) => (
@@ -262,13 +280,7 @@ function Index() {
           </motion.div>
 
           <div className="flex flex-wrap justify-center gap-x-12 gap-y-24">
-            {[
-              { name: "Corte Masculino", time: "45 min", video: "/assets/video_corte_1.mp4" },
-              { name: "A Barba", time: "30 min", video: "/assets/video_barba_premium.mp4" },
-              { name: "O Combo", time: "1h 15min", video: "/assets/video_combo_premium.mp4" },
-              { name: "Kids", time: "30 min", video: "/assets/video_kids_premium.mp4" },
-              { name: "Toalha Quente", time: "20 min", video: "/assets/video_toalha_quente.mp4" },
-            ].map((service, i) => (
+            {services.map((service, i) => (
               <motion.div 
                 key={i} 
                 initial={{ opacity: 0, y: 30 }}
@@ -296,7 +308,16 @@ function Index() {
                     <span className="text-gold font-bold text-xs uppercase tracking-widest">{service.time}</span>
                   </div>
                   <p className="text-cream/50 text-sm leading-relaxed">Experiência completa com finalização premium.</p>
-                  <Button variant="link" className="p-0 text-gold h-auto mt-4 uppercase text-xs font-bold tracking-widest">Agendar agora →</Button>
+                  <Button variant="link" className="p-0 text-gold h-auto mt-4 uppercase text-xs font-bold tracking-widest" asChild>
+                    <a
+                      href={whatsappUrl(`Olá, gostaria de agendar o serviço ${service.name}`)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`Agendar ${service.name} pelo WhatsApp`}
+                    >
+                      Agendar agora →
+                    </a>
+                  </Button>
                 </div>
               </motion.div>
             ))}
@@ -318,7 +339,7 @@ function Index() {
               </h2>
               <p className="text-xl text-cream/70 max-w-xl font-light">Para o homem que entende que imagem é investimento. Cortes ilimitados e benefícios exclusivos em São Caetano.</p>
               <Button size="xl" variant="premium" className="rounded-none px-12 uppercase" asChild>
-                <a href="https://wa.me/5511931458599?text=Olá,%20gostaria%20de%20saber%20mais%20sobre%20o%20Club%20Seu%20José" target="_blank" rel="noopener noreferrer">Faça parte do clube</a>
+                <a href={whatsappUrl("Olá, gostaria de saber mais sobre o Club Seu José")} target="_blank" rel="noopener noreferrer">Faça parte do clube</a>
               </Button>
             </motion.div>
 
@@ -326,8 +347,8 @@ function Index() {
               {[
                 { title: "ILIMITADO", desc: "Corte quantas vezes quiser." },
                 { title: "PRIORIDADE", desc: "Agendamento VIP sem filas." },
-                { title: "ECONOMIA", desc: "Mais de 40% de redução de custo." },
-                { title: "EVENTOS", desc: "Acesso a workshops e degustações." }
+                { title: "ECONOMIA", desc: "Faça mais e pague menos!" },
+                { title: "PRATICIDADE", desc: "pague diretamente pelo App" }
               ].map((item, i) => (
                 <motion.div 
                   key={i} 
@@ -432,7 +453,7 @@ function Index() {
       {/* Floating CTA (WhatsApp Pulse) */}
       <div className="fixed bottom-6 left-6 z-50">
         <motion.a 
-          href="https://wa.me/5511931458599?text=Olá,%20gostaria%20de%20agendar%20um%20horário"
+          href={whatsappUrl(DEFAULT_WHATSAPP_MESSAGE)}
           target="_blank"
           animate={{ scale: [1, 1.05, 1] }}
           transition={{ duration: 2, repeat: Infinity }}
@@ -445,7 +466,7 @@ function Index() {
 
       <div className="fixed bottom-6 right-6 lg:hidden z-50">
         <Button variant="premium" size="icon" className="w-16 h-16 rounded-full shadow-2xl" asChild>
-          <a href="https://wa.me/5511931458599?text=Olá,%20gostaria%20de%20agendar%20um%20horário" target="_blank" rel="noopener noreferrer">
+          <a href={whatsappUrl(DEFAULT_WHATSAPP_MESSAGE)} target="_blank" rel="noopener noreferrer">
             <Calendar size={28} />
           </a>
         </Button>
@@ -463,21 +484,17 @@ function Index() {
           </div>
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 auto-rows-[200px] md:auto-rows-[300px]">
-            {/* 1. Vídeo Principal (Grande) */}
+            {/* 1. Imagem Principal (Grande) */}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               className="relative overflow-hidden md:col-span-2 md:row-span-2 border border-gold/10 group"
             >
-              <video 
-                autoPlay 
-                muted 
-                loop 
-                playsInline 
-                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
-              >
-                <source src={"/assets/video_institucional_2.mp4"} type="video/mp4" />
-              </video>
+              <img
+                src={"/assets/barbearia_interna_2.jpg"}
+                alt="Atendimento na Barbearia Seu José"
+                className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+              />
               <div className="absolute inset-0 bg-forest-deep/20 group-hover:bg-transparent transition-colors" />
             </motion.div>
 
@@ -593,15 +610,15 @@ function Index() {
                     <Clock size={24} />
                   </div>
                   <div>
-                    <h4 className="text-gold font-bold uppercase text-[10px] tracking-widest mb-1">Horário de Luxo</h4>
-                    <p className="text-lg text-cream/80 font-serif leading-tight">Seg-Sex: 10h às 20h <br />Sáb: 09h às 17h</p>
+                    <h4 className="text-gold font-bold uppercase text-[10px] tracking-widest mb-1">Horário de Atendimento</h4>
+                    <p className="text-lg text-cream/80 font-serif leading-tight">Seg-Sex: 10h às 20h <br />Sábado: até 17h30</p>
                   </div>
                 </div>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-6 pt-4">
                 <Button size="xl" variant="premium" className="rounded-none px-12 h-16 text-lg uppercase tracking-widest shadow-2xl shadow-gold/10" asChild>
-                  <a href="https://wa.me/5511931458599?text=Olá,%20gostaria%20de%20agendar%20um%20horário" target="_blank" rel="noopener noreferrer">
+                  <a href={whatsappUrl(DEFAULT_WHATSAPP_MESSAGE)} target="_blank" rel="noopener noreferrer">
                     Agendar Horário <Scissors className="ml-2 w-5 h-5" />
                   </a>
                 </Button>
@@ -634,18 +651,19 @@ function Index() {
           <div className="mt-40 pt-12 border-t border-gold/10 flex flex-col md:flex-row justify-between items-center gap-12">
             <div className="flex flex-col items-center md:items-start gap-4">
               <div className="flex items-center gap-4">
-                <img src={"/assets/logo.png"} alt="Logo Seu José" className="w-16 h-16 rounded-full border border-gold/20" />
+                <img src={"/assets/logo.png"} alt="Logo Barbearia Seu José" className="w-16 h-16 rounded-full border border-gold/20" />
                 <div className="flex flex-col">
                   <span className="font-serif text-2xl tracking-tighter uppercase text-cream">Seu José</span>
-                  <span className="text-[10px] uppercase tracking-[0.5em] text-gold font-bold">Barbershop</span>
+                  <span className="text-[10px] uppercase tracking-[0.5em] text-gold font-bold">Barbearia</span>
                 </div>
               </div>
             </div>
 
             <div className="flex flex-wrap justify-center gap-12 text-[10px] font-bold uppercase tracking-[0.3em] text-cream/40">
               <a href="https://www.instagram.com/seujosebarbershop" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-all duration-300">Instagram</a>
-              <a href="https://wa.me/5511931458599?text=Olá,%20gostaria%20de%20agendar%20um%20horário" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-all duration-300">WhatsApp</a>
-              <a href="https://play.google.com/store/apps/details?id=br.com.starapp.barbeariaseujose" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-all duration-300">Play Store</a>
+              <a href={whatsappUrl(DEFAULT_WHATSAPP_MESSAGE)} target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-all duration-300">WhatsApp</a>
+              <a href="https://play.google.com/store/apps/details?id=br.com.starapp.barbeariaseujose" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-all duration-300">Google Play</a>
+              <a href="https://apps.apple.com/br/app/barbearia-seu-jos%C3%A9/id6474557189" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-all duration-300">App Store</a>
             </div>
 
             <div className="text-[10px] uppercase tracking-widest text-cream/20">
