@@ -12,7 +12,7 @@
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
-  
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -32,7 +32,7 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  
+
   --color-gold: var(--gold);
   --color-gold-dark: var(--gold-dark);
   --color-forest: var(--forest);
@@ -46,7 +46,7 @@
 
 :root {
   --radius: 0.5rem;
-  
+
   /* Paleta baseada na logo e briefing */
   --forest: oklch(0.35 0.08 160); /* #1F4D3D */
   --forest-deep: oklch(0.25 0.06 160); /* #14352A */
@@ -54,25 +54,25 @@
   --gold-dark: oklch(0.6 0.15 85); /* #C9822E */
   --cream: oklch(0.97 0.02 85); /* #F7F3EA */
   --brick: oklch(0.45 0.15 45); /* #8B4A32 */
-  
+
   --background: var(--forest-deep);
   --foreground: var(--cream);
-  
+
   --card: oklch(0.2 0.04 160);
   --card-foreground: var(--cream);
-  
+
   --primary: var(--gold);
   --primary-foreground: var(--forest-deep);
-  
+
   --secondary: var(--forest);
   --secondary-foreground: var(--cream);
-  
+
   --muted: oklch(0.3 0.04 160);
   --muted-foreground: oklch(0.8 0.02 85);
-  
+
   --accent: var(--gold);
   --accent-foreground: var(--forest-deep);
-  
+
   --border: oklch(0.4 0.05 160);
   --input: oklch(0.4 0.05 160);
   --ring: var(--gold);
@@ -88,9 +88,74 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
   }
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-serif);
     font-weight: 700;
+  }
+}
+
+@layer components {
+  .reviews-carousel {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+  }
+
+  .reviews-track {
+    display: flex;
+    width: max-content;
+    will-change: transform;
+    animation: reviews-scroll 34s linear infinite;
+  }
+
+  .reviews-group {
+    display: flex;
+    gap: 1rem;
+    padding-right: 1rem;
+  }
+
+  .review-card {
+    width: min(82vw, 24rem);
+  }
+
+  .reviews-carousel:hover .reviews-track,
+  .reviews-carousel:focus-within .reviews-track {
+    animation-play-state: paused !important;
+  }
+}
+
+@keyframes reviews-scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-height: 680px) and (max-width: 1279px) {
+  #mobile-menu {
+    padding-top: 5rem;
+    padding-bottom: 1rem;
+  }
+
+  .mobile-menu-content {
+    justify-content: flex-start;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .mobile-menu-link {
+    min-height: 2.5rem;
+    padding-top: 0.375rem;
+    padding-bottom: 0.375rem;
+  }
+
+  .mobile-menu-cta {
+    min-height: 3rem;
+    margin-top: 1rem;
   }
 }
 
@@ -131,14 +196,33 @@
     font-size: clamp(3rem, 8vw + 1rem, 10rem);
     line-height: 0.9;
   }
+}
 
-  @keyframes marquee {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
-  .animate-marquee {
-    animation: marquee 30s linear infinite;
-    display: flex;
-    width: max-content;
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    transition-duration: 0.01ms;
+  }
+
+  .reviews-carousel {
+    overflow-x: auto;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .reviews-track {
+    animation: none;
+    transform: none;
+  }
+
+  .reviews-group[aria-hidden="true"] {
+    display: none;
   }
 }
