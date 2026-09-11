@@ -100,10 +100,31 @@
 }
 
 @layer components {
+  .hero-content {
+    animation: hero-reveal 1s ease-out both;
+  }
+
   .reviews-carousel {
-    overflow: hidden;
+    overflow-x: auto;
+    scrollbar-width: none;
     -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
     mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+  }
+
+  .reviews-carousel::-webkit-scrollbar {
+    display: none;
+  }
+
+  section[id] {
+    scroll-margin-top: 6rem;
+  }
+
+  main[inert] .fixed {
+    visibility: hidden;
+  }
+
+  .fixed.bottom-6 {
+    bottom: max(1.5rem, env(safe-area-inset-bottom));
   }
 
   .reviews-track {
@@ -129,9 +150,42 @@
   }
 }
 
+@media (max-width: 639px), (max-height: 680px) {
+  .hero-section {
+    padding-top: 10rem;
+    padding-bottom: 7rem;
+  }
+}
+
+@media (max-width: 399px) {
+  #assinatura h2 {
+    font-size: clamp(2.75rem, 14vw, 3.75rem);
+  }
+}
+
+@media (max-width: 359px) {
+  .hero-content .headline-huge {
+    font-size: 2.5rem;
+  }
+
+  .hero-content a {
+    padding-inline: 1.5rem;
+    font-size: 1rem;
+  }
+}
+
 @keyframes reviews-scroll {
   to {
     transform: translateX(-50%);
+  }
+}
+
+@keyframes hero-reveal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 
@@ -199,6 +253,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .hero-content {
+    animation: none;
+  }
+
   html {
     scroll-behavior: auto;
   }

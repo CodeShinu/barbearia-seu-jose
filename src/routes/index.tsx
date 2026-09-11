@@ -227,7 +227,7 @@ function ReviewCard({ review }: { review: Review }) {
           <time className="text-xs text-cream/45">{review.date}</time>
         </div>
       </div>
-      <div className="mt-5 flex gap-1 text-gold" aria-label="5 de 5 estrelas">
+      <div className="mt-5 flex gap-1 text-gold" role="img" aria-label="5 de 5 estrelas">
         {Array.from({ length: 5 }).map((_, star) => (
           <Star key={star} size={17} fill="currentColor" aria-hidden="true" />
         ))}
@@ -269,6 +269,7 @@ const navLinks = [
 function LazyServiceMedia({ service }: { service: Service }) {
   const mediaRef = useRef<HTMLVideoElement>(null);
   const [isNearViewport, setIsNearViewport] = useState(false);
+  const [hasLoaded, setHasLoaded] = useState(false);
   const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
@@ -276,7 +277,11 @@ function LazyServiceMedia({ service }: { service: Service }) {
     if (!media || !service.video) return;
 
     const observer = new IntersectionObserver(
-      ([entry]) => setIsNearViewport(entry?.isIntersecting ?? false),
+      ([entry]) => {
+        const visible = entry?.isIntersecting ?? false;
+        setIsNearViewport(visible);
+        if (visible) setHasLoaded(true);
+      },
       { rootMargin: "240px 0px" },
     );
 
@@ -289,7 +294,6 @@ function LazyServiceMedia({ service }: { service: Service }) {
     if (!media || !service.video) return;
 
     if (isNearViewport) {
-      media.load();
       if (!prefersReducedMotion) void media.play().catch(() => undefined);
     } else {
       media.pause();
@@ -320,15 +324,15 @@ function LazyServiceMedia({ service }: { service: Service }) {
       aria-label={`Vídeo do serviço ${service.name}`}
       className="h-full w-full object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
     >
-      {isNearViewport && <source src={service.video} type="video/mp4" />}
+      {hasLoaded && <source src={service.video} type="video/mp4" />}
     </video>
   );
 }
 
 export const Route = createFileRoute("/")({
   head: () => ({
-    title: "Barbearia Seu José | Barbearia Premium em São Caetano do Sul",
     meta: [
+      { title: "Barbearia Seu José | Barbearia Premium em São Caetano do Sul" },
       {
         name: "description",
         content:
@@ -362,19 +366,57 @@ function Index() {
   const [isPageVisible, setIsPageVisible] = useState(true);
   const [activeServiceCategory, setActiveServiceCategory] = useState<ServiceCategory>("barba");
   const videoRef = useRef<HTMLVideoElement>(null);
+  const galleryVideoRef = useRef<HTMLVideoElement>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const reviewsRef = useRef<HTMLDivElement>(null);
+  const [areReviewsVisible, setAreReviewsVisible] = useState(false);
   const prefersReducedMotion = useReducedMotion();
   const { scrollYProgress } = useScroll();
   const visibleServices = services.filter((service) => service.category === activeServiceCategory);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
-    if (prefersReducedMotion) videoRef.current?.pause();
-  }, [prefersReducedMotion]);
+    const videos = [videoRef.current, galleryVideoRef.current].filter(
+      (video): video is HTMLVideoElement => video !== null,
+    );
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        const video = entry.target as HTMLVideoElement;
+        if (entry.isIntersecting && isPageVisible && !prefersReducedMotion) {
+          void video.play().catch(() => undefined);
+        } else {
+          video.pause();
+        }
+      }
+    });
+    videos.forEach((video) => observer.observe(video));
+    return () => observer.disconnect();
+  }, [prefersReducedMotion, isPageVisible]);
+
+  useEffect(() => {
+    const reviewsElement = reviewsRef.current;
+    if (!reviewsElement) return;
+    const observer = new IntersectionObserver(([entry]) =>
+      setAreReviewsVisible(entry?.isIntersecting ?? false),
+    );
+    observer.observe(reviewsElement);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const desktop = window.matchMedia("(min-width: 1280px)");
+    const closeOnDesktop = () => {
+      if (desktop.matches) setIsMenuOpen(false);
+    };
+    desktop.addEventListener("change", closeOnDesktop);
+    return () => desktop.removeEventListener("change", closeOnDesktop);
+  }, []);
 
   useEffect(() => {
     const handleVisibilityChange = () => setIsPageVisible(!document.hidden);
@@ -387,8 +429,19 @@ function Index() {
     if (!isMenuOpen) return;
 
     const previousOverflow = document.body.style.overflow;
+    const menu = document.getElementById("mobile-menu");
+    const trigger = menuButtonRef.current;
+    const links = Array.from(menu?.querySelectorAll<HTMLAnchorElement>("a[href]") ?? []);
+    links[0]?.focus();
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") setIsMenuOpen(false);
+      if (event.key === "Tab") {
+        const focusable = [trigger, ...links].filter((element) => element !== null);
+        const index = focusable.findIndex((element) => element === document.activeElement);
+        const next = event.shiftKey ? index - 1 : index + 1;
+        event.preventDefault();
+        focusable[(next + focusable.length) % focusable.length]?.focus();
+      }
     };
 
     document.body.style.overflow = "hidden";
@@ -396,10 +449,12 @@ function Index() {
     return () => {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", handleKeyDown);
+      if (trigger?.getClientRects().length) trigger.focus();
     };
   }, [isMenuOpen]);
 
-  const shouldPauseReviews = areReviewsPaused || !isPageVisible || prefersReducedMotion;
+  const shouldPauseReviews =
+    areReviewsPaused || !areReviewsVisible || !isPageVisible || prefersReducedMotion;
 
   return (
     <MotionConfig reducedMotion="user">
@@ -412,6 +467,7 @@ function Index() {
 
         {/* Navbar */}
         <nav
+          aria-label="Navegação principal"
           className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 py-4 px-6 md:px-12 flex items-center justify-between ${isScrolled ? "bg-forest-deep/95 backdrop-blur-md shadow-2xl py-3 border-b border-gold/10" : "bg-transparent"}`}
         >
           <motion.div
@@ -456,6 +512,7 @@ function Index() {
           </div>
 
           <button
+            ref={menuButtonRef}
             type="button"
             className="relative grid h-11 w-11 place-items-center border border-gold/25 bg-forest-deep/70 text-gold backdrop-blur-md transition-colors hover:border-gold/60 hover:bg-gold hover:text-forest-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold xl:hidden"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -519,7 +576,6 @@ function Index() {
                     <motion.a
                       key={item.href}
                       href={item.href}
-                      autoFocus={index === 0}
                       onClick={() => setIsMenuOpen(false)}
                       initial={{ opacity: 0, x: -16 }}
                       animate={{ opacity: 1, x: 0 }}
@@ -563,859 +619,891 @@ function Index() {
           )}
         </AnimatePresence>
 
-        {/* 1. Hero with Video & Texture */}
-        <section
-          id="home"
-          className="relative h-screen flex flex-col justify-center items-center text-center px-6 overflow-hidden grainy-overlay"
-        >
-          <div className="absolute inset-0 z-0">
-            <div className="absolute inset-0 bg-dark-gradient z-10" />
-            <motion.video
-              ref={videoRef}
-              autoPlay={!prefersReducedMotion}
-              muted={isMuted}
-              loop
-              playsInline
-              initial={prefersReducedMotion ? false : { scale: 1.1 }}
-              animate={{ scale: prefersReducedMotion ? 1 : 1.1 }}
-              transition={{
-                duration: prefersReducedMotion ? 0 : 20,
-                repeat: prefersReducedMotion ? 0 : Infinity,
-                repeatType: "reverse",
-              }}
-              className="w-full h-full object-cover grayscale opacity-40 md:opacity-60"
-            >
-              <source src={"/assets/video_institucional_1.mp4"} type="video/mp4" />
-            </motion.video>
-
-            <button
-              type="button"
-              onClick={() => setIsMuted(!isMuted)}
-              className="absolute bottom-32 right-6 z-20 w-12 h-12 rounded-full border border-gold/30 bg-forest-deep/50 backdrop-blur-md flex items-center justify-center text-gold hover:bg-gold hover:text-forest-deep transition-all md:right-12"
-              aria-label={isMuted ? "Ativar som do vídeo" : "Desativar som do vídeo"}
-            >
-              {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
-            </button>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1 }}
-            className="relative z-20 max-w-6xl space-y-8"
+        <main inert={isMenuOpen}>
+          {/* 1. Hero with Video & Texture */}
+          <section
+            id="home"
+            className="hero-section relative min-h-svh flex flex-col justify-center items-center text-center px-6 overflow-hidden grainy-overlay"
           >
-            <div className="flex flex-wrap justify-center gap-4 mb-4">
-              <span className="bg-gold/10 border border-gold/30 px-6 py-2 rounded-none text-xs font-bold uppercase tracking-widest text-gold">
-                🏆 DESDE 2019
-              </span>
-            </div>
-
-            <h1 className="headline-huge font-serif text-cream uppercase">
-              Barbearia <br />
-              <span className="text-gold italic">Seu José.</span>
-            </h1>
-
-            <p className="text-xl md:text-3xl text-cream/70 max-w-2xl mx-auto leading-tight text-balance">
-              Barbearia premium em São Caetano do Sul. Onde a tradição encontra a modernidade.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-6 justify-center pt-8">
-              <Button size="xl" variant="premium" className="rounded-none px-12" asChild>
-                <a
-                  href={whatsappUrl(DEFAULT_WHATSAPP_MESSAGE)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Agendar Agora
-                </a>
-              </Button>
-              <Button
-                size="xl"
-                variant="outline"
-                className="rounded-none px-12 border-cream/20 text-cream"
-                asChild
+            <div className="absolute inset-0 z-0">
+              <div className="absolute inset-0 bg-dark-gradient z-10" />
+              <motion.video
+                ref={videoRef}
+                autoPlay={!prefersReducedMotion}
+                muted={isMuted}
+                loop
+                playsInline
+                initial={prefersReducedMotion ? false : { scale: 1.1 }}
+                animate={{ scale: prefersReducedMotion ? 1 : 1.1 }}
+                transition={{
+                  duration: prefersReducedMotion ? 0 : 20,
+                  repeat: prefersReducedMotion ? 0 : Infinity,
+                  repeatType: "reverse",
+                }}
+                className="w-full h-full object-cover grayscale opacity-40 md:opacity-60"
               >
-                <a href="#serviços">Nossos Serviços</a>
-              </Button>
+                <source src={"/assets/video_institucional_1.mp4"} type="video/mp4" />
+              </motion.video>
+
+              <button
+                type="button"
+                onClick={() => setIsMuted(!isMuted)}
+                className="absolute bottom-6 right-24 sm:bottom-32 sm:right-6 z-20 w-12 h-12 rounded-full border border-gold/30 bg-forest-deep/50 backdrop-blur-md flex items-center justify-center text-gold hover:bg-gold hover:text-forest-deep transition-all md:right-12"
+                aria-label={isMuted ? "Ativar som do vídeo" : "Desativar som do vídeo"}
+              >
+                {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+              </button>
             </div>
-          </motion.div>
-        </section>
 
-        {/* 2. Faixa de Confiança */}
-        <section className="py-12 bg-forest border-y border-gold/10">
-          <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8">
-            {[
-              { label: "História", value: "Desde 2019" },
-              { label: "Avaliações oficiais", value: "5 estrelas" },
-              { label: "Catálogo oficial", value: `${services.length} serviços` },
-              { label: "Club Seu José", value: `${subscriptionPlans.length} planos` },
-            ].map((item, i) => (
-              <motion.div key={i} {...fadeInUp} className="text-center">
-                <div className="text-3xl md:text-4xl font-serif font-bold text-gold mb-1">
-                  {item.value}
-                </div>
-                <div className="text-xs md:text-sm uppercase tracking-widest text-cream/60">
-                  {item.label}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </section>
-
-        {/* 3. Sobre & 4. Diferenciais com Assimetria */}
-        <section id="sobre" className="py-32 px-6 md:px-12 bg-forest-deep relative overflow-hidden">
-          <div className="absolute inset-0 opacity-[0.05] pointer-events-none brick-texture" />
-
-          <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-16 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="relative w-full lg:w-1/2"
-            >
-              <div className="absolute -top-10 -left-10 w-32 h-32 border-l-2 border-t-2 border-gold/40 z-0" />
-              <img
-                src={"/assets/poster_tradicao.jpg"}
-                alt="Ambiente Seu José"
-                className="rounded-none shadow-2xl w-full h-[600px] object-contain bg-forest/20 relative z-10 grayscale hover:grayscale-0 transition-all duration-700 border-2 border-gold/10"
-              />
-              <div className="absolute -bottom-6 -right-6 bg-gold p-8 rounded-none z-20 hidden md:block">
-                <p className="text-forest-deep font-bold uppercase tracking-tighter text-xl leading-none">
-                  Estilo <br /> Atemporal
-                </p>
+            <div className="hero-content relative z-20 w-full max-w-6xl space-y-8">
+              <div className="flex flex-wrap justify-center gap-4 mb-4">
+                <span className="bg-gold/10 border border-gold/30 px-6 py-2 rounded-none text-xs font-bold uppercase tracking-widest text-gold">
+                  🏆 DESDE 2019
+                </span>
               </div>
-            </motion.div>
 
-            <div className="w-full lg:w-1/2 space-y-10 lg:pl-12">
-              <motion.div {...fadeInUp} className="space-y-6">
-                <h2 className="text-5xl md:text-7xl font-serif leading-none">
-                  Nossa <br />
-                  <span className="text-gold italic">História.</span>
-                </h2>
-                <div className="space-y-5 text-base leading-relaxed text-cream/70 md:text-lg">
-                  {aboutManifesto.map((paragraph) => (
-                    <p key={paragraph}>{paragraph}</p>
-                  ))}
+              <h1 className="headline-huge font-serif text-cream uppercase">
+                Barbearia <br />
+                <span className="text-gold italic">Seu José.</span>
+              </h1>
+
+              <p className="text-xl md:text-3xl text-cream/70 max-w-2xl mx-auto leading-tight text-balance">
+                Barbearia premium em São Caetano do Sul. Onde a tradição encontra a modernidade.
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-6 justify-center pt-8">
+                <Button size="xl" variant="premium" className="rounded-none px-12" asChild>
+                  <a
+                    href={whatsappUrl(DEFAULT_WHATSAPP_MESSAGE)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Agendar Agora
+                  </a>
+                </Button>
+                <Button
+                  size="xl"
+                  variant="outline"
+                  className="rounded-none px-12 border-cream/20 text-cream"
+                  asChild
+                >
+                  <a href="#serviços">Nossos Serviços</a>
+                </Button>
+              </div>
+            </div>
+          </section>
+
+          {/* 2. Faixa de Confiança */}
+          <section className="py-12 bg-forest border-y border-gold/10">
+            <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8">
+              {[
+                { label: "História", value: "Desde 2019" },
+                { label: "Avaliações oficiais", value: "5 estrelas" },
+                { label: "Catálogo oficial", value: `${services.length} serviços` },
+                { label: "Planos de assinatura", value: `${subscriptionPlans.length} planos` },
+              ].map((item, i) => (
+                <motion.div key={i} {...fadeInUp} className="text-center">
+                  <div className="text-3xl md:text-4xl font-serif font-bold text-gold mb-1">
+                    {item.value}
+                  </div>
+                  <div className="text-xs md:text-sm uppercase tracking-widest text-cream/60">
+                    {item.label}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </section>
+
+          {/* 3. Sobre & 4. Diferenciais com Assimetria */}
+          <section
+            id="sobre"
+            className="py-32 px-6 md:px-12 bg-forest-deep relative overflow-hidden"
+          >
+            <div className="absolute inset-0 opacity-[0.05] pointer-events-none brick-texture" />
+
+            <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-16 items-center">
+              <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                className="relative w-full lg:w-1/2"
+              >
+                <div className="absolute -top-10 -left-10 w-32 h-32 border-l-2 border-t-2 border-gold/40 z-0" />
+                <img
+                  loading="lazy"
+                  decoding="async"
+                  src={"/assets/poster_tradicao.jpg"}
+                  alt="Ambiente Seu José"
+                  className="rounded-none shadow-2xl w-full h-[600px] object-contain bg-forest/20 relative z-10 grayscale hover:grayscale-0 transition-all duration-700 border-2 border-gold/10"
+                />
+                <div className="absolute -bottom-6 -right-6 bg-gold p-8 rounded-none z-20 hidden md:block">
+                  <p className="text-forest-deep font-bold uppercase tracking-tighter text-xl leading-none">
+                    Estilo <br /> Atemporal
+                  </p>
                 </div>
-                <p className="border-l-2 border-gold pl-4 text-sm font-bold uppercase tracking-widest text-gold">
-                  Manifesto — São Caetano do Sul, março de 2019.
+              </motion.div>
+
+              <div className="w-full lg:w-1/2 space-y-10 lg:pl-12">
+                <motion.div {...fadeInUp} className="space-y-6">
+                  <h2 className="text-5xl md:text-7xl font-serif leading-none">
+                    Nossa <br />
+                    <span className="text-gold italic">História.</span>
+                  </h2>
+                  <div className="space-y-5 text-base leading-relaxed text-cream/70 md:text-lg">
+                    {aboutManifesto.map((paragraph) => (
+                      <p key={paragraph}>{paragraph}</p>
+                    ))}
+                  </div>
+                  <p className="border-l-2 border-gold pl-4 text-sm font-bold uppercase tracking-widest text-gold">
+                    Manifesto — São Caetano do Sul, março de 2019.
+                  </p>
+                </motion.div>
+              </div>
+            </div>
+          </section>
+
+          {/* 5. Serviços com Layout Dinâmico */}
+          <section id="serviços" className="py-32 bg-forest px-6 md:px-12 relative overflow-hidden">
+            <div className="max-w-7xl mx-auto flex flex-col gap-12 md:gap-16">
+              <motion.div {...fadeInUp} className="max-w-3xl">
+                <h2 className="text-5xl md:text-8xl font-serif uppercase tracking-tighter leading-[0.8]">
+                  Serviços <br />
+                  <span className="text-gold italic">Oficiais.</span>
+                </h2>
+                <p className="text-cream/60 mt-6 text-xl">
+                  Escolha uma categoria e encontre o cuidado ideal.
                 </p>
               </motion.div>
-            </div>
-          </div>
-        </section>
 
-        {/* 5. Serviços com Layout Dinâmico */}
-        <section id="serviços" className="py-32 bg-forest px-6 md:px-12 relative overflow-hidden">
-          <div className="max-w-7xl mx-auto flex flex-col gap-12 md:gap-16">
-            <motion.div {...fadeInUp} className="max-w-3xl">
-              <h2 className="text-5xl md:text-8xl font-serif uppercase tracking-tighter leading-[0.8]">
-                Serviços <br />
-                <span className="text-gold italic">Oficiais.</span>
-              </h2>
-              <p className="text-cream/60 mt-6 text-xl">
-                Escolha uma categoria e encontre o cuidado ideal.
-              </p>
-            </motion.div>
+              <div
+                role="group"
+                aria-label="Categorias de serviços"
+                className="-mx-6 flex gap-3 overflow-x-auto px-6 pb-2 md:mx-0 md:flex-wrap md:px-0"
+              >
+                {serviceCategories.map((category) => {
+                  const isActive = activeServiceCategory === category.id;
+                  return (
+                    <button
+                      key={category.id}
+                      type="button"
+                      aria-pressed={isActive}
+                      aria-controls="catalogo-servicos"
+                      onClick={() => setActiveServiceCategory(category.id)}
+                      className={`shrink-0 border px-5 py-3 text-xs font-bold uppercase tracking-widest transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-forest ${isActive ? "border-gold bg-gold text-forest-deep" : "border-gold/20 bg-forest-deep/25 text-cream/70 hover:border-gold/60 hover:text-gold"}`}
+                    >
+                      {category.label}
+                    </button>
+                  );
+                })}
+              </div>
 
-            <div
-              role="group"
-              aria-label="Categorias de serviços"
-              className="-mx-6 flex gap-3 overflow-x-auto px-6 pb-2 md:mx-0 md:flex-wrap md:px-0"
-            >
-              {serviceCategories.map((category) => {
-                const isActive = activeServiceCategory === category.id;
-                return (
-                  <button
-                    key={category.id}
-                    type="button"
-                    aria-pressed={isActive}
-                    aria-controls="catalogo-servicos"
-                    onClick={() => setActiveServiceCategory(category.id)}
-                    className={`shrink-0 border px-5 py-3 text-xs font-bold uppercase tracking-widest transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-forest ${isActive ? "border-gold bg-gold text-forest-deep" : "border-gold/20 bg-forest-deep/25 text-cream/70 hover:border-gold/60 hover:text-gold"}`}
+              <motion.div
+                id="catalogo-servicos"
+                layout
+                className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3"
+              >
+                {visibleServices.map((service, i) => (
+                  <motion.div
+                    layout
+                    key={service.name}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.1 }}
+                    className="group flex min-w-0 flex-col border border-gold/15 bg-forest-deep/35 transition-all duration-300 hover:-translate-y-1 hover:border-gold/45"
                   >
-                    {category.label}
-                  </button>
-                );
-              })}
-            </div>
-
-            <motion.div
-              id="catalogo-servicos"
-              layout
-              className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3"
-            >
-              {visibleServices.map((service, i) => (
-                <motion.div
-                  layout
-                  key={service.name}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                  className="group flex min-w-0 flex-col border border-gold/15 bg-forest-deep/35 transition-all duration-300 hover:-translate-y-1 hover:border-gold/45"
-                >
-                  <div className="aspect-[16/9] overflow-hidden border-b border-gold/10">
-                    <LazyServiceMedia service={service} />
-                  </div>
-                  <div className="flex flex-1 flex-col p-5 sm:p-6">
-                    <div className="flex min-w-0 items-start justify-between gap-4">
-                      <h3 className="min-w-0 text-2xl font-serif leading-tight text-cream">
-                        {service.name}
-                      </h3>
-                      {service.plan && (
-                        <span className="shrink-0 border border-gold/40 px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-gold">
-                          Plano
-                        </span>
-                      )}
+                    <div className="aspect-[16/9] overflow-hidden border-b border-gold/10">
+                      <LazyServiceMedia service={service} />
                     </div>
-                    <p className="mt-3 min-h-10 text-sm leading-relaxed text-cream/55">
-                      {service.description ?? " "}
-                    </p>
-                    <div className="mt-5 flex flex-wrap items-end justify-between gap-4 border-t border-gold/10 pt-4">
-                      <div>
-                        {service.pricePrefix && (
-                          <span className="block text-[10px] uppercase tracking-widest text-cream/45">
-                            {service.pricePrefix}
+                    <div className="flex flex-1 flex-col p-5 sm:p-6">
+                      <div className="flex min-w-0 items-start justify-between gap-4">
+                        <h3 className="min-w-0 text-2xl font-serif leading-tight text-cream">
+                          {service.name}
+                        </h3>
+                        {service.plan && (
+                          <span className="shrink-0 border border-gold/40 px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-gold">
+                            Plano disponível
                           </span>
                         )}
-                        <span className="text-lg font-bold text-gold">{service.price}</span>
                       </div>
-                      <span className="flex items-center gap-2 text-sm text-cream/70">
-                        <Clock size={16} aria-hidden="true" />
-                        {service.duration}
-                      </span>
+                      <p className="mt-3 min-h-10 text-sm leading-relaxed text-cream/55">
+                        {service.description ?? " "}
+                      </p>
+                      <div className="mt-5 flex flex-wrap items-end justify-between gap-4 border-t border-gold/10 pt-4">
+                        <div>
+                          {service.pricePrefix && (
+                            <span className="block text-[10px] uppercase tracking-widest text-cream/45">
+                              {service.pricePrefix}
+                            </span>
+                          )}
+                          <span className="text-lg font-bold text-gold">{service.price}</span>
+                        </div>
+                        <span className="flex items-center gap-2 text-sm text-cream/70">
+                          <Clock size={16} aria-hidden="true" />
+                          {service.duration}
+                        </span>
+                      </div>
+                      <Button variant="premium" className="mt-6 w-full rounded-none" asChild>
+                        <a
+                          href={whatsappUrl(`Olá, gostaria de agendar o serviço ${service.name}`)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`Agendar ${service.name} pelo WhatsApp`}
+                        >
+                          Agendar
+                        </a>
+                      </Button>
                     </div>
-                    <Button variant="premium" className="mt-6 w-full rounded-none" asChild>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </div>
+          </section>
+
+          {/* 6. Assinatura - Estilo Brutalista/Premium */}
+          <section
+            id="assinatura"
+            className="relative py-32 px-6 overflow-hidden bg-forest-deep border-y border-gold/10"
+          >
+            <div className="absolute inset-0 opacity-[0.05] brick-texture pointer-events-none" />
+
+            <div className="max-w-7xl mx-auto relative z-10 space-y-14">
+              <motion.div {...fadeInUp} className="max-w-3xl space-y-7">
+                <span className="text-gold font-bold uppercase tracking-widest text-sm inline-block border-b-2 border-gold pb-1">
+                  Club Seu José
+                </span>
+                <h2 className="text-6xl md:text-8xl font-serif uppercase leading-none tracking-tighter">
+                  Sempre <br />
+                  <span className="text-gold italic">Impecável.</span>
+                </h2>
+                <div className="flex flex-wrap gap-3 text-xs font-bold uppercase tracking-widest text-cream/70">
+                  <span className="flex items-center gap-2 border border-gold/15 px-4 py-2">
+                    <Check size={16} className="text-gold" /> Serviço ilimitado
+                  </span>
+                  <span className="flex items-center gap-2 border border-gold/15 px-4 py-2">
+                    <Check size={16} className="text-gold" /> Pagamento mensal
+                  </span>
+                </div>
+              </motion.div>
+
+              <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+                {subscriptionPlans.map((plan, i) => (
+                  <motion.article
+                    key={plan.name}
+                    {...fadeInUp}
+                    transition={{ delay: i * 0.1 }}
+                    className="flex flex-col border border-gold/15 bg-forest/25 p-7 transition-all duration-300 hover:-translate-y-1 hover:border-gold/50"
+                  >
+                    <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-gold">
+                      Assinatura
+                    </span>
+                    <h3 className="mt-4 min-h-16 text-2xl font-serif leading-tight text-cream">
+                      {plan.name}
+                    </h3>
+                    <p className="mt-6 text-3xl font-serif font-bold text-gold">
+                      {plan.price}
+                      <span className="ml-1 text-sm font-sans font-normal text-cream/50">/mês</span>
+                    </p>
+                    <Button variant="premium" className="mt-8 w-full rounded-none" asChild>
                       <a
-                        href={whatsappUrl(`Olá, gostaria de agendar o serviço ${service.name}`)}
+                        href={whatsappUrl(`Olá, gostaria de assinar o plano ${plan.name}`)}
                         target="_blank"
                         rel="noopener noreferrer"
-                        aria-label={`Agendar ${service.name} pelo WhatsApp`}
+                        aria-label={`Solicitar assinatura do plano ${plan.name} pelo WhatsApp`}
                       >
-                        Agendar
+                        Quero assinar
+                      </a>
+                    </Button>
+                  </motion.article>
+                ))}
+              </div>
+            </div>
+          </section>
+          {/* 7. Equipe / Barbeiros (Assimetria) */}
+          <section id="equipe" className="py-32 px-6 md:px-12 bg-forest relative overflow-hidden">
+            <div className="max-w-7xl mx-auto flex flex-col gap-20">
+              <div className="flex flex-col md:flex-row justify-between items-end gap-8">
+                <motion.div {...fadeInUp} className="max-w-2xl">
+                  <h2 className="text-5xl md:text-8xl font-serif leading-none tracking-tighter uppercase text-cream">
+                    O Time <br />
+                    <span className="text-gold italic">de Elite.</span>
+                  </h2>
+                </motion.div>
+                <Button
+                  variant="outline"
+                  className="rounded-none border-gold/30 text-gold uppercase tracking-widest text-xs h-12"
+                  asChild
+                >
+                  <a
+                    href={whatsappUrl(
+                      "Olá, gostaria de agendar com a equipe da Barbearia Seu José",
+                    )}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Agendar com a equipe
+                  </a>
+                </Button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-12">
+                {[
+                  {
+                    name: "Daniel",
+                    role: "Barber",
+                    img: "/assets/barber_daniel.jpg",
+                    position: "center 30%",
+                  },
+                  {
+                    name: "Adriel",
+                    role: "Barber",
+                    img: "/assets/barber_adriel.jpg",
+                    position: "center 28%",
+                  },
+                  {
+                    name: "Joéber",
+                    role: "Barber",
+                    img: "/assets/barber_joeber.jpg",
+                    position: "center 28%",
+                  },
+                  {
+                    name: "Wesley",
+                    role: "Barber",
+                    img: "/assets/barber_wesley.jpg",
+                    position: "center 28%",
+                  },
+                  {
+                    name: "Gilberto",
+                    role: "Barber",
+                    img: "/assets/barber_gilberto.jpg",
+                    position: "center 30%",
+                  },
+                ].map((barber, i) => (
+                  <motion.div
+                    key={barber.name}
+                    {...fadeInUp}
+                    transition={{ delay: i * 0.1 }}
+                    className={`group relative transition-transform duration-300 hover:-translate-y-1 lg:col-span-2 ${i === 3 ? "lg:col-start-2" : i === 4 ? "lg:col-start-4" : ""}`}
+                  >
+                    <div className="relative aspect-[3/4] overflow-hidden border border-gold/15 bg-forest-deep/40 shadow-[0_12px_20px_rgba(0,0,0,0.22)] transition-all duration-500 group-hover:border-gold/50">
+                      <img
+                        src={barber.img}
+                        alt={`${barber.name}, ${barber.role} da Barbearia Seu José`}
+                        loading="lazy"
+                        decoding="async"
+                        style={{ objectPosition: barber.position }}
+                        className="h-full w-full object-cover saturate-[0.82] contrast-[1.04] transition-all duration-700 group-hover:scale-[1.035] group-hover:saturate-100"
+                      />
+                      <div
+                        aria-hidden="true"
+                        className="absolute inset-0 bg-gradient-to-t from-forest-deep/40 via-transparent to-transparent opacity-70 transition-opacity duration-500 group-hover:opacity-35"
+                      />
+                    </div>
+                    <div className="mt-5 border-l-2 border-gold/70 py-1 pl-4 transition-colors duration-300 group-hover:border-gold">
+                      <h3 className="text-2xl font-serif uppercase tracking-tighter text-cream">
+                        {barber.name}
+                      </h3>
+                      <p className="mt-1 text-xs font-bold uppercase tracking-widest text-gold">
+                        {barber.role}
+                      </p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* 8. Avaliações oficiais */}
+          <section
+            id="avaliacoes"
+            className="relative overflow-hidden border-y border-gold/10 bg-forest-deep px-6 py-24 md:px-12"
+          >
+            <div className="mx-auto max-w-7xl">
+              <motion.div
+                {...fadeInUp}
+                className="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between"
+              >
+                <div>
+                  <h2 className="text-5xl font-serif uppercase leading-none tracking-tighter text-cream md:text-7xl">
+                    Avaliações <span className="text-gold italic">reais.</span>
+                  </h2>
+                  <p className="mt-4 text-sm uppercase tracking-widest text-cream/45">
+                    {reviews.length} avaliações · 5 estrelas
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setAreReviewsPaused((paused) => !paused)}
+                  className="flex w-fit items-center gap-2 border border-gold/25 px-4 py-3 text-xs font-bold uppercase tracking-widest text-gold transition-colors hover:bg-gold hover:text-forest-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+                  aria-label={
+                    areReviewsPaused
+                      ? "Continuar carrossel de avaliações"
+                      : "Pausar carrossel de avaliações"
+                  }
+                  aria-pressed={areReviewsPaused}
+                >
+                  {areReviewsPaused ? (
+                    <Play size={15} aria-hidden="true" />
+                  ) : (
+                    <Pause size={15} aria-hidden="true" />
+                  )}
+                  {areReviewsPaused ? "Continuar" : "Pausar"}
+                </button>
+              </motion.div>
+
+              <div
+                ref={reviewsRef}
+                className="reviews-carousel"
+                tabIndex={0}
+                role="region"
+                aria-label="Avaliações de clientes"
+              >
+                <div
+                  className="reviews-track"
+                  style={{
+                    animationDuration: `${reviews.length * 6.8}s`,
+                    animationPlayState: shouldPauseReviews ? "paused" : "running",
+                  }}
+                >
+                  <div className="reviews-group" role="list">
+                    {reviews.map((review) => (
+                      <div role="listitem" key={`${review.name}-${review.date}`}>
+                        <ReviewCard review={review} />
+                      </div>
+                    ))}
+                  </div>
+                  <div className="reviews-group" aria-hidden="true">
+                    {reviews.map((review) => (
+                      <div key={`duplicate-${review.name}-${review.date}`}>
+                        <ReviewCard review={review} />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* O rodapé foi movido para depois da galeria para seguir o fluxo visual solicitado */}
+
+          {/* Atalho flutuante para horários */}
+          <div className="fixed top-24 right-6 z-50">
+            <motion.a
+              href="#contato"
+              initial={{ x: 100 }}
+              animate={{ x: 0 }}
+              className="bg-forest-deep/80 backdrop-blur-md border border-gold/30 px-4 py-2 flex items-center gap-3"
+            >
+              <Clock size={14} className="text-gold" aria-hidden="true" />
+              <span className="text-[10px] font-bold uppercase tracking-widest text-gold">
+                Ver horários
+              </span>
+            </motion.a>
+          </div>
+
+          {/* Floating CTA (WhatsApp Pulse) */}
+          <div className="fixed bottom-6 left-6 z-50">
+            <motion.a
+              href={whatsappUrl(DEFAULT_WHATSAPP_MESSAGE)}
+              target="_blank"
+              rel="noopener noreferrer"
+              animate={{ scale: prefersReducedMotion ? 1 : [1, 1.05, 1] }}
+              transition={{
+                duration: prefersReducedMotion ? 0 : 2,
+                repeat: prefersReducedMotion ? 0 : Infinity,
+              }}
+              className="flex items-center gap-3 bg-[#25D366] text-white px-4 py-3 rounded-full shadow-2xl hover:scale-105 transition-transform"
+              aria-label="Abrir atendimento da Barbearia Seu José no WhatsApp"
+            >
+              <Phone size={20} />
+              <span className="font-bold text-sm hidden md:block uppercase tracking-widest">
+                Atendimento
+              </span>
+            </motion.a>
+          </div>
+
+          <div className="fixed bottom-6 right-6 lg:hidden z-50">
+            <Button
+              variant="premium"
+              size="icon"
+              className="w-16 h-16 rounded-full shadow-2xl"
+              asChild
+            >
+              <a
+                href={whatsappUrl(DEFAULT_WHATSAPP_MESSAGE)}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Agendar horário pelo WhatsApp"
+              >
+                <Calendar size={28} aria-hidden="true" />
+              </a>
+            </Button>
+          </div>
+
+          {/* Galeria / Instagram Brutalista - Optimized with Uploads */}
+          <section className="py-32 bg-forest-deep px-6 overflow-hidden">
+            <div className="max-w-7xl mx-auto flex flex-col gap-16">
+              <div className="flex flex-col md:flex-row justify-between items-baseline gap-4">
+                <h2 className="text-4xl md:text-7xl font-serif uppercase tracking-tighter text-cream">
+                  Galeria <br />
+                  <span className="text-gold italic">No Detalhe.</span>
+                </h2>
+                <p className="text-cream/40 uppercase tracking-widest text-xs font-bold">
+                  @seujosebarbershop
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 auto-rows-[200px] md:auto-rows-[300px]">
+                {/* 1. Imagem Principal (Grande) */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  className="relative overflow-hidden md:col-span-2 md:row-span-2 border border-gold/10 group"
+                >
+                  <img
+                    loading="lazy"
+                    decoding="async"
+                    src={"/assets/barbearia_interna_2.jpg"}
+                    alt="Atendimento na Barbearia Seu José"
+                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+                  />
+                  <div className="absolute inset-0 bg-forest-deep/20 group-hover:bg-transparent transition-colors" />
+                </motion.div>
+
+                {/* 2. Corte Mullet 1 */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10 md:row-span-2"
+                >
+                  <img
+                    loading="lazy"
+                    decoding="async"
+                    src={"/assets/corte_mullet_1.jpg"}
+                    alt="Corte Mullet Detalhe"
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000"
+                  />
+                </motion.div>
+
+                {/* 3. Corte Mullet 2 */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10"
+                >
+                  <img
+                    loading="lazy"
+                    decoding="async"
+                    src={"/assets/corte_mullet_2.jpg"}
+                    alt="Corte Mullet Perfil"
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000"
+                  />
+                </motion.div>
+
+                {/* 4. Corte Mullet 3 */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10"
+                >
+                  <img
+                    loading="lazy"
+                    decoding="async"
+                    src={"/assets/corte_mullet_3.jpg"}
+                    alt="Corte Mullet Estilo"
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000"
+                  />
+                </motion.div>
+
+                {/* 5. Vídeo Institucional 3 (Largo) */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  className="relative overflow-hidden md:col-span-2 border border-gold/10 group"
+                >
+                  <video
+                    ref={galleryVideoRef}
+                    preload="none"
+                    aria-label="Vídeo institucional da Barbearia Seu José"
+                    muted
+                    loop
+                    playsInline
+                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                  >
+                    <source src={"/assets/video_institucional_3.mp4"} type="video/mp4" />
+                  </video>
+                </motion.div>
+
+                {/* 6. Barbearia Interna 3 */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  className="relative overflow-hidden md:col-span-2 border border-gold/10 group"
+                >
+                  <img
+                    loading="lazy"
+                    decoding="async"
+                    src={"/assets/barbearia_interna_3.jpg"}
+                    alt="Ambiente VIP Seu José"
+                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 hover:scale-105 transition-transform duration-1000"
+                  />
+                </motion.div>
+
+                {/* 7. Barbearia Interna 1 (Vertical) */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10 md:row-span-2"
+                >
+                  <img
+                    loading="lazy"
+                    decoding="async"
+                    src={"/assets/barbearia_interna_1.jpg"}
+                    alt="Barbeiros em Ação"
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000"
+                  />
+                </motion.div>
+
+                {/* 8. Barbearia Interna 2 (Largo) */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10 md:col-span-3"
+                >
+                  <img
+                    loading="lazy"
+                    decoding="async"
+                    src={"/assets/barbearia_interna_2.jpg"}
+                    alt="Cuidado Premium"
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000"
+                  />
+                </motion.div>
+              </div>
+            </div>
+          </section>
+          {/* 15. Contato & Footer Premium - Movido para depois da Galeria */}
+          <section
+            id="contato"
+            className="relative py-40 bg-forest-deep overflow-hidden border-t border-gold/10"
+          >
+            <div className="absolute inset-0 opacity-[0.05] brick-texture pointer-events-none" />
+
+            {/* Elemento Decorativo Gigante no Background */}
+            <div className="absolute -bottom-20 -right-20 text-[20vw] font-serif font-black text-gold/5 pointer-events-none uppercase tracking-tighter select-none">
+              Estilo
+            </div>
+
+            <div className="max-w-7xl mx-auto px-6 relative z-10">
+              <div className="grid grid-cols-1 items-start gap-16 xl:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] xl:gap-16">
+                {/* Coluna de Informações e CTA */}
+                <motion.div {...fadeInUp} className="min-w-0 space-y-16">
+                  <div className="space-y-6">
+                    <span className="text-gold font-bold uppercase tracking-[0.3em] text-xs inline-block border-b border-gold/30 pb-2">
+                      Agendamento & Localização
+                    </span>
+                    <h2 className="text-5xl font-serif leading-none tracking-tighter text-cream uppercase sm:text-6xl lg:text-7xl xl:text-6xl 2xl:text-8xl">
+                      Onde a <br />
+                      <span className="text-gold italic">Magia</span> <br />
+                      Acontece.
+                    </h2>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-10 sm:grid-cols-2">
+                    <div className="space-y-4 group">
+                      <div className="w-12 h-12 flex items-center justify-center text-gold border border-gold/20 group-hover:bg-gold group-hover:text-forest-deep transition-all duration-500">
+                        <MapPin size={24} />
+                      </div>
+                      <div>
+                        <h3 className="text-gold font-bold uppercase text-[10px] tracking-widest mb-1">
+                          Endereço
+                        </h3>
+                        <address className="text-lg text-cream/80 font-serif not-italic leading-snug">
+                          {ADDRESS}
+                          <br />
+                          {ADDRESS_CITY}
+                        </address>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4 group">
+                      <div className="w-12 h-12 flex items-center justify-center text-gold border border-gold/20 group-hover:bg-gold group-hover:text-forest-deep transition-all duration-500">
+                        <Clock size={24} />
+                      </div>
+                      <div>
+                        <h3 className="text-gold font-bold uppercase text-[10px] tracking-widest mb-1">
+                          Horário de Atendimento
+                        </h3>
+                        <dl className="space-y-1.5 text-sm text-cream/75">
+                          {businessHours.map((item) => (
+                            <div
+                              key={item.day}
+                              className="flex justify-between gap-4 border-b border-cream/5 pb-1"
+                            >
+                              <dt>{item.day}</dt>
+                              <dd
+                                className={
+                                  item.hours === "Fechado" ? "text-cream/40" : "text-cream"
+                                }
+                              >
+                                {item.hours}
+                              </dd>
+                            </div>
+                          ))}
+                        </dl>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-5 border-t border-gold/10 pt-8">
+                    <div className="flex items-center gap-3">
+                      <CreditCard className="text-gold" size={22} aria-hidden="true" />
+                      <h3 className="font-sans text-sm font-bold uppercase tracking-widest text-cream">
+                        Formas de pagamento
+                      </h3>
+                    </div>
+                    <ul className="flex flex-wrap gap-2" aria-label="Formas de pagamento aceitas">
+                      {paymentMethods.map((method) => (
+                        <li
+                          key={method}
+                          className="border border-gold/15 bg-forest/25 px-3 py-2 text-xs text-cream/70"
+                        >
+                          {method}
+                        </li>
+                      ))}
+                    </ul>
+                    <p className="flex items-center gap-2 text-sm text-cream/60">
+                      <Wifi size={18} className="text-gold" aria-hidden="true" /> Wi-Fi disponível
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-4 pt-4 sm:grid-cols-2">
+                    <Button
+                      size="xl"
+                      variant="premium"
+                      className="h-16 w-full rounded-none px-4 text-sm uppercase tracking-widest shadow-2xl shadow-gold/10 sm:text-base"
+                      asChild
+                    >
+                      <a
+                        href={whatsappUrl(DEFAULT_WHATSAPP_MESSAGE)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Agendar Horário <Scissors className="ml-2 w-5 h-5" />
+                      </a>
+                    </Button>
+                    <Button
+                      size="xl"
+                      variant="outline"
+                      className="h-16 w-full rounded-none border-cream/20 px-4 text-sm uppercase tracking-widest text-cream transition-all hover:bg-cream hover:text-forest-deep sm:text-base"
+                      asChild
+                    >
+                      <a
+                        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(MAP_QUERY)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Ver no Mapa
                       </a>
                     </Button>
                   </div>
                 </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </section>
 
-        {/* 6. Assinatura - Estilo Brutalista/Premium */}
-        <section
-          id="assinatura"
-          className="relative py-32 px-6 overflow-hidden bg-forest-deep border-y border-gold/10"
-        >
-          <div className="absolute inset-0 opacity-[0.05] brick-texture pointer-events-none" />
-
-          <div className="max-w-7xl mx-auto relative z-10 space-y-14">
-            <motion.div {...fadeInUp} className="max-w-3xl space-y-7">
-              <span className="text-gold font-bold uppercase tracking-widest text-sm inline-block border-b-2 border-gold pb-1">
-                Club Seu José
-              </span>
-              <h2 className="text-6xl md:text-8xl font-serif uppercase leading-none tracking-tighter">
-                Sempre <br />
-                <span className="text-gold italic">Impecável.</span>
-              </h2>
-              <div className="flex flex-wrap gap-3 text-xs font-bold uppercase tracking-widest text-cream/70">
-                <span className="flex items-center gap-2 border border-gold/15 px-4 py-2">
-                  <Check size={16} className="text-gold" /> Serviço ilimitado
-                </span>
-                <span className="flex items-center gap-2 border border-gold/15 px-4 py-2">
-                  <Check size={16} className="text-gold" /> Pagamento mensal
-                </span>
-              </div>
-            </motion.div>
-
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-              {subscriptionPlans.map((plan, i) => (
-                <motion.article
-                  key={plan.name}
-                  {...fadeInUp}
-                  transition={{ delay: i * 0.1 }}
-                  className="flex flex-col border border-gold/15 bg-forest/25 p-7 transition-all duration-300 hover:-translate-y-1 hover:border-gold/50"
-                >
-                  <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-gold">
-                    Assinatura
-                  </span>
-                  <h3 className="mt-4 min-h-16 text-2xl font-serif leading-tight text-cream">
-                    {plan.name}
-                  </h3>
-                  <p className="mt-6 text-3xl font-serif font-bold text-gold">
-                    {plan.price}
-                    <span className="ml-1 text-sm font-sans font-normal text-cream/50">/mês</span>
-                  </p>
-                  <Button variant="premium" className="mt-8 w-full rounded-none" asChild>
-                    <a
-                      href={whatsappUrl(`Olá, gostaria de assinar o plano ${plan.name}`)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`Solicitar assinatura do plano ${plan.name} pelo WhatsApp`}
-                    >
-                      Quero assinar
-                    </a>
-                  </Button>
-                </motion.article>
-              ))}
-            </div>
-          </div>
-        </section>
-        {/* 7. Equipe / Barbeiros (Assimetria) */}
-        <section id="equipe" className="py-32 px-6 md:px-12 bg-forest relative overflow-hidden">
-          <div className="max-w-7xl mx-auto flex flex-col gap-20">
-            <div className="flex flex-col md:flex-row justify-between items-end gap-8">
-              <motion.div {...fadeInUp} className="max-w-2xl">
-                <h2 className="text-5xl md:text-8xl font-serif leading-none tracking-tighter uppercase text-cream">
-                  O Time <br />
-                  <span className="text-gold italic">de Elite.</span>
-                </h2>
-              </motion.div>
-              <Button
-                variant="outline"
-                className="rounded-none border-gold/30 text-gold uppercase tracking-widest text-xs h-12"
-                asChild
-              >
-                <a
-                  href={whatsappUrl("Olá, gostaria de agendar com a equipe da Barbearia Seu José")}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Agendar com a equipe
-                </a>
-              </Button>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-12">
-              {[
-                {
-                  name: "Daniel",
-                  role: "Barber",
-                  img: "/assets/barber_daniel.jpg",
-                  position: "center 30%",
-                },
-                {
-                  name: "Adriel",
-                  role: "Barber",
-                  img: "/assets/barber_adriel.jpg",
-                  position: "center 28%",
-                },
-                {
-                  name: "Joéber",
-                  role: "Barber",
-                  img: "/assets/barber_joeber.jpg",
-                  position: "center 28%",
-                },
-                {
-                  name: "Wesley",
-                  role: "Barber",
-                  img: "/assets/barber_wesley.jpg",
-                  position: "center 28%",
-                },
-                {
-                  name: "Gilberto",
-                  role: "Barber",
-                  img: "/assets/barber_gilberto.jpg",
-                  position: "center 30%",
-                },
-              ].map((barber, i) => (
+                {/* Coluna do Mapa Brutalista */}
                 <motion.div
-                  key={barber.name}
-                  {...fadeInUp}
-                  transition={{ delay: i * 0.1 }}
-                  className={`group relative transition-transform duration-300 hover:-translate-y-1 lg:col-span-2 ${i === 3 ? "lg:col-start-2" : i === 4 ? "lg:col-start-4" : ""}`}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  className="relative min-w-0 aspect-[4/3] xl:aspect-square"
                 >
-                  <div className="relative aspect-[3/4] overflow-hidden border border-gold/15 bg-forest-deep/40 shadow-[0_12px_20px_rgba(0,0,0,0.22)] transition-all duration-500 group-hover:border-gold/50">
-                    <img
-                      src={barber.img}
-                      alt={`${barber.name}, ${barber.role} da Barbearia Seu José`}
+                  <div className="absolute -top-4 -left-4 w-full h-full border border-gold/20 z-0" />
+                  <div className="relative z-10 w-full h-full border-2 border-gold/40 shadow-2xl overflow-hidden group">
+                    <iframe
+                      src={`https://www.google.com/maps?q=${encodeURIComponent(MAP_QUERY)}&output=embed`}
+                      title="Mapa da Barbearia Seu José"
+                      className="w-full h-full border-0 grayscale hover:grayscale-0 transition-all duration-1000"
+                      allowFullScreen
                       loading="lazy"
-                      decoding="async"
-                      style={{ objectPosition: barber.position }}
-                      className="h-full w-full object-cover saturate-[0.82] contrast-[1.04] transition-all duration-700 group-hover:scale-[1.035] group-hover:saturate-100"
                     />
-                    <div
-                      aria-hidden="true"
-                      className="absolute inset-0 bg-gradient-to-t from-forest-deep/40 via-transparent to-transparent opacity-70 transition-opacity duration-500 group-hover:opacity-35"
-                    />
-                  </div>
-                  <div className="mt-5 border-l-2 border-gold/70 py-1 pl-4 transition-colors duration-300 group-hover:border-gold">
-                    <h3 className="text-2xl font-serif uppercase tracking-tighter text-cream">
-                      {barber.name}
-                    </h3>
-                    <p className="mt-1 text-xs font-bold uppercase tracking-widest text-gold">
-                      {barber.role}
-                    </p>
                   </div>
                 </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* 8. Avaliações oficiais */}
-        <section
-          id="avaliacoes"
-          className="relative overflow-hidden border-y border-gold/10 bg-forest-deep px-6 py-24 md:px-12"
-        >
-          <div className="mx-auto max-w-7xl">
-            <motion.div
-              {...fadeInUp}
-              className="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between"
-            >
-              <div>
-                <h2 className="text-5xl font-serif uppercase leading-none tracking-tighter text-cream md:text-7xl">
-                  Avaliações <span className="text-gold italic">reais.</span>
-                </h2>
-                <p className="mt-4 text-sm uppercase tracking-widest text-cream/45">
-                  {reviews.length} avaliações · 5 estrelas
-                </p>
               </div>
-              <button
-                type="button"
-                onClick={() => setAreReviewsPaused((paused) => !paused)}
-                className="flex w-fit items-center gap-2 border border-gold/25 px-4 py-3 text-xs font-bold uppercase tracking-widest text-gold transition-colors hover:bg-gold hover:text-forest-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
-                aria-label={
-                  areReviewsPaused
-                    ? "Continuar carrossel de avaliações"
-                    : "Pausar carrossel de avaliações"
-                }
-                aria-pressed={areReviewsPaused}
-              >
-                {areReviewsPaused ? (
-                  <Play size={15} aria-hidden="true" />
-                ) : (
-                  <Pause size={15} aria-hidden="true" />
-                )}
-                {areReviewsPaused ? "Continuar" : "Pausar"}
-              </button>
-            </motion.div>
 
-            <div className="reviews-carousel" aria-label="Avaliações de clientes">
-              <div
-                className="reviews-track"
-                style={{
-                  animationDuration: `${reviews.length * 6.8}s`,
-                  animationPlayState: shouldPauseReviews ? "paused" : "running",
-                }}
-              >
-                <div className="reviews-group" role="list">
-                  {reviews.map((review) => (
-                    <div role="listitem" key={`${review.name}-${review.date}`}>
-                      <ReviewCard review={review} />
-                    </div>
-                  ))}
-                </div>
-                <div className="reviews-group" aria-hidden="true">
-                  {reviews.map((review) => (
-                    <div key={`duplicate-${review.name}-${review.date}`}>
-                      <ReviewCard review={review} />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* O rodapé foi movido para depois da galeria para seguir o fluxo visual solicitado */}
-
-        {/* Atalho flutuante para horários */}
-        <div className="fixed top-24 right-6 z-50">
-          <motion.a
-            href="#contato"
-            initial={{ x: 100 }}
-            animate={{ x: 0 }}
-            className="bg-forest-deep/80 backdrop-blur-md border border-gold/30 px-4 py-2 flex items-center gap-3"
-          >
-            <Clock size={14} className="text-gold" aria-hidden="true" />
-            <span className="text-[10px] font-bold uppercase tracking-widest text-gold">
-              Ver horários
-            </span>
-          </motion.a>
-        </div>
-
-        {/* Floating CTA (WhatsApp Pulse) */}
-        <div className="fixed bottom-6 left-6 z-50">
-          <motion.a
-            href={whatsappUrl(DEFAULT_WHATSAPP_MESSAGE)}
-            target="_blank"
-            animate={{ scale: prefersReducedMotion ? 1 : [1, 1.05, 1] }}
-            transition={{
-              duration: prefersReducedMotion ? 0 : 2,
-              repeat: prefersReducedMotion ? 0 : Infinity,
-            }}
-            className="flex items-center gap-3 bg-[#25D366] text-white px-4 py-3 rounded-full shadow-2xl hover:scale-105 transition-transform"
-            aria-label="Abrir atendimento da Barbearia Seu José no WhatsApp"
-          >
-            <Phone size={20} />
-            <span className="font-bold text-sm hidden md:block uppercase tracking-widest">
-              Atendimento
-            </span>
-          </motion.a>
-        </div>
-
-        <div className="fixed bottom-6 right-6 lg:hidden z-50">
-          <Button
-            variant="premium"
-            size="icon"
-            className="w-16 h-16 rounded-full shadow-2xl"
-            asChild
-          >
-            <a
-              href={whatsappUrl(DEFAULT_WHATSAPP_MESSAGE)}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Calendar size={28} />
-            </a>
-          </Button>
-        </div>
-
-        {/* Galeria / Instagram Brutalista - Optimized with Uploads */}
-        <section className="py-32 bg-forest-deep px-6 overflow-hidden">
-          <div className="max-w-7xl mx-auto flex flex-col gap-16">
-            <div className="flex flex-col md:flex-row justify-between items-baseline gap-4">
-              <h2 className="text-4xl md:text-7xl font-serif uppercase tracking-tighter text-cream">
-                Galeria <br />
-                <span className="text-gold italic">No Detalhe.</span>
-              </h2>
-              <p className="text-cream/40 uppercase tracking-widest text-xs font-bold">
-                @seujosebarbershop
-              </p>
-            </div>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 auto-rows-[200px] md:auto-rows-[300px]">
-              {/* 1. Imagem Principal (Grande) */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                className="relative overflow-hidden md:col-span-2 md:row-span-2 border border-gold/10 group"
-              >
-                <img
-                  src={"/assets/barbearia_interna_2.jpg"}
-                  alt="Atendimento na Barbearia Seu José"
-                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
-                />
-                <div className="absolute inset-0 bg-forest-deep/20 group-hover:bg-transparent transition-colors" />
-              </motion.div>
-
-              {/* 2. Corte Mullet 1 */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10 md:row-span-2"
-              >
-                <img
-                  src={"/assets/corte_mullet_1.jpg"}
-                  alt="Corte Mullet Detalhe"
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000"
-                />
-              </motion.div>
-
-              {/* 3. Corte Mullet 2 */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10"
-              >
-                <img
-                  src={"/assets/corte_mullet_2.jpg"}
-                  alt="Corte Mullet Perfil"
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000"
-                />
-              </motion.div>
-
-              {/* 4. Corte Mullet 3 */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10"
-              >
-                <img
-                  src={"/assets/corte_mullet_3.jpg"}
-                  alt="Corte Mullet Estilo"
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000"
-                />
-              </motion.div>
-
-              {/* 5. Vídeo Institucional 3 (Largo) */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                className="relative overflow-hidden md:col-span-2 border border-gold/10 group"
-              >
-                <video
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
-                >
-                  <source src={"/assets/video_institucional_3.mp4"} type="video/mp4" />
-                </video>
-              </motion.div>
-
-              {/* 6. Barbearia Interna 3 */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                className="relative overflow-hidden md:col-span-2 border border-gold/10 group"
-              >
-                <img
-                  src={"/assets/barbearia_interna_3.jpg"}
-                  alt="Ambiente VIP Seu José"
-                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 hover:scale-105 transition-transform duration-1000"
-                />
-              </motion.div>
-
-              {/* 7. Barbearia Interna 1 (Vertical) */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10 md:row-span-2"
-              >
-                <img
-                  src={"/assets/barbearia_interna_1.jpg"}
-                  alt="Barbeiros em Ação"
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000"
-                />
-              </motion.div>
-
-              {/* 8. Barbearia Interna 2 (Largo) */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10 md:col-span-3"
-              >
-                <img
-                  src={"/assets/barbearia_interna_2.jpg"}
-                  alt="Cuidado Premium"
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000"
-                />
-              </motion.div>
-            </div>
-          </div>
-        </section>
-        {/* 15. Contato & Footer Premium - Movido para depois da Galeria */}
-        <section
-          id="contato"
-          className="relative py-40 bg-forest-deep overflow-hidden border-t border-gold/10"
-        >
-          <div className="absolute inset-0 opacity-[0.05] brick-texture pointer-events-none" />
-
-          {/* Elemento Decorativo Gigante no Background */}
-          <div className="absolute -bottom-20 -right-20 text-[20vw] font-serif font-black text-gold/5 pointer-events-none uppercase tracking-tighter select-none">
-            Estilo
-          </div>
-
-          <div className="max-w-7xl mx-auto px-6 relative z-10">
-            <div className="grid grid-cols-1 items-start gap-16 xl:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] xl:gap-16">
-              {/* Coluna de Informações e CTA */}
-              <motion.div {...fadeInUp} className="min-w-0 space-y-16">
-                <div className="space-y-6">
-                  <span className="text-gold font-bold uppercase tracking-[0.3em] text-xs inline-block border-b border-gold/30 pb-2">
-                    Agendamento & Localização
-                  </span>
-                  <h2 className="text-5xl font-serif leading-none tracking-tighter text-cream uppercase sm:text-6xl lg:text-7xl xl:text-6xl 2xl:text-8xl">
-                    Onde a <br />
-                    <span className="text-gold italic">Magia</span> <br />
-                    Acontece.
-                  </h2>
-                </div>
-
-                <div className="grid grid-cols-1 gap-10 sm:grid-cols-2">
-                  <div className="space-y-4 group">
-                    <div className="w-12 h-12 flex items-center justify-center text-gold border border-gold/20 group-hover:bg-gold group-hover:text-forest-deep transition-all duration-500">
-                      <MapPin size={24} />
-                    </div>
-                    <div>
-                      <h4 className="text-gold font-bold uppercase text-[10px] tracking-widest mb-1">
-                        Endereço
-                      </h4>
-                      <address className="text-lg text-cream/80 font-serif not-italic leading-snug">
-                        {ADDRESS}
-                        <br />
-                        {ADDRESS_CITY}
-                      </address>
-                    </div>
-                  </div>
-
-                  <div className="space-y-4 group">
-                    <div className="w-12 h-12 flex items-center justify-center text-gold border border-gold/20 group-hover:bg-gold group-hover:text-forest-deep transition-all duration-500">
-                      <Clock size={24} />
-                    </div>
-                    <div>
-                      <h4 className="text-gold font-bold uppercase text-[10px] tracking-widest mb-1">
-                        Horário de Atendimento
-                      </h4>
-                      <dl className="space-y-1.5 text-sm text-cream/75">
-                        {businessHours.map((item) => (
-                          <div
-                            key={item.day}
-                            className="flex justify-between gap-4 border-b border-cream/5 pb-1"
-                          >
-                            <dt>{item.day}</dt>
-                            <dd
-                              className={item.hours === "Fechado" ? "text-cream/40" : "text-cream"}
-                            >
-                              {item.hours}
-                            </dd>
-                          </div>
-                        ))}
-                      </dl>
+              {/* Rodapé Final Minimalista */}
+              <div className="mt-40 pt-12 border-t border-gold/10 flex flex-col md:flex-row justify-between items-center gap-12">
+                <div className="flex flex-col items-center md:items-start gap-4">
+                  <div className="flex items-center gap-4">
+                    <img
+                      loading="lazy"
+                      decoding="async"
+                      src={"/assets/logo.png"}
+                      alt="Logo Barbearia Seu José"
+                      className="w-16 h-16 rounded-full border border-gold/20"
+                    />
+                    <div className="flex flex-col">
+                      <span className="font-serif text-2xl tracking-tighter uppercase text-cream">
+                        Barbearia
+                      </span>
+                      <span className="text-[10px] uppercase tracking-[0.5em] text-gold font-bold">
+                        Seu José
+                      </span>
                     </div>
                   </div>
                 </div>
 
-                <div className="space-y-5 border-t border-gold/10 pt-8">
-                  <div className="flex items-center gap-3">
-                    <CreditCard className="text-gold" size={22} aria-hidden="true" />
-                    <h3 className="font-sans text-sm font-bold uppercase tracking-widest text-cream">
-                      Formas de pagamento
-                    </h3>
-                  </div>
-                  <ul className="flex flex-wrap gap-2" aria-label="Formas de pagamento aceitas">
-                    {paymentMethods.map((method) => (
-                      <li
-                        key={method}
-                        className="border border-gold/15 bg-forest/25 px-3 py-2 text-xs text-cream/70"
-                      >
-                        {method}
-                      </li>
-                    ))}
-                  </ul>
-                  <p className="flex items-center gap-2 text-sm text-cream/60">
-                    <Wifi size={18} className="text-gold" aria-hidden="true" /> Wi-Fi disponível
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-1 gap-4 pt-4 sm:grid-cols-2">
-                  <Button
-                    size="xl"
-                    variant="premium"
-                    className="h-16 w-full rounded-none px-4 text-sm uppercase tracking-widest shadow-2xl shadow-gold/10 sm:text-base"
-                    asChild
+                <div className="flex flex-wrap justify-center gap-12 text-[10px] font-bold uppercase tracking-[0.3em] text-cream/40">
+                  <a
+                    href="https://www.instagram.com/seujosebarbershop"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-gold transition-all duration-300"
                   >
-                    <a
-                      href={whatsappUrl(DEFAULT_WHATSAPP_MESSAGE)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Agendar Horário <Scissors className="ml-2 w-5 h-5" />
-                    </a>
-                  </Button>
-                  <Button
-                    size="xl"
-                    variant="outline"
-                    className="h-16 w-full rounded-none border-cream/20 px-4 text-sm uppercase tracking-widest text-cream transition-all hover:bg-cream hover:text-forest-deep sm:text-base"
-                    asChild
+                    Instagram
+                  </a>
+                  <a
+                    href={whatsappUrl(DEFAULT_WHATSAPP_MESSAGE)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-gold transition-all duration-300"
                   >
-                    <a
-                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(MAP_QUERY)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Ver no Mapa
-                    </a>
-                  </Button>
+                    WhatsApp
+                  </a>
+                  <a
+                    href="https://play.google.com/store/apps/details?id=br.com.starapp.barbeariaseujose"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-gold transition-all duration-300"
+                  >
+                    Google Play
+                  </a>
+                  <a
+                    href="https://apps.apple.com/br/app/barbearia-seu-jos%C3%A9/id6474557189"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-gold transition-all duration-300"
+                  >
+                    App Store
+                  </a>
                 </div>
-              </motion.div>
 
-              {/* Coluna do Mapa Brutalista */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                className="relative min-w-0 aspect-[4/3] xl:aspect-square"
-              >
-                <div className="absolute -top-4 -left-4 w-full h-full border border-gold/20 z-0" />
-                <div className="relative z-10 w-full h-full border-2 border-gold/40 shadow-2xl overflow-hidden group">
-                  <iframe
-                    src={`https://www.google.com/maps?q=${encodeURIComponent(MAP_QUERY)}&output=embed`}
-                    title="Mapa da Barbearia Seu José"
-                    className="w-full h-full border-0 grayscale hover:grayscale-0 transition-all duration-1000"
-                    allowFullScreen
-                    loading="lazy"
-                  />
+                <div className="text-[10px] uppercase tracking-widest text-cream/20">
+                  © 2026 — SCS / SP
                 </div>
-              </motion.div>
-            </div>
-
-            {/* Rodapé Final Minimalista */}
-            <div className="mt-40 pt-12 border-t border-gold/10 flex flex-col md:flex-row justify-between items-center gap-12">
-              <div className="flex flex-col items-center md:items-start gap-4">
-                <div className="flex items-center gap-4">
-                  <img
-                    src={"/assets/logo.png"}
-                    alt="Logo Barbearia Seu José"
-                    className="w-16 h-16 rounded-full border border-gold/20"
-                  />
-                  <div className="flex flex-col">
-                    <span className="font-serif text-2xl tracking-tighter uppercase text-cream">
-                      Barbearia
-                    </span>
-                    <span className="text-[10px] uppercase tracking-[0.5em] text-gold font-bold">
-                      Seu José
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap justify-center gap-12 text-[10px] font-bold uppercase tracking-[0.3em] text-cream/40">
-                <a
-                  href="https://www.instagram.com/seujosebarbershop"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-gold transition-all duration-300"
-                >
-                  Instagram
-                </a>
-                <a
-                  href={whatsappUrl(DEFAULT_WHATSAPP_MESSAGE)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-gold transition-all duration-300"
-                >
-                  WhatsApp
-                </a>
-                <a
-                  href="https://play.google.com/store/apps/details?id=br.com.starapp.barbeariaseujose"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-gold transition-all duration-300"
-                >
-                  Google Play
-                </a>
-                <a
-                  href="https://apps.apple.com/br/app/barbearia-seu-jos%C3%A9/id6474557189"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-gold transition-all duration-300"
-                >
-                  App Store
-                </a>
-              </div>
-
-              <div className="text-[10px] uppercase tracking-widest text-cream/20">
-                © 2026 — SCS / SP
               </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        {/* Back to top */}
-        <motion.button
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          onClick={() =>
-            window.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" })
-          }
-          className="fixed bottom-6 right-6 hidden lg:flex w-12 h-12 bg-forest border border-gold/20 rounded-full items-center justify-center text-gold hover:bg-gold hover:text-forest-deep transition-all z-50"
-          aria-label="Voltar ao topo"
-        >
-          <ArrowUp size={24} />
-        </motion.button>
+          {/* Back to top */}
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() =>
+              window.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" })
+            }
+            className="fixed bottom-6 right-6 hidden lg:flex w-12 h-12 bg-forest border border-gold/20 rounded-full items-center justify-center text-gold hover:bg-gold hover:text-forest-deep transition-all z-50"
+            aria-label="Voltar ao topo"
+          >
+            <ArrowUp size={24} />
+          </motion.button>
+        </main>
       </div>
     </MotionConfig>
   );
