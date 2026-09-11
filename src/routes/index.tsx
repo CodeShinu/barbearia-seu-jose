@@ -21,6 +21,7 @@ import {
   Play,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { reviews, type Review } from "@/data/reviews";
 
 const WHATSAPP_NUMBER = "5511931458599";
 const DEFAULT_WHATSAPP_MESSAGE = "Olá, gostaria de agendar um horário";
@@ -204,16 +205,6 @@ const subscriptionPlans = [
   { name: "Cabelo ilimitado", price: "R$ 149,90" },
   { name: "Cabelo e Barba ilimitados", price: "R$ 249,90" },
 ];
-
-const reviews = [
-  { name: "Carlos Belruss", date: "28/05/2026" },
-  { name: "Cahue Rodrigues", date: "03/04/2026" },
-  { name: "Miguel Perussi", date: "18/09/2025" },
-  { name: "Daniel Tech", date: "10/09/2025", comment: "Sensacional!" },
-  { name: "Sandro Schiavotello", date: "10/11/2023", comment: "Barbearia Top" },
-];
-
-type Review = (typeof reviews)[number];
 
 function ReviewCard({ review }: { review: Review }) {
   const initials = review.name
@@ -977,7 +968,7 @@ function Index() {
                   Avaliações <span className="text-gold italic">reais.</span>
                 </h2>
                 <p className="mt-4 text-sm uppercase tracking-widest text-cream/45">
-                  5 avaliações · 5 estrelas
+                  {reviews.length} avaliações · 5 estrelas
                 </p>
               </div>
               <button
@@ -1003,7 +994,10 @@ function Index() {
             <div className="reviews-carousel" aria-label="Avaliações de clientes">
               <div
                 className="reviews-track"
-                style={{ animationPlayState: shouldPauseReviews ? "paused" : "running" }}
+                style={{
+                  animationDuration: `${reviews.length * 6.8}s`,
+                  animationPlayState: shouldPauseReviews ? "paused" : "running",
+                }}
               >
                 <div className="reviews-group" role="list">
                   {reviews.map((review) => (
