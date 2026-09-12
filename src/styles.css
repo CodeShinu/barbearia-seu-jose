@@ -253,9 +253,7 @@
 }
 
 @media (hover: none), (pointer: coarse) {
-  [data-gallery-grid] > [data-touch-color="true"],
-  [data-gallery-grid] > [data-touch-color="true"] img,
-  [data-gallery-grid] > [data-touch-color="true"] video {
+  main [data-touch-color="true"] {
     filter: grayscale(0);
   }
 }

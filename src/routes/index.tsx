@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AnimatePresence, motion, MotionConfig, useReducedMotion, useScroll } from "framer-motion";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, type TouchEvent } from "react";
 import {
   Scissors,
   Star,
@@ -377,6 +377,31 @@ const fadeInUp = {
   transition: { duration: 0.6 },
 };
 
+function revealTouchedMedia(event: TouchEvent<HTMLElement>) {
+  const touch = event.touches[0];
+  if (!touch) return;
+
+  event.currentTarget.querySelectorAll<HTMLElement>("img, video").forEach((media) => {
+    if (media.closest("#equipe")) return;
+    const rect = media.getBoundingClientRect();
+    if (
+      touch.clientX < rect.left ||
+      touch.clientX > rect.right ||
+      touch.clientY < rect.top ||
+      touch.clientY > rect.bottom
+    )
+      return;
+
+    let element: HTMLElement | null = media;
+    while (element && element !== event.currentTarget) {
+      if (element.classList.contains("grayscale")) {
+        element.dataset["touchColor"] = "true";
+      }
+      element = element.parentElement;
+    }
+  });
+}
+
 function Index() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -639,7 +664,7 @@ function Index() {
           )}
         </AnimatePresence>
 
-        <main inert={isMenuOpen}>
+        <main inert={isMenuOpen} onTouchStart={revealTouchedMedia} onTouchMove={revealTouchedMedia}>
           {/* 1. Hero with Video & Texture */}
           <section
             id="home"
@@ -939,9 +964,12 @@ function Index() {
             </div>
           </section>
           {/* 7. Equipe / Barbeiros (Assimetria) */}
-          <section id="equipe" className="py-32 px-6 md:px-12 bg-forest relative overflow-hidden">
+          <section
+            id="equipe"
+            className="py-16 md:py-32 px-6 md:px-12 bg-forest relative overflow-hidden"
+          >
             <div className="max-w-7xl mx-auto flex flex-col gap-20">
-              <div className="flex flex-col md:flex-row justify-between items-end gap-8">
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
                 <motion.div {...fadeInUp} className="max-w-2xl">
                   <h2 className="text-5xl md:text-8xl font-serif leading-none tracking-tighter uppercase text-cream">
                     O Time <br />
@@ -1174,20 +1202,6 @@ function Index() {
 
               <div
                 data-gallery-grid
-                onTouchStart={(event) => {
-                  const card = (event.target as Element).closest<HTMLElement>(
-                    "[data-gallery-grid] > div",
-                  );
-                  if (card) card.dataset["touchColor"] = "true";
-                }}
-                onTouchMove={(event) => {
-                  const touch = event.touches[0];
-                  if (!touch) return;
-                  const card = document
-                    .elementFromPoint(touch.clientX, touch.clientY)
-                    ?.closest<HTMLElement>("[data-gallery-grid] > div");
-                  if (card) card.dataset["touchColor"] = "true";
-                }}
                 className="grid grid-cols-2 md:grid-cols-4 gap-6 auto-rows-[200px] md:auto-rows-[300px]"
               >
                 {/* 1. Imagem Principal (Grande) */}
