@@ -58,6 +58,7 @@ type Service = {
   pricePrefix?: "A partir de";
   plan?: boolean;
   video?: string;
+  image?: string;
 };
 
 const services: Service[] = [
@@ -68,9 +69,15 @@ const services: Service[] = [
     duration: "30 min",
     description: "Barba completa com toalha quente.",
     plan: true,
-    video: "/assets/video_barba_premium.mp4",
+    image: "/assets/servico-barba.jpeg",
   },
-  { category: "barba", name: "Barba + Barboterapia", price: "R$ 90,00", duration: "40 min" },
+  {
+    category: "barba",
+    name: "Barba + Barboterapia",
+    price: "R$ 90,00",
+    duration: "40 min",
+    image: "/assets/servico-barba-barboterapia.jpeg",
+  },
   { category: "barba", name: "Barba + Ozônioterapia", price: "R$ 80,00", duration: "30 min" },
   {
     category: "cabelo",
@@ -300,6 +307,18 @@ function LazyServiceMedia({ service }: { service: Service }) {
     }
   }, [isNearViewport, prefersReducedMotion, service.video]);
 
+  if (service.image) {
+    return (
+      <img
+        src={service.image}
+        alt={`Serviço de ${service.name} na Barbearia Seu José`}
+        loading="lazy"
+        decoding="async"
+        className="h-full w-full object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
+      />
+    );
+  }
+
   if (!service.video) {
     return (
       <div className="flex h-full items-center justify-center bg-forest-deep/70">
@@ -367,6 +386,7 @@ function Index() {
   const [activeServiceCategory, setActiveServiceCategory] = useState<ServiceCategory>("barba");
   const videoRef = useRef<HTMLVideoElement>(null);
   const galleryVideoRef = useRef<HTMLVideoElement>(null);
+  const experienceVideoRef = useRef<HTMLVideoElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const reviewsRef = useRef<HTMLDivElement>(null);
   const [areReviewsVisible, setAreReviewsVisible] = useState(false);
@@ -382,7 +402,7 @@ function Index() {
   }, []);
 
   useEffect(() => {
-    const videos = [videoRef.current, galleryVideoRef.current].filter(
+    const videos = [videoRef.current, galleryVideoRef.current, experienceVideoRef.current].filter(
       (video): video is HTMLVideoElement => video !== null,
     );
     const observer = new IntersectionObserver((entries) => {
@@ -700,7 +720,7 @@ function Index() {
                 { label: "História", value: "Desde 2019" },
                 { label: "Avaliações oficiais", value: "5 estrelas" },
                 { label: "Catálogo oficial", value: `${services.length} serviços` },
-                { label: "Planos de assinatura", value: `${subscriptionPlans.length} planos` },
+                { label: "Club Seu José", value: "Assinatura" },
               ].map((item, i) => (
                 <motion.div key={i} {...fadeInUp} className="text-center">
                   <div className="text-3xl md:text-4xl font-serif font-bold text-gold mb-1">
@@ -1152,7 +1172,24 @@ function Index() {
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 auto-rows-[200px] md:auto-rows-[300px]">
+              <div
+                data-gallery-grid
+                onTouchStart={(event) => {
+                  const card = (event.target as Element).closest<HTMLElement>(
+                    "[data-gallery-grid] > div",
+                  );
+                  if (card) card.dataset["touchColor"] = "true";
+                }}
+                onTouchMove={(event) => {
+                  const touch = event.touches[0];
+                  if (!touch) return;
+                  const card = document
+                    .elementFromPoint(touch.clientX, touch.clientY)
+                    ?.closest<HTMLElement>("[data-gallery-grid] > div");
+                  if (card) card.dataset["touchColor"] = "true";
+                }}
+                className="grid grid-cols-2 md:grid-cols-4 gap-6 auto-rows-[200px] md:auto-rows-[300px]"
+              >
                 {/* 1. Imagem Principal (Grande) */}
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -1277,6 +1314,55 @@ function Index() {
                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000"
                   />
                 </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  className="relative overflow-hidden md:col-span-3 border border-gold/10 group"
+                >
+                  <video
+                    ref={experienceVideoRef}
+                    preload="none"
+                    aria-label="Experiência na Barbearia Seu José"
+                    muted
+                    loop
+                    playsInline
+                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                  >
+                    <source src="/assets/galeria-experiencia-seu-jose.mp4" type="video/mp4" />
+                  </video>
+                </motion.div>
+                {[
+                  {
+                    src: "/assets/servico-barba-barboterapia.jpeg",
+                    alt: "Atendimento com toalha na Barbearia Seu José",
+                    layout: "md:col-span-2",
+                  },
+                  {
+                    src: "/assets/galeria-acabamento-barba.jpeg",
+                    alt: "Acabamento da barba com máquina",
+                    layout: "",
+                  },
+                  {
+                    src: "/assets/servico-barba.jpeg",
+                    alt: "Detalhe do contorno da barba com navalha",
+                    layout: "col-span-2 md:col-span-1",
+                  },
+                ].map((photo) => (
+                  <motion.div
+                    key={photo.src}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    className={`relative row-span-2 overflow-hidden border border-gold/10 group ${photo.layout}`}
+                  >
+                    <img
+                      src={photo.src}
+                      alt={photo.alt}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+                    />
+                  </motion.div>
+                ))}
               </div>
             </div>
           </section>

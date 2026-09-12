@@ -252,6 +252,14 @@
   }
 }
 
+@media (hover: none), (pointer: coarse) {
+  [data-gallery-grid] > [data-touch-color="true"],
+  [data-gallery-grid] > [data-touch-color="true"] img,
+  [data-gallery-grid] > [data-touch-color="true"] video {
+    filter: grayscale(0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hero-content {
     animation: none;
