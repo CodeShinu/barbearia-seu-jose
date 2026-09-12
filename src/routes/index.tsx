@@ -69,7 +69,7 @@ const services: Service[] = [
     duration: "30 min",
     description: "Barba completa com toalha quente.",
     plan: true,
-    image: "/assets/servico-barba.jpeg",
+    image: "/assets/barba-toalha-quente.jpeg",
   },
   {
     category: "barba",
@@ -1347,6 +1347,11 @@ function Index() {
                 </motion.div>
                 {[
                   {
+                    src: "/assets/barba-toalha-quente.jpeg",
+                    alt: "Serviço de barba com toalha quente e navalha na Barbearia Seu José",
+                    layout: "md:col-span-2",
+                  },
+                  {
                     src: "/assets/servico-barba-barboterapia.jpeg",
                     alt: "Atendimento com toalha na Barbearia Seu José",
                     layout: "md:col-span-2",
@@ -1588,6 +1593,17 @@ function Index() {
                   © 2026 — SCS / SP
                 </div>
               </div>
+              <p className="mt-8 text-center text-xs leading-relaxed text-cream/60">
+                Desenvolvido por{" "}
+                <a
+                  href="https://vortexstudioweb.netlify.app/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium transition-colors hover:text-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold"
+                >
+                  Vortex Studio
+                </a>
+              </p>
             </div>
           </section>
 
