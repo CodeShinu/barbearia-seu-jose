@@ -77,7 +77,13 @@ const services: Service[] = [
     duration: "40 min",
     image: "/assets/servico-barba-barboterapia.jpeg",
   },
-  { category: "barba", name: "Barba + Ozônioterapia", price: "R$ 80,00", duration: "30 min" },
+  {
+    category: "barba",
+    name: "Barba + Ozônio terapia",
+    price: "R$ 80,00",
+    duration: "30 min",
+    video: "/assets/barba-ozonio-terapia.mp4",
+  },
   {
     category: "cabelo",
     name: "Corte",
@@ -202,6 +208,7 @@ const navLinks = [
   { label: "Assinatura", href: "#assinatura" },
   { label: "Equipe", href: "#equipe" },
   { label: "Avaliações", href: "#avaliacoes" },
+  { label: "Galeria", href: "#galeria" },
   { label: "Contato", href: "#contato" },
 ];
 
@@ -467,7 +474,7 @@ function Index() {
             </div>
           </motion.div>
 
-          <div className="hidden xl:flex gap-8 items-center text-sm font-bold uppercase tracking-widest">
+          <div className="hidden xl:flex gap-5 items-center text-sm font-bold uppercase tracking-widest">
             {navLinks.map((item) => (
               <a
                 key={item.href}
@@ -1119,200 +1126,176 @@ function Index() {
             </Button>
           </div>
 
-          {/* Galeria / Instagram Brutalista - Optimized with Uploads */}
-          <section className="py-32 bg-forest-deep px-6 overflow-hidden">
-            <div className="max-w-7xl mx-auto flex flex-col gap-16">
-              <div className="flex flex-col md:flex-row justify-between items-baseline gap-4">
-                <h2 className="text-4xl md:text-7xl font-serif uppercase tracking-tighter text-cream">
-                  Galeria <br />
-                  <span className="text-gold italic">No Detalhe.</span>
-                </h2>
-                <p className="text-cream/40 uppercase tracking-widest text-xs font-bold">
-                  @seujosebarbershop
-                </p>
-              </div>
-
-              <div
-                data-gallery-grid
-                className="grid grid-cols-2 md:grid-cols-4 gap-6 auto-rows-[200px] md:auto-rows-[300px]"
+          <section
+            id="galeria"
+            aria-labelledby="gallery-title"
+            className="relative scroll-mt-24 border-t border-gold/15 bg-forest-deep px-6 py-24 md:py-32"
+          >
+            <div className="max-w-7xl mx-auto">
+              <motion.div
+                {...fadeInUp}
+                className="mb-10 flex flex-col justify-between gap-6 md:mb-14 md:flex-row md:items-end"
               >
-                {/* 1. Imagem Principal (Grande) */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  className="relative overflow-hidden md:col-span-2 md:row-span-2 border border-gold/10 group"
-                >
-                  <img
-                    loading="lazy"
-                    decoding="async"
-                    src={"/assets/barbearia_interna_2.jpg"}
-                    alt="Atendimento na Barbearia Seu José"
-                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
-                  />
-                  <div className="absolute inset-0 bg-forest-deep/20 group-hover:bg-transparent transition-colors" />
-                </motion.div>
-
-                {/* 2. Corte Mullet 1 */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10 md:row-span-2"
-                >
-                  <img
-                    loading="lazy"
-                    decoding="async"
-                    src={"/assets/corte_mullet_1.jpg"}
-                    alt="Corte Mullet Detalhe"
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000"
-                  />
-                </motion.div>
-
-                {/* 3. Corte Mullet 2 */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10"
-                >
-                  <img
-                    loading="lazy"
-                    decoding="async"
-                    src={"/assets/corte_mullet_2.jpg"}
-                    alt="Corte Mullet Perfil"
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000"
-                  />
-                </motion.div>
-
-                {/* 4. Corte Mullet 3 */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10"
-                >
-                  <img
-                    loading="lazy"
-                    decoding="async"
-                    src={"/assets/corte_mullet_3.jpg"}
-                    alt="Corte Mullet Estilo"
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000"
-                  />
-                </motion.div>
-
-                {/* 5. Vídeo Institucional 3 (Largo) */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  className="relative overflow-hidden md:col-span-2 border border-gold/10 group"
+                <div>
+                  <span className="mb-5 block text-xs font-bold uppercase tracking-[0.3em] text-gold">
+                    O nosso dia a dia
+                  </span>
+                  <h2
+                    id="gallery-title"
+                    className="text-5xl md:text-7xl font-serif uppercase tracking-tighter text-cream"
+                  >
+                    Galeria <br />
+                    <span className="text-gold italic">No Detalhe.</span>
+                  </h2>
+                </div>
+                <div className="max-w-sm space-y-5">
+                  <p className="text-sm leading-relaxed text-cream/60">
+                    Do primeiro cuidado ao acabamento. Conheça os cortes, os rituais e o ambiente
+                    que fazem parte da experiência Seu José.
+                  </p>
+                  <a
+                    href="https://www.instagram.com/seujosebarbershop"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-3 border-b border-gold/40 pb-2 text-xs font-bold uppercase tracking-widest text-gold transition-colors hover:text-cream focus-visible:outline focus-visible:outline-gold"
+                  >
+                    @seujosebarbershop <ArrowUpRight size={16} />
+                  </a>
+                </div>
+              </motion.div>
+              <div data-gallery-grid className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-5">
+                <motion.figure
+                  {...fadeInUp}
+                  className="group relative col-span-2 row-span-2 overflow-hidden border border-gold/25 bg-forest aspect-[4/5]"
                 >
                   <video
-                    ref={galleryVideoRef}
-                    preload="none"
-                    aria-label="Vídeo institucional da Barbearia Seu José"
+                    controls
                     muted
                     loop
                     playsInline
-                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                    preload="metadata"
+                    aria-label="Barba + Ozônio terapia na Barbearia Seu José"
+                    className="h-full w-full object-cover"
                   >
-                    <source src={"/assets/video_institucional_3.mp4"} type="video/mp4" />
+                    <source src="/assets/barba-ozonio-terapia.mp4" type="video/mp4" />
                   </video>
-                </motion.div>
-
-                {/* 6. Barbearia Interna 3 */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  className="relative overflow-hidden md:col-span-2 border border-gold/10 group"
-                >
-                  <img
-                    loading="lazy"
-                    decoding="async"
-                    src={"/assets/barbearia_interna_3.jpg"}
-                    alt="Ambiente VIP Seu José"
-                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 hover:scale-105 transition-transform duration-1000"
-                  />
-                </motion.div>
-
-                {/* 7. Barbearia Interna 1 (Vertical) */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10 md:row-span-2"
-                >
-                  <img
-                    loading="lazy"
-                    decoding="async"
-                    src={"/assets/barbearia_interna_1.jpg"}
-                    alt="Barbeiros em Ação"
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000"
-                  />
-                </motion.div>
-
-                {/* 8. Barbearia Interna 2 (Largo) */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  className="relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 border border-gold/10 md:col-span-3"
-                >
-                  <img
-                    loading="lazy"
-                    decoding="async"
-                    src={"/assets/barbearia_interna_2.jpg"}
-                    alt="Cuidado Premium"
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000"
-                  />
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  className="relative overflow-hidden md:col-span-3 border border-gold/10 group"
-                >
-                  <video
-                    ref={experienceVideoRef}
-                    preload="none"
-                    aria-label="Experiência na Barbearia Seu José"
-                    muted
-                    loop
-                    playsInline
-                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
-                  >
-                    <source src="/assets/galeria-experiencia-seu-jose.mp4" type="video/mp4" />
-                  </video>
-                </motion.div>
+                  <figcaption className="pointer-events-none absolute inset-x-0 top-0 bg-gradient-to-b from-black/80 to-transparent p-6 pb-16 md:p-8 md:pb-20">
+                    <span className="text-[10px] uppercase tracking-[0.25em] text-gold">
+                      O cuidado em cada etapa
+                    </span>
+                    <h3 className="mt-2 font-serif text-2xl text-cream md:text-3xl">
+                      Barba + Ozônio terapia
+                    </h3>
+                  </figcaption>
+                </motion.figure>
                 {[
                   {
+                    src: "/assets/corte_mullet_1.jpg",
+                    title: "Personalidade em cada corte",
+                    label: "Cabelo",
+                  },
+                  {
                     src: "/assets/barba-toalha-quente.jpeg",
-                    alt: "Serviço de barba com toalha quente e navalha na Barbearia Seu José",
-                    layout: "md:col-span-2",
+                    title: "Seu momento de pausa",
+                    label: "Toalha quente",
+                  },
+                  {
+                    src: "/assets/corte_mullet_2.jpg",
+                    title: "Precisão no acabamento",
+                    label: "Detalhes",
                   },
                   {
                     src: "/assets/servico-barba-barboterapia.jpeg",
-                    alt: "Atendimento com toalha na Barbearia Seu José",
-                    layout: "md:col-span-2",
+                    title: "Cuidado que faz a diferença",
+                    label: "Barboterapia",
+                  },
+                  {
+                    src: "/assets/barbearia_interna_2.jpg",
+                    title: "Sinta-se em casa",
+                    label: "Nosso espaço",
+                    wide: true,
+                  },
+                  {
+                    src: "/assets/barbearia_interna_3.jpg",
+                    title: "Tradição e personalidade",
+                    label: "Seu José",
+                    wide: true,
+                  },
+                  {
+                    src: "/assets/corte_mullet_3.jpg",
+                    title: "Estilo de todos os ângulos",
+                    label: "Cortes",
                   },
                   {
                     src: "/assets/galeria-acabamento-barba.jpeg",
-                    alt: "Acabamento da barba com máquina",
-                    layout: "",
+                    title: "Cada detalhe importa",
+                    label: "Barba",
                   },
                   {
                     src: "/assets/servico-barba.jpeg",
-                    alt: "Detalhe do contorno da barba com navalha",
-                    layout: "col-span-2 md:col-span-1",
+                    title: "Contornos precisos",
+                    label: "Navalha",
+                  },
+                  {
+                    src: "/assets/barbearia_interna_1.jpg",
+                    title: "Feito por quem entende",
+                    label: "Nossa rotina",
                   },
                 ].map((photo) => (
-                  <motion.div
+                  <motion.figure
                     key={photo.src}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    className={`relative row-span-2 overflow-hidden border border-gold/10 group ${photo.layout}`}
+                    {...fadeInUp}
+                    className={`group relative overflow-hidden border border-gold/15 bg-forest transition-colors duration-500 hover:border-gold/50 ${photo.wide ? "col-span-2 aspect-[16/10]" : "aspect-[4/5]"}`}
                   >
                     <img
                       src={photo.src}
-                      alt={photo.alt}
+                      alt={photo.title}
                       loading="lazy"
                       decoding="async"
-                      className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+                      className="h-full w-full object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
                     />
-                  </motion.div>
+                    <figcaption className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent px-4 pb-4 pt-16 md:px-6 md:pb-6">
+                      <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-gold">
+                        {photo.label}
+                      </span>
+                      <h3 className="mt-1 font-serif text-base leading-tight text-cream md:text-xl">
+                        {photo.title}
+                      </h3>
+                    </figcaption>
+                  </motion.figure>
+                ))}
+                {[
+                  {
+                    src: "/assets/video_institucional_3.mp4",
+                    title: "Por dentro da Seu José",
+                    ref: galleryVideoRef,
+                  },
+                  {
+                    src: "/assets/galeria-experiencia-seu-jose.mp4",
+                    title: "Viva essa experiência",
+                    ref: experienceVideoRef,
+                  },
+                ].map((video) => (
+                  <figure
+                    key={video.src}
+                    className="group relative col-span-2 aspect-video overflow-hidden border border-gold/15 bg-forest"
+                  >
+                    <video
+                      ref={video.ref}
+                      controls
+                      muted
+                      loop
+                      playsInline
+                      preload="none"
+                      aria-label={video.title}
+                      className="h-full w-full object-cover grayscale transition-all duration-700 group-hover:grayscale-0"
+                    >
+                      <source src={video.src} type="video/mp4" />
+                    </video>
+                    <figcaption className="pointer-events-none absolute inset-x-0 top-0 bg-gradient-to-b from-black/70 to-transparent p-5 pb-12 font-serif text-xl text-cream">
+                      {video.title}
+                    </figcaption>
+                  </figure>
                 ))}
               </div>
             </div>
