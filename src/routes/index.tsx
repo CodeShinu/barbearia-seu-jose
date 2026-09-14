@@ -350,6 +350,7 @@ function Index() {
   const [activeServiceCategory, setActiveServiceCategory] = useState<ServiceCategory>("barba");
   const videoRef = useRef<HTMLVideoElement>(null);
   const galleryVideoRef = useRef<HTMLVideoElement>(null);
+  const ozoneGalleryVideoRef = useRef<HTMLVideoElement>(null);
   const experienceVideoRef = useRef<HTMLVideoElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const reviewsRef = useRef<HTMLDivElement>(null);
@@ -366,9 +367,12 @@ function Index() {
   }, []);
 
   useEffect(() => {
-    const videos = [videoRef.current, galleryVideoRef.current, experienceVideoRef.current].filter(
-      (video): video is HTMLVideoElement => video !== null,
-    );
+    const videos = [
+      videoRef.current,
+      galleryVideoRef.current,
+      ozoneGalleryVideoRef.current,
+      experienceVideoRef.current,
+    ].filter((video): video is HTMLVideoElement => video !== null);
     const observer = new IntersectionObserver((entries) => {
       for (const entry of entries) {
         const video = entry.target as HTMLVideoElement;
@@ -607,7 +611,7 @@ function Index() {
           {/* 1. Hero with Video & Texture */}
           <section
             id="home"
-            className="hero-section relative min-h-svh flex flex-col justify-center items-center text-center px-6 overflow-hidden grainy-overlay"
+            className="hero-section group/hero relative min-h-svh flex flex-col justify-center items-center text-center px-6 overflow-hidden grainy-overlay"
           >
             <div className="absolute inset-0 z-0">
               <div className="absolute inset-0 bg-dark-gradient z-10" />
@@ -624,7 +628,7 @@ function Index() {
                   repeat: prefersReducedMotion ? 0 : Infinity,
                   repeatType: "reverse",
                 }}
-                className="w-full h-full object-cover grayscale opacity-40 md:opacity-60"
+                className="w-full h-full object-cover grayscale group-hover/hero:grayscale-0 transition-[filter] duration-700 opacity-40 md:opacity-60"
               >
                 <source src={"/assets/video_institucional_1.mp4"} type="video/mp4" />
               </motion.video>
@@ -1169,13 +1173,13 @@ function Index() {
                   className="group relative col-span-2 row-span-2 overflow-hidden border border-gold/25 bg-forest aspect-[4/5]"
                 >
                   <video
-                    controls
+                    ref={ozoneGalleryVideoRef}
                     muted
                     loop
                     playsInline
                     preload="metadata"
                     aria-label="Barba + Ozônio terapia na Barbearia Seu José"
-                    className="h-full w-full object-cover"
+                    className="h-full w-full object-cover grayscale group-hover:grayscale-0 transition-[filter] duration-700"
                   >
                     <source src="/assets/barba-ozonio-terapia.mp4" type="video/mp4" />
                   </video>
@@ -1282,7 +1286,6 @@ function Index() {
                   >
                     <video
                       ref={video.ref}
-                      controls
                       muted
                       loop
                       playsInline
