@@ -44,7 +44,6 @@ const aboutManifesto = [
 const serviceCategories = [
   { id: "barba", label: "Barba" },
   { id: "cabelo", label: "Cabelo" },
-  { id: "combos", label: "Combos" },
   { id: "adicionais", label: "Serviços adicionais" },
 ] as const;
 
@@ -111,73 +110,6 @@ const services: Service[] = [
     duration: "80 min",
     pricePrefix: "A partir de",
     description: "Alisamento progressivo/redutor de volume.",
-  },
-  {
-    category: "combos",
-    name: "Corte + Barba",
-    price: "R$ 120,00",
-    duration: "60 min",
-    video: "/assets/video_combo_premium.mp4",
-  },
-  {
-    category: "combos",
-    name: "Corte + Barba + Barboterapia",
-    price: "R$ 150,00",
-    duration: "70 min",
-  },
-  {
-    category: "combos",
-    name: "Corte + Barba + Ozônioterapia",
-    price: "R$ 140,00",
-    duration: "60 min",
-  },
-  {
-    category: "combos",
-    name: "Corte + Barba + Barboterapia + Ozônioterapia",
-    price: "R$ 160,00",
-    duration: "80 min",
-  },
-  {
-    category: "combos",
-    name: "Corte + Barba + Selagem/Botox",
-    price: "R$ 250,00",
-    duration: "120 min",
-  },
-  {
-    category: "combos",
-    name: "Corte + Barba + Sobrancelha",
-    price: "R$ 145,00",
-    duration: "80 min",
-  },
-  {
-    category: "combos",
-    name: "Corte + Sobrancelha",
-    price: "R$ 100,00",
-    duration: "50 min",
-    description: "Corte de cabelo + sobrancelha com navalha.",
-  },
-  { category: "combos", name: "Pézinho + Barba", price: "R$ 90,00", duration: "40 min" },
-  { category: "combos", name: "Raspar + Barba", price: "R$ 100,00", duration: "50 min" },
-  {
-    category: "combos",
-    name: "Raspar + Barba + Sobrancelha",
-    price: "R$ 125,00",
-    duration: "60 min",
-  },
-  {
-    category: "combos",
-    name: "Combo VIP I",
-    price: "R$ 165,00",
-    duration: "80 min",
-    description: "Corte, barba, sobrancelha e hidratação capilar.",
-  },
-  {
-    category: "combos",
-    name: "Combo VIP II",
-    price: "R$ 195,00",
-    duration: "90 min",
-    description:
-      "Corte, barba, sobrancelha, hidratação capilar, depilação de nariz e depilação de orelha.",
   },
   {
     category: "adicionais",
