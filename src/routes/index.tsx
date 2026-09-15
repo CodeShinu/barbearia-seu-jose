@@ -100,6 +100,7 @@ const services: Service[] = [
     duration: "20 min",
     description: "Raspar o cabelo em um único tamanho.",
     plan: true,
+    image: "/assets/raspar.jpeg",
   },
   {
     category: "cabelo",
@@ -123,9 +124,22 @@ const services: Service[] = [
     price: "R$ 30,00",
     duration: "10 min",
     description: "Design de sobrancelha com navalha.",
+    video: "/assets/sobrancelha.mp4",
   },
-  { category: "adicionais", name: "Depilação de nariz", price: "R$ 25,00", duration: "10 min" },
-  { category: "adicionais", name: "Depilação de orelha", price: "R$ 25,00", duration: "10 min" },
+  {
+    category: "adicionais",
+    name: "Depilação de nariz",
+    price: "R$ 25,00",
+    duration: "10 min",
+    image: "/assets/depilacao-nariz.jpeg",
+  },
+  {
+    category: "adicionais",
+    name: "Depilação de orelha",
+    price: "R$ 25,00",
+    duration: "10 min",
+    image: "/assets/depilacao-orelha.jpeg",
+  },
   {
     category: "adicionais",
     name: "Hidratação",
@@ -1244,6 +1258,87 @@ function Index() {
                     src: "/assets/barbearia_interna_1.jpg",
                     title: "Feito por quem entende",
                     label: "Nossa rotina",
+                  },
+                  {
+                    src: "/assets/galeria-toalha-quente-atendimento.jpeg",
+                    title: "Cuidado do início ao fim",
+                    label: "Toalha quente",
+                  },
+                  {
+                    src: "/assets/galeria-barbeiro-em-acao.jpeg",
+                    title: "Atenção em cada movimento",
+                    label: "Nossa equipe",
+                  },
+                  {
+                    src: "/assets/galeria-corte-barba-finalizados.jpeg",
+                    title: "Estilo e confiança renovados",
+                    label: "Cabelo e barba",
+                  },
+                  {
+                    src: "/assets/galeria-rotina-atendimentos.jpeg",
+                    title: "Dedicação em cada cadeira",
+                    label: "Nosso dia a dia",
+                  },
+                  {
+                    src: "/assets/galeria-resultado-no-espelho.jpeg",
+                    title: "O resultado fala por si",
+                    label: "Acabamento",
+                  },
+                  {
+                    src: "/assets/galeria-acolhimento.jpeg",
+                    title: "Mais que um atendimento",
+                    label: "Conexões",
+                  },
+                  {
+                    src: "/assets/galeria-corte-classico.jpeg",
+                    title: "Tradição para todas as gerações",
+                    label: "Corte clássico",
+                  },
+                  {
+                    src: "/assets/galeria-corte-maquina.jpeg",
+                    title: "Precisão e cuidado",
+                    label: "Cabelo",
+                  },
+                  {
+                    src: "/assets/galeria-ritual-barba.jpeg",
+                    title: "Um ritual de cuidado",
+                    label: "Barba",
+                  },
+                  {
+                    src: "/assets/galeria-corte-natural.jpeg",
+                    title: "Seu estilo, sua personalidade",
+                    label: "Cortes",
+                  },
+                  {
+                    src: "/assets/galeria-corte-infantil.jpeg",
+                    title: "Pequenos clientes, grandes sorrisos",
+                    label: "Infantil",
+                  },
+                  {
+                    src: "/assets/galeria-cliente-no-espaco.jpeg",
+                    title: "Sempre à vontade",
+                    label: "Seu José",
+                  },
+                  {
+                    src: "/assets/galeria-finalizacao-secador.jpeg",
+                    title: "Capricho até o último detalhe",
+                    label: "Finalização",
+                  },
+                  {
+                    src: "/assets/galeria-panorama-atendimentos.jpeg",
+                    title: "O nosso espaço em movimento",
+                    label: "Nosso espaço",
+                    wide: true,
+                  },
+                  {
+                    src: "/assets/galeria-equipe-atendendo.jpeg",
+                    title: "Aqui, cada cliente tem seu momento",
+                    label: "Nossa rotina",
+                  },
+                  {
+                    src: "/assets/galeria-barba-navalha.jpeg",
+                    title: "Precisão na navalha",
+                    label: "Barba",
                   },
                 ].map((photo) => (
                   <motion.figure
