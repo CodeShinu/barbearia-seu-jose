@@ -58,6 +58,7 @@ type Service = {
   plan?: boolean;
   video?: string;
   image?: string;
+  imagePosition?: string;
 };
 
 const services: Service[] = [
@@ -68,7 +69,8 @@ const services: Service[] = [
     duration: "30 min",
     description: "Barba completa com toalha quente.",
     plan: true,
-    image: "/assets/barba-toalha-quente.jpeg",
+    image: "/assets/barba-tesoura.jpeg",
+    imagePosition: "center 35%",
   },
   {
     category: "barba",
@@ -264,6 +266,7 @@ function LazyServiceMedia({ service }: { service: Service }) {
     return (
       <img
         src={service.image}
+        style={{ objectPosition: service.imagePosition }}
         alt={`Serviço de ${service.name} na Barbearia Seu José`}
         loading="lazy"
         decoding="async"
