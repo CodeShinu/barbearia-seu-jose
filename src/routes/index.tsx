@@ -13,8 +13,6 @@ import {
   X,
   ArrowUp,
   ArrowUpRight,
-  Volume2,
-  VolumeX,
   CreditCard,
   Wifi,
   Pause,
@@ -361,7 +359,6 @@ function revealTouchedMedia(event: TouchEvent<HTMLElement>) {
 function Index() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
   const [areReviewsPaused, setAreReviewsPaused] = useState(false);
   const [isPageVisible, setIsPageVisible] = useState(true);
   const [activeServiceCategory, setActiveServiceCategory] = useState<ServiceCategory>("barba");
@@ -635,7 +632,7 @@ function Index() {
               <motion.video
                 ref={videoRef}
                 autoPlay={!prefersReducedMotion}
-                muted={isMuted}
+                muted
                 loop
                 playsInline
                 initial={prefersReducedMotion ? false : { scale: 1.1 }}
@@ -650,14 +647,6 @@ function Index() {
                 <source src={"/assets/video_institucional_1.mp4"} type="video/mp4" />
               </motion.video>
 
-              <button
-                type="button"
-                onClick={() => setIsMuted(!isMuted)}
-                className="absolute bottom-6 right-24 sm:bottom-32 sm:right-6 z-20 w-12 h-12 rounded-full border border-gold/30 bg-forest-deep/50 backdrop-blur-md flex items-center justify-center text-gold hover:bg-gold hover:text-forest-deep transition-all md:right-12"
-                aria-label={isMuted ? "Ativar som do vídeo" : "Desativar som do vídeo"}
-              >
-                {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
-              </button>
             </div>
 
             <div className="hero-content relative z-20 w-full max-w-6xl space-y-8">
@@ -704,7 +693,7 @@ function Index() {
               {[
                 { label: "História", value: "Desde 2019" },
                 { label: "Avaliações oficiais", value: "5 estrelas" },
-                { label: "Catálogo oficial", value: `${services.length} serviços` },
+                { label: "Atendidos com excelência", value: "+2.000 clientes" },
                 { label: "Club Seu José", value: "Assinatura" },
               ].map((item, i) => (
                 <motion.div key={i} {...fadeInUp} className="text-center">

@@ -7,7 +7,8 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { Volume2, VolumeX } from "lucide-react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -155,8 +156,55 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <SiteMusic />
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
     </QueryClientProvider>
+  );
+}
+
+function SiteMusic() {
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const toggleMusic = async () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    if (isPlaying) {
+      audio.pause();
+      setIsPlaying(false);
+      return;
+    }
+
+    try {
+      await audio.play();
+      setIsPlaying(true);
+    } catch {
+      setIsPlaying(false);
+    }
+  };
+
+  return (
+    <>
+      <audio
+        ref={audioRef}
+        src="/assets/video_institucional_1.mp4"
+        loop
+        preload="metadata"
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => setIsPlaying(false)}
+      />
+      <button
+        type="button"
+        onClick={() => void toggleMusic()}
+        className="fixed bottom-24 right-6 z-[90] flex h-12 w-12 items-center justify-center rounded-full border border-gold/30 bg-forest-deep/80 text-gold shadow-xl backdrop-blur-md transition-all hover:bg-gold hover:text-forest-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+        aria-label={isPlaying ? "Desativar música do site" : "Ativar música do site"}
+        aria-pressed={isPlaying}
+        title={isPlaying ? "Desativar música" : "Ativar música"}
+      >
+        {isPlaying ? <Volume2 size={20} /> : <VolumeX size={20} />}
+      </button>
+    </>
   );
 }
