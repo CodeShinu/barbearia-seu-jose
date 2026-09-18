@@ -82,7 +82,7 @@ const services: Service[] = [
     name: "Barba + Ozônio terapia",
     price: "R$ 80,00",
     duration: "30 min",
-    video: "/assets/barba-ozonio-terapia.mp4",
+    video: "/assets/barba-ozonio-terapia-2026.mp4",
   },
   {
     category: "cabelo",
@@ -1187,7 +1187,7 @@ function Index() {
                     aria-label="Barba + Ozônio terapia na Barbearia Seu José"
                     className="h-full w-full object-cover grayscale group-hover:grayscale-0 transition-[filter] duration-700"
                   >
-                    <source src="/assets/barba-ozonio-terapia.mp4" type="video/mp4" />
+                    <source src="/assets/barba-ozonio-terapia-2026.mp4" type="video/mp4" />
                   </video>
                   <figcaption className="pointer-events-none absolute inset-x-0 top-0 bg-gradient-to-b from-black/80 to-transparent p-6 pb-16 md:p-8 md:pb-20">
                     <span className="text-[10px] uppercase tracking-[0.25em] text-gold">
