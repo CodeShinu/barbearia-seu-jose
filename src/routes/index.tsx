@@ -1307,6 +1307,11 @@ function Index() {
                     label: "Infantil",
                   },
                   {
+                    src: "/assets/galeria-pai-e-filho.jpeg",
+                    title: "Momentos que atravessam gerações",
+                    label: "Família",
+                  },
+                  {
                     src: "/assets/galeria-cliente-no-espaco.jpeg",
                     title: "Sempre à vontade",
                     label: "Seu José",
